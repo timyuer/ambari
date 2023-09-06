@@ -17,7 +17,7 @@ from mock import (
 builtin_string = 'builtins'
 if inPy3k:
     builtin_string = 'builtins'
-    str = str
+    unicode = str
 
 PTModule = sys.modules[__name__]
 MODNAME = '%s.PTModule' % __name__

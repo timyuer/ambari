@@ -80,7 +80,7 @@ def api_accessor(host, login, password, protocol, port, unsafe=None):
   def do_request(api_url, request_type=GET_REQUEST_TYPE, request_body=''):
     try:
       url = '{0}://{1}:{2}{3}'.format(protocol, host, port, api_url)
-      admin_auth = base64.encodebytes(('%s:%s' % (login, password)).encode()).decode().replace('\n', '')
+      admin_auth = base64.b64encode('{}:{}'.format(login, password).encode()).decode().replace('\n', '')
       request = urllib.request.Request(url)
       request.add_header('Authorization', 'Basic %s' % admin_auth)
       request.add_header('X-Requested-By', 'ambari')

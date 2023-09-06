@@ -324,8 +324,6 @@ class HDFSRecommender(service_advisor.ServiceAdvisor):
       if len(namenodeHosts) > 1:
         nn_max_heapsize = min(int(namenodeHosts[0]["Hosts"]["total_mem"]),
                               int(namenodeHosts[1]["Hosts"]["total_mem"])) / 1024
-        at = self.getHostComponentsByCategories(namenodeHosts[0]["Hosts"]["host_name"], ["MASTER"], services, hosts)
-
         masters_at_host = max(
           len(self.getHostComponentsByCategories(namenodeHosts[0]["Hosts"]["host_name"], ["MASTER"], services, hosts)),
           len(self.getHostComponentsByCategories(namenodeHosts[1]["Hosts"]["host_name"], ["MASTER"], services, hosts)))

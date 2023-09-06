@@ -94,13 +94,24 @@
 
       <osSpecifics>
         <osSpecific>
-          <osFamily>redhat7</osFamily>
+          <osFamily>redhat7,redhat8</osFamily>
           <packages>
             <package>
               <name>kafka_${stack_version}</name>
             </package>
             <package>
               <name>ranger_${stack_version}-kafka-plugin</name>
+            </package>
+          </packages>
+        </osSpecific>
+        <osSpecific>
+          <osFamily>ubuntu22</osFamily>
+          <packages>
+            <package>
+              <name>kafka-${stack_version}</name>
+            </package>
+            <package>
+              <name>ranger-${stack_version}-kafka-plugin</name>
             </package>
           </packages>
         </osSpecific>

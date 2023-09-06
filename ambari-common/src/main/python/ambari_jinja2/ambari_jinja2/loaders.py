@@ -346,7 +346,7 @@ class PrefixLoader(BaseLoader):
 
     def list_templates(self):
         result = []
-        for prefix, loader in list(self.mapping.items()):
+        for prefix, loader in self.mapping.items():
             for template in loader.list_templates():
                 result.append(prefix + self.delimiter + template)
         return result

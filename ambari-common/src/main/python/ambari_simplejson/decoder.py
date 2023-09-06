@@ -4,7 +4,7 @@
 import re
 import sys
 import struct
-from ambari_simplejson.compat import PY3, chr
+from ambari_simplejson.compat import PY3, unichr
 from ambari_simplejson.scanner import make_scanner, JSONDecodeError
 
 

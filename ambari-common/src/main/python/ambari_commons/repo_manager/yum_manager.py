@@ -276,10 +276,7 @@ class YumManager(GenericManager):
     if not name:
       raise ValueError("Package name can't be empty")
 
-    if os.geteuid() == 0:
-      return self.yum_check_package_available(name)
-    else:
-      return self.rpm_check_package_available(name)
+    return self.rpm_check_package_available(name)
 
   def yum_check_package_available(self, name):
     """
@@ -352,7 +349,8 @@ class YumManager(GenericManager):
     regex = re.compile(name_regex)
 
     for package in packages:
-      if regex.match(package['name'].decode()):
+      package_name = package['name'].decode() if isinstance(package['name'], bytes) else package['name']
+      if regex.match(package_name):
         return True
     return False
 

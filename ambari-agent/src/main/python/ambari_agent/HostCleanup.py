@@ -268,7 +268,7 @@ class HostCleanup:
     out = None
     try:
       p1 = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
-      p2 = subprocess.Popen(["grep", "priority"], stdin=p1.stdout, stdout=subprocess.PIPE)
+      p2 = subprocess.Popen(["grep", "priority"], stdin=p1.stdout, stdout=subprocess.PIPE, universal_newlines=True)
       p1.stdout.close()
       out = p2.communicate()[0]
       logger.debug('alternatives --display ' + alt_name + '\n, out = ' + out)
@@ -574,7 +574,8 @@ class HostCleanup:
     process = subprocess.Popen(cmd,
                                stdout=subprocess.PIPE,
                                stdin=subprocess.PIPE,
-                               stderr=subprocess.PIPE
+                               stderr=subprocess.PIPE,
+                               universal_newlines=True
     )
     (stdoutdata, stderrdata) = process.communicate()
     return process.returncode, stdoutdata, stderrdata

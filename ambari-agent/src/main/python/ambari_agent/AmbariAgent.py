@@ -66,9 +66,6 @@ def check_native_libs_support():
   if not c_extension.is_loaded():
     not_loaded_extensions.append("simplejson")
 
-  if subprocess._posixsubprocess is None:
-    not_loaded_extensions.append("subprocess")
-
   if not_loaded_extensions:
     logger.warning("Some native extensions not available for module(s): {}, it may affect execution performance".format(",".join(not_loaded_extensions)))
 

@@ -28,9 +28,6 @@ __all__ = (
 
 __version__ = '1.0.1'
 
-import logging
-
-logging.basicConfig(level=logging.DEBUG)
 
 import pprint
 import sys
@@ -77,7 +74,7 @@ try:
     str
 except NameError:
     # Python 3
-    str = str = str
+    basestring = unicode = str
 
 try:
     int

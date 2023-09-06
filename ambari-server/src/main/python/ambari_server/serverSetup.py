@@ -145,21 +145,13 @@ def verify_setup_allowed(options):
 def check_selinux():
   try:
     retcode, out, err = run_os_command(GET_SE_LINUX_ST_CMD)
-    if isinstance(out, str):
-      se_status = re.search('(disabled|enabled)', out).group(0)
-      print("SELinux status is '" + se_status + "'")
-    else:
-      se_status = re.search('(disabled|enabled)', out.decode()).group(0)
-
-    print("SELinux status is '" + str(se_status) + "'")
+    se_status = re.search('(disabled|enabled)', out).group(0)
+    print("SELinux status is '" + se_status + "'")
     if se_status == SE_STATUS_DISABLED:
       return 0
     else:
       try:
-        if isinstance(out, str):
-          se_mode = re.search('(enforcing|permissive)', out).group(0)
-        else:
-          se_mode = re.search('(enforcing|permissive)', out.decode()).group(0)
+        se_mode = re.search('(enforcing|permissive)', out).group(0)
       except AttributeError:
         err = "Error determining SELinux mode. Exiting."
         raise FatalException(1, err)
@@ -858,7 +850,8 @@ class JDKSetupLinux(JDKSetup):
                            stdout=subprocess.PIPE,
                            stdin=subprocess.PIPE,
                            stderr=subprocess.PIPE,
-                           shell=True
+                           shell=True,
+                           universal_newlines=True
                            )
     (stdoutdata, stderrdata) = process.communicate()
 
@@ -1289,7 +1282,8 @@ def check_ambari_java_version_is_valid(java_home, java_bin, min_version, propert
                                stdout=subprocess.PIPE,
                                stdin=subprocess.PIPE,
                                stderr=subprocess.PIPE,
-                               shell=True
+                               shell=True,
+                               universal_newlines=True
                                )
     (out, err) = process.communicate()
     if process.returncode != 0:

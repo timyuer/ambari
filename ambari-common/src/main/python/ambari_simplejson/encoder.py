@@ -5,7 +5,7 @@ import re
 from operator import itemgetter
 # Do not import Decimal directly to avoid reload issues
 import decimal
-from ambari_simplejson.compat import chr, binary_type, text_type, string_types, integer_types, PY3
+from ambari_simplejson.compat import unichr, binary_type, text_type, string_types, integer_types, PY3
 
 
 def _import_speedups():
@@ -57,15 +57,15 @@ def encode_basestring(s, _PY3=PY3, _q='"'):
             s = str.__str__(s)
     else:
         if isinstance(s, str) and HAS_UTF8.search(s) is not None:
-            s = str(s, 'utf-8')
-        elif type(s) not in (str, str):
+            s = unicode(s, 'utf-8')
+        elif type(s) not in (str, unicode):
             # convert an str subclass instance to exact str
             # convert a unicode subclass instance to exact unicode
             # raise a TypeError otherwise
             if isinstance(s, str):
                 s = str.__str__(s)
             else:
-                s = str.__getnewargs__(s)[0]
+                s = unicode.__getnewargs__(s)[0]
     def replace(match):
         return ESCAPE_DCT[match.group(0)]
     return _q + ESCAPE.sub(replace, s) + _q
@@ -84,15 +84,15 @@ def py_encode_basestring_ascii(s, _PY3=PY3):
             s = str.__str__(s)
     else:
         if isinstance(s, str) and HAS_UTF8.search(s) is not None:
-            s = str(s, 'utf-8')
-        elif type(s) not in (str, str):
+            s = unicode(s, 'utf-8')
+        elif type(s) not in (str, unicode):
             # convert an str subclass instance to exact str
             # convert a unicode subclass instance to exact unicode
             # raise a TypeError otherwise
             if isinstance(s, str):
                 s = str.__str__(s)
             else:
-                s = str.__getnewargs__(s)[0]
+                s = unicode.__getnewargs__(s)[0]
     def replace(match):
         s = match.group(0)
         try:
@@ -305,10 +305,7 @@ class JSONEncoder(object):
         chunks = self.iterencode(o, _one_shot=True)
         if not isinstance(chunks, (list, tuple)):
             chunks = list(chunks)
-        if self.ensure_ascii:
-            return ''.join(chunks)
-        else:
-            return ''.join(chunks)
+        return ''.join(chunks)
 
     def iterencode(self, o, _one_shot=False):
         """Encode the given object and yield each string
@@ -407,10 +404,7 @@ class JSONEncoderForHTML(JSONEncoder):
         # Override JSONEncoder.encode because it has hacks for
         # performance that make things more complicated.
         chunks = self.iterencode(o, True)
-        if self.ensure_ascii:
-            return ''.join(chunks)
-        else:
-            return ''.join(chunks)
+        return ''.join(chunks)
 
     def iterencode(self, o, _one_shot=False):
         chunks = super(JSONEncoderForHTML, self).iterencode(o, _one_shot)

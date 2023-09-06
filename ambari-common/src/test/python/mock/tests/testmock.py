@@ -22,7 +22,7 @@ from mock import (
 try:
     str
 except NameError:
-    str = str
+    unicode = str
 
 
 class Iter(object):

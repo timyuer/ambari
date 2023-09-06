@@ -49,7 +49,7 @@ def hostname(config):
   try:
     scriptname = config.get('agent', 'hostname_script')
     try:
-      osStat = subprocess.Popen([scriptname], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+      osStat = subprocess.Popen([scriptname], stdout=subprocess.PIPE, stderr=subprocess.PIPE, universal_newlines=True)
       out, err = osStat.communicate()
       if (0 == osStat.returncode and 0 != len(out.strip())):
         cached_hostname = out.strip()

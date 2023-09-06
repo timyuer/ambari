@@ -46,7 +46,8 @@ def run_os_command(cmd):
                              shell=shell,
                              stdout=subprocess.PIPE,
                              stdin=subprocess.PIPE,
-                             stderr=subprocess.PIPE
+                             stderr=subprocess.PIPE,
+                             universal_newlines=True
   )
   (stdoutdata, stderrdata) = process.communicate()
   return process.returncode, stdoutdata, stderrdata
@@ -445,7 +446,7 @@ class FacterLinux(Facter):
 
     try:
       retcode, out, err = run_os_command(FacterLinux.GET_SE_LINUX_ST_CMD)
-      se_status = FacterLinux.SE_STATUS_REGEXP.search(out.decode('utf-8'))
+      se_status = FacterLinux.SE_STATUS_REGEXP.search(out)
       if se_status:
         return True
     except OSError:

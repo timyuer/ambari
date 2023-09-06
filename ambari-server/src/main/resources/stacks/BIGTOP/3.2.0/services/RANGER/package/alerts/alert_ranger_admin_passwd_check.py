@@ -19,7 +19,7 @@ limitations under the License.
 """
 
 import base64
-import urllib2
+import urllib.request, urllib.error, urllib.parse
 import ambari_simplejson as json # simplejson is much faster comparing to Python 2.6 json module and has the same functions set.
 import logging
 from resource_management.core.environment import Environment
@@ -141,20 +141,20 @@ def check_ranger_login(ranger_auth_link, username, password):
   """
   try:
     usernamepassword = '{0}:{1}'.format(username, password)
-    base_64_string = base64.encodestring(usernamepassword).replace('\n', '')
-    request = urllib2.Request(ranger_auth_link)
+    base_64_string = base64.b64encode(usernamepassword.encode()).decode().replace('\n', '')
+    request = urllib.request.Request(ranger_auth_link)
     request.add_header("Content-Type", "application/json")
     request.add_header("Accept", "application/json")
     request.add_header("Authorization", "Basic {0}".format(base_64_string))
-    result = urllib2.urlopen(request, timeout=20)
+    result = urllib.request.urlopen(request, timeout=20)
     response_code = result.getcode()
     if response_code == 200:
       response = json.loads(result.read())
     return response_code
-  except urllib2.HTTPError as e:
+  except urllib.error.HTTPError as e:
     logger.exception("Error during Ranger service authentication. Http status code - {0}. {1}".format(e.code, e.read()))
     return e.code
-  except urllib2.URLError as e:
+  except urllib.error.URLError as e:
     logger.exception("Error during Ranger service authentication. {0}".format(e.reason))
     return None
   except Exception as e:
@@ -171,12 +171,12 @@ def get_ranger_user(ranger_get_user, username, password, user):
   try:
     url = '{0}?name={1}'.format(ranger_get_user, user)
     usernamepassword = '{0}:{1}'.format(username, password)
-    base_64_string = base64.encodestring(usernamepassword).replace('\n', '')
-    request = urllib2.Request(url)
+    base_64_string = base64.b64encode(usernamepassword.encode()).decode().replace('\n', '')
+    request = urllib.request.Request(url)
     request.add_header("Content-Type", "application/json")
     request.add_header("Accept", "application/json")
     request.add_header("Authorization", "Basic {0}".format(base_64_string))
-    result = urllib2.urlopen(request, timeout=20)
+    result = urllib.request.urlopen(request, timeout=20)
     response_code = result.getcode()
     response = json.loads(result.read())
     if response_code == 200 and len(response['vXUsers']) > 0:
@@ -185,10 +185,10 @@ def get_ranger_user(ranger_get_user, username, password, user):
           return True
     else:
       return False
-  except urllib2.HTTPError as e:
+  except urllib.error.HTTPError as e:
     logger.exception("Error getting user from Ranger service. Http status code - {0}. {1}".format(e.code, e.read()))
     return False
-  except urllib2.URLError as e:
+  except urllib.error.URLError as e:
     logger.exception("Error getting user from Ranger service. {0}".format(e.reason))
     return False
   except Exception as e:

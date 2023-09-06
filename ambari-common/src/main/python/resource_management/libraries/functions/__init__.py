@@ -19,10 +19,6 @@ limitations under the License.
 Ambari Agent
 
 """
-import os
-import sys
-module_root = os.path.dirname(os.path.abspath(__file__))
-sys.path.append(module_root)
 
 import platform
 

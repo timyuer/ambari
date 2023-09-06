@@ -284,7 +284,7 @@
 
       <osSpecifics>
         <osSpecific>
-          <osFamily>redhat7</osFamily>
+          <osFamily>redhat7,redhat8</osFamily>
           <packages>
             <package>
               <name>hadoop_${stack_version}</name>
@@ -306,6 +306,32 @@
             </package>
             <package>
               <name>ranger_${stack_version}-hdfs-plugin</name>
+            </package>
+          </packages>
+        </osSpecific>
+        <osSpecific>
+          <osFamily>ubuntu22</osFamily>
+          <packages>
+            <package>
+              <name>hadoop-${stack_version}</name>
+            </package>
+            <package>
+              <name>hadoop-${stack_version}-client</name>
+            </package>
+            <package>
+              <name>libsnappy1</name>
+            </package>
+            <package>
+              <name>libsnappy-dev</name>
+            </package>
+            <package>
+              <name>libhdfs0</name>
+            </package>
+            <package>
+              <name>libhdfs0-dev</name>
+            </package>
+            <package>
+              <name>ranger-${stack_version}-hdfs-plugin</name>
             </package>
           </packages>
         </osSpecific>

@@ -21,7 +21,7 @@ PYTHON_WRAPER_TARGET="${PYTHON_WRAPER_DIR}/ambari-python-wrap"
 rm -f "$PYTHON_WRAPER_TARGET"
 
 AMBARI_PYTHON=""
-python_binaries=( "/usr/bin/python" "/usr/bin/python3" "/usr/bin/python3.9" )
+python_binaries=("/usr/bin/python3" "/usr/bin/python3.9" )
 for python_binary in "${python_binaries[@]}"
 do
   $python_binary -c "import sys ; ver = sys.version_info ; sys.exit(not (ver >= (3,0)))" 1>/dev/null 2>/dev/null
@@ -38,3 +38,26 @@ else
   mkdir -p "$PYTHON_WRAPER_DIR"
   ln -s "$AMBARI_PYTHON" "$PYTHON_WRAPER_TARGET"
 fi
+
+if ! [ -x "$(command -v lsb_release)" ]; then
+  echo "lsb_release is not installed. try install redhat-lsb"
+  if [ -x "$(command -v yum)" ]; then
+     yum install -y redhat-lsb
+	 if [ $? -ne 0 ] ; then
+	   echo "try install kylin-lsb"
+	   yum install -y kylin-lsb
+     fi
+	 if [ $? -ne 0 ] ; then
+	   echo "try install UnionTech-lsb"
+	   yum install -y UnionTech-lsb
+     fi
+	 if [ $? -ne 0 ] ; then
+	   echo "try install openeuler-lsb"
+	   yum install -y openeuler-lsb
+     fi
+  fi
+fi
+if ! [ -x "$(command -v lsb_release)" ]; then
+  >&2 echo "Error: lsb_release is not installed."
+fi
+lsb_release
