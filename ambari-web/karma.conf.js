@@ -23,14 +23,15 @@ module.exports = function(config) {
     basePath: '',
 
     plugins: [
-      'karma-phantomjs-launcher',
       'karma-mocha',
       'karma-chai',
       'karma-sinon',
       'karma-coverage',
       'karma-ember-precompiler-brunch',
       'karma-commonjs-require',
-      'karma-babel-preprocessor'
+      'karma-babel-preprocessor',
+      'karma-chrome-launcher',
+      'karma-verbose-reporter'
     ],
 
     // frameworks to use
