@@ -202,7 +202,7 @@ class AmbariConfig:
 
   @property
   def cache_dir(self):
-    return self.get('agent', 'cache_dir', default='/var/lib/ambari-agent/cache')
+    return '/var/lib/ambari-agent/cache'
 
   @property
   def cluster_cache_dir(self):
