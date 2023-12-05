@@ -635,6 +635,7 @@ else:
 zookeeper_quorum_hosts = cluster_zookeeper_quorum_hosts
 zookeeper_clientPort = cluster_zookeeper_clientPort
 yarn_hbase_user = status_params.yarn_hbase_user
+hbase_user = config['configurations']['hbase-env']['hbase_user']
 yarn_hbase_user_home = format("/user/{yarn_hbase_user}")
 yarn_hbase_user_version_home = format("{yarn_hbase_user_home}/{version}")
 yarn_hbase_app_hdfs_path = format("/bigtop/apps/{version}/hbase")
@@ -702,10 +703,29 @@ if security_enabled and has_atsv2:
   yarn_ats_user_keytab = config['configurations']['yarn-env']['yarn_ats_user_keytab']
   yarn_hbase_kinit_cmd = format("{kinit_path_local} -kt {yarn_ats_user_keytab} {yarn_ats_principal_name};")
 
+
+hbase_within_cluster = config['configurations']['yarn-hbase-env']['hbase_within_cluster']
+is_hbase_installed = False
+master_configs = config['clusterHostInfo']
+
+if hbase_within_cluster:
+  if 'hbase_master_hosts' in master_configs and 'hbase-site' in config['configurations']:
+    is_hbase_installed = True
+    zookeeper_znode_parent = config['configurations']['hbase-site']['zookeeper.znode.parent']
+  else:
+    zookeeper_znode_parent = "/hbase-unsecure"
+  hbase_site_conf = config['configurations']['hbase-site']
+  hbase_site_attributes = config['configurationAttributes']['hbase-site']
+else:
+  zookeeper_znode_parent = "/atsv2-hbase-unsecure"
+  hbase_site_conf  = config['configurations']['yarn-hbase-site']
+  hbase_site_attributes = config['configurationAttributes']['yarn-hbase-site']
+
 yarn_hbase_grant_premissions_file = format("{yarn_hbase_conf_dir}/hbase_grant_permissions.sh")
 yarn_hbase_package_preparation_file = format("{tmp_dir}/hbase_package_preparation.sh")
 is_hbase_system_service_launch = config['configurations']['yarn-hbase-env']['is_hbase_system_service_launch']
 use_external_hbase = config['configurations']['yarn-hbase-env']['use_external_hbase']
+
 hbase_cmd = format("{yarn_hbase_bin}/hbase --config {yarn_hbase_conf_dir}")
 class_name = format("org.apache.hadoop.yarn.server.timelineservice.storage.TimelineSchemaCreator -Dhbase.client.retries.number=35 -create -s")
 yarn_hbase_table_create_cmd = format("export HBASE_CLASSPATH_PREFIX={stack_root}/{version}/usr/lib/hadoop-yarn/timelineservice/*;{yarn_hbase_kinit_cmd} {hbase_cmd} {class_name}")

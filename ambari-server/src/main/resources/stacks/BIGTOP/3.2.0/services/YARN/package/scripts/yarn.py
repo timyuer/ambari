@@ -37,7 +37,7 @@ from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 from ambari_commons import OSConst
 
 from resource_management.libraries.functions.mounted_dirs_helper import handle_mounted_dirs
-from hbase_service import create_hbase_package, copy_hbase_package_to_hdfs
+from hbase_service import create_hbase_package, copy_hbase_package_to_hdfs, createTables
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def yarn(name=None, config_dir=None):
@@ -154,8 +154,8 @@ def yarn(name=None, config_dir=None):
   )
   XmlConfig("hbase-site.xml",
             conf_dir=params.yarn_hbase_conf_dir,
-            configurations=params.config['configurations']['yarn-hbase-site'],
-            configuration_attributes=params.config['configurationAttributes']['yarn-hbase-site'],
+            configurations=params.hbase_site_conf,
+            configuration_attributes=params.hbase_site_attributes,
             owner=params.yarn_hbase_user,
             group=params.user_group,
             mode=0o644
@@ -326,7 +326,7 @@ def yarn(name=None, config_dir=None):
          group=params.user_group
     )
 
-  setup_atsv2_backend(name,config_dir)
+  setup_atsv2_backend(name, config_dir)
 
 def setup_historyserver():
   import params
@@ -588,6 +588,10 @@ def yarn(name = None):
 
 def setup_atsv2_backend(name=None, config_dir=None):
     import params
+    Logger.info(f"setup_atsv2_backend name:{name} {params.use_external_hbase} {params.hbase_within_cluster} {params.is_hbase_system_service_launch}")
+    if name == "apptimelinereader" and params.use_external_hbase and params.hbase_within_cluster:
+        createTables()
+
     if not params.use_external_hbase and params.is_hbase_system_service_launch:
         if name == 'resourcemanager':
             setup_system_services(config_dir)

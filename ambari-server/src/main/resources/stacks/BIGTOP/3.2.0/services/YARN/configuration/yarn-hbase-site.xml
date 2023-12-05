@@ -137,7 +137,7 @@
 
   <property>
     <name>zookeeper.znode.parent</name>
-    <value>/atsv2-hbase-unsecure</value>
+    <value>{{zookeeper_znode_parent}}</value>
     <on-ambari-upgrade add="false"/>
   </property>
   <property>

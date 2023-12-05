@@ -252,6 +252,17 @@
     </value-attributes>
     <on-ambari-upgrade add="true"/>
   </property>
+
+  <property>
+    <name>hbase_within_cluster</name>
+    <value>false</value>
+    <description>Set to true, YARN will use the HBase installed on this cluster by Ambari for storage.</description>
+    <value-attributes>
+      <type>boolean</type>
+    </value-attributes>
+    <on-ambari-upgrade add="true"/>
+  </property>
+
   <property>
     <name>yarn_hbase_log_level</name>
     <value>INFO</value>
