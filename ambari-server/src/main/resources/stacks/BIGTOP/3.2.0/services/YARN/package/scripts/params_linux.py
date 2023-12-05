@@ -716,6 +716,7 @@ if hbase_within_cluster:
     zookeeper_znode_parent = "/hbase-unsecure"
   hbase_site_conf = config['configurations']['hbase-site']
   hbase_site_attributes = config['configurationAttributes']['hbase-site']
+  yarn_hbase_conf_dir = "/etc/hbase/conf"
 else:
   zookeeper_znode_parent = "/atsv2-hbase-unsecure"
   hbase_site_conf  = config['configurations']['yarn-hbase-site']
