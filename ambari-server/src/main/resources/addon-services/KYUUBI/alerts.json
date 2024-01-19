@@ -10,7 +10,7 @@
         "scope": "ANY",
         "source": {
           "type": "SCRIPT",
-          "path": "HDP/3.2/services/SPARK3/package/scripts/alerts/alert_kyuubi_server_port.py",
+          "path": "BIGTOP/3.2/services/SPARK3/package/scripts/alerts/alert_kyuubi_server_port.py",
           "parameters": [
             {
               "name": "check.command.timeout",

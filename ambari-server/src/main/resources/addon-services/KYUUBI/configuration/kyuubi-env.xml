@@ -88,7 +88,7 @@
 
 export JAVA_HOME={{java_home}}
 export HADOOP_CONF_DIR=/etc/hadoop/conf
-export SPARK_HOME=/usr/hdp/current/spark3-client
+export SPARK_HOME=/usr/bigtop/current/spark3-client
 export SPARK_CONF_DIR=/etc/spark3/conf
 export KYUUBI_LOG_DIR={{kyuubi_log_dir}}
 export KYUUBI_PID_DIR={{kyuubi_pid_dir}}
