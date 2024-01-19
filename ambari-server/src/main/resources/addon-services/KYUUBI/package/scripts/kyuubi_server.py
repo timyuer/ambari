@@ -34,7 +34,7 @@ class KyuubiServer(Script):
         #Directory([params.kyuubi_log_dir, params.kyuubi_pid_dir, params.kyuubi_operation_log_dir],
                   owner=params.kyuubi_user,
                   group=params.kyuubi_group,
-                  mode=0775,
+                  mode=0o775,
                   create_parents = True
                   )
 
@@ -45,7 +45,7 @@ class KyuubiServer(Script):
                key_value_delimiter = " ",
                owner=params.kyuubi_user,
                group=params.kyuubi_group,
-               mode=0644
+               mode=0o644
                )
 
         # create kyuubi-env.sh in kyuubi install dir
@@ -53,7 +53,7 @@ class KyuubiServer(Script):
              owner=params.kyuubi_user,
              group=params.kyuubi_group,
              content=InlineTemplate(params.kyuubi_env_sh),
-             mode=0644,
+             mode=0o644,
         )
 
         #create log4j2.properties kyuubi install dir
@@ -61,13 +61,13 @@ class KyuubiServer(Script):
              owner=params.kyuubi_user,
              group=params.kyuubi_group,
              content=InlineTemplate(params.kyuubi_log4j2_properties),
-             mode=0644,
+             mode=0o644,
         )
         # work dir
         Directory(os.path.join(params.kyuubi_pid_dir, 'work'),
             owner=params.kyuubi_user,
             group=params.kyuubi_group,
-            mode=0775,
+            mode=0o775,
             create_parents = True
             )
 
@@ -76,7 +76,7 @@ class KyuubiServer(Script):
                        type="directory",
                        action="create_on_execute",
                        owner=params.kyuubi_user,
-                       mode=0775
+                       mode=0o775
                   )
                   
     def start(self, env, upgrade_type=None):

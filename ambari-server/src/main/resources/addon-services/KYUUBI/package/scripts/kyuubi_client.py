@@ -41,7 +41,7 @@ class KyuubiClient(Script):
         #Directory([params.kyuubi_log_dir, params.kyuubi_pid_dir, params.kyuubi_operation_log_dir],
                   owner=params.kyuubi_user,
                   group=params.kyuubi_group,
-                  mode=0775,
+                  mode=0o775,
                   create_parents = True
                   )
 
@@ -52,7 +52,7 @@ class KyuubiClient(Script):
                key_value_delimiter = " ",
                owner=params.kyuubi_user,
                group=params.kyuubi_group,
-               mode=0644
+               mode=0o644
                )
 
         # create kyuubi-env.sh in kyuubi install dir
@@ -60,7 +60,7 @@ class KyuubiClient(Script):
              owner=params.kyuubi_user,
              group=params.kyuubi_group,
              content=InlineTemplate(params.kyuubi_env_sh),
-             mode=0644,
+             mode=0o644,
         )
  
 
