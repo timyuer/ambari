@@ -41,7 +41,7 @@ class DinkyService(Script):
         if not os.path.exists(dinky_setup_marker):
             try :
                 Execute(params.init_sql, user=params.dinky_user)
-                Logger.info(format('dinky init finished, cmd: {init_cmd}'))
+                Logger.info(format('dinky init finished, cmd: {params.init_sql}'))
 
                 File(dinky_setup_marker,
                      owner = params.dinky_user,

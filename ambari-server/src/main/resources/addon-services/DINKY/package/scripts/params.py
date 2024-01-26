@@ -90,7 +90,9 @@ if 'mysql' == dinky_database_config['dinky_database_type']:
     database_port = dinky_env_map['spring.datasource.database.port']
     dinky_init_sql_path = dinky_init_mysql_sqlfile
     sql_client = "mysql"
-    init_sql = format("{sql_client} -h {database_host} -p'{database_port}'  -u {dinky_user}   {dinky_database_name}  < {dinky_init_sql_path}")
+    #mysql -h hostname -P port -u username -p'password' dinky_database_name < /path/to/file.sql
+
+    init_sql = format("{sql_client} -h {database_host} -P {database_port}  -u {dinky_user} -p'{dinky_database_password}'   {dinky_database_name}  < {dinky_init_sql_path}")
 else:
 
     dinky_database_config['dinky_database_driver'] = 'org.postgresql.Driver'
