@@ -34,14 +34,14 @@ class AlluxioMaster(Script):
         Directory([ params.alluxio_pid_dir, params.alluxio_master_metastore_dir],
                   owner=params.alluxio_user,
                   group=params.alluxio_group,
-                  mode=0775,
+                  mode=0o775,
                   create_parents = True
         )
 
         Directory([params.alluxio_log_dir, os.path.join(params.alluxio_log_dir, 'user')],
                   owner=params.alluxio_user,
                   group=params.alluxio_group,
-                  mode=0777,
+                  mode=0o777,
                   create_parents = True
         )
 
@@ -50,7 +50,7 @@ class AlluxioMaster(Script):
              owner=params.alluxio_user,
              group=params.alluxio_group,
              content=InlineTemplate(params.alluxio_site_properties),
-             mode=0644,
+             mode=0o644,
         )
 
         # create alluxio-env.sh in alluxio install dir
@@ -58,7 +58,7 @@ class AlluxioMaster(Script):
              owner=params.alluxio_user,
              group=params.alluxio_group,
              content=InlineTemplate(params.alluxio_env_sh),
-             mode=0775,
+             mode=0o775,
         )
 
         #create log4j2.properties alluxio install dir
@@ -66,14 +66,14 @@ class AlluxioMaster(Script):
              owner=params.alluxio_user,
              group=params.alluxio_group,
              content=InlineTemplate(params.alluxio_log4j2_properties),
-             mode=0644,
+             mode=0o644,
         ) 
     
         # masters
         File(format("{alluxio_conf_dir}/masters"),
              owner=params.alluxio_user,
              group=params.alluxio_group,
-             mode=0644,
+             mode=0o644,
              content=Template('masters.j2', conf_dir=params.alluxio_conf_dir)
           )
 
@@ -81,7 +81,7 @@ class AlluxioMaster(Script):
         File(format("{alluxio_conf_dir}/workers"),
              owner=params.alluxio_user,
              group=params.alluxio_group,
-             mode=0644,
+             mode=0o644,
              content=Template('workers.j2', conf_dir=params.alluxio_conf_dir)
           )
         
@@ -90,13 +90,13 @@ class AlluxioMaster(Script):
                        type="directory",
                        action="create_on_execute",
                        owner=params.alluxio_user,
-                       mode=0775
+                       mode=0o775
                   )
         params.HdfsResource(params.underfs_hdfs_addr,
                        type="directory",
                        action="create_on_execute",
                        owner=params.alluxio_user,
-                       mode=0775
+                       mode=0o775
                   )
                   
     def start(self, env, upgrade_type=None):

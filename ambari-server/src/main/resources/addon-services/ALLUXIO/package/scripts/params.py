@@ -19,7 +19,7 @@ limitations under the License.
 """
 import socket
 import os
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from ambari_commons.constants import AMBARI_SUDO_BINARY
 from resource_management import *
