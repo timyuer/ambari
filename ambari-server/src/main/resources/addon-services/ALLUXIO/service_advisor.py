@@ -113,7 +113,7 @@ class AlluxioServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return self.getServiceComponentCardinalityValidations(services, hosts, "KYUUBI")
+    return self.getServiceComponentCardinalityValidations(services, hosts, "ALLUXIO")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """

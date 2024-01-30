@@ -38,7 +38,7 @@
         "source": {
           "type": "PORT",
           "uri": "{{alluxio-log4j-properties/alluxio.worker.rpc.port}}",
-          "default_port": 19999,
+          "default_port": 29999,
           "reporting": {
             "ok": {
               "text": "TCP OK - {0:.3f}s response on port {1}"

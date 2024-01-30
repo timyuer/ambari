@@ -104,7 +104,7 @@
 # alluxio.master.hostname=localhost
 # alluxio.master.mount.table.root.ufs=${alluxio.work.dir}/underFSStorage
 
-alluxio.master.hostname={{host_name}}
+alluxio.master.hostname={{alluxio_master_host}}
 #alluxio.master.mount.table.root.ufs={{namenode_address}}/alluxio/root/
 alluxio.underfs.address={{underfs_hdfs_addr}}
 alluxio.underfs.hdfs.configuration=/etc/hadoop/conf/core-site.xml:/etc/hadoop/conf/hdfs-site.xml

@@ -22,7 +22,7 @@
 <configuration supports_final="true">
     <property>
         <name>content</name>
-        <description>kyuubi-log4j2-properties</description>
+        <description>alluxio-log4j2-properties</description>
         <value>
 #
 # The Alluxio Open Foundation licenses this work under the Apache License, version 2.0

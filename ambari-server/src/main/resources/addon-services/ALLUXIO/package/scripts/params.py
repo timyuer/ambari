@@ -91,15 +91,19 @@ alluxio_pid_dir = config['configurations']['alluxio-env']['alluxio_pid_dir']
 alluxio_log_dir = config['configurations']['alluxio-env']['alluxio_log_dir']
 alluxio_work_dir = format("{alluxio_pid_dir}/work")
 
+host_name = config['agentLevelParams']['hostname']
+
 # alluxio masters address
 alluxio_masters = config['clusterHostInfo']['alluxio_master_hosts']
 alluxio_masters_str = '\n'.join(alluxio_masters)
+alluxio_master_host = host_name
 
 masters_journal_port = "19200"
 master_embedded_journal_addresses = ""
 master_embedded_journal_addresses_config = ""
 # get comma separated lists of masters_journal_host hosts from alluxio_masters
 if(len(alluxio_masters) > 1) :
+  alluxio_master_host = host_name
   index = 0
   for host in alluxio_masters:
     masters_journal_host = host
@@ -111,6 +115,9 @@ if(len(alluxio_masters) > 1) :
     if index < len(alluxio_masters):
       master_embedded_journal_addresses += ","
   master_embedded_journal_addresses_config = "alluxio.master.embedded.journal.addresses=" + master_embedded_journal_addresses
+elif (len(alluxio_masters) == 1) :
+  alluxio_master_host = alluxio_masters[0]
+print(alluxio_master_host)  
 print(master_embedded_journal_addresses_config)
 
 
@@ -151,7 +158,7 @@ else:
 # alluxio underfs address
 underfs_hdfs_addr = namenode_address + config['configurations']['alluxio-site-properties']['alluxio.underfs.hdfs.address']
 
-host_name = config['agentLevelParams']['hostname']
+
 
 # alluxio hdd dirs
 hdd_dirs = config['configurations']['alluxio-site-properties']['alluxio.hdd.dirs']
