@@ -298,6 +298,32 @@
           ]
         }
       },
+      "KYUUBI": {
+        "KYUUBI_CLIENT": {
+          "STACK-SELECT-PACKAGE": "kyuubi-client",
+          "INSTALL": [
+            "kyuubi-client"
+          ],
+          "PATCH": [
+            "kyuubi-client"
+          ],
+          "STANDARD": [
+            "kyuubi-client"
+          ]
+        },
+        "KYUUBI_SERVER": {
+          "STACK-SELECT-PACKAGE": "kyuubi-server",
+          "INSTALL": [
+            "kyuubi-server"
+          ],
+          "PATCH": [
+            "kyuubi-server"
+          ],
+          "STANDARD": [
+            "kyuubi-server"
+          ]
+        }
+      },
       "RANGER": {
         "RANGER_ADMIN": {
           "STACK-SELECT-PACKAGE": "ranger-admin",
@@ -501,6 +527,13 @@
           "conf_dir": "/etc/kafka/conf",
           "current_dir": "{0}/current/kafka-broker/conf",
           "component": "kafka-broker"
+        }
+      ],
+      "knox": [
+        {
+          "conf_dir": "/etc/knox/conf",
+          "current_dir": "{0}/current/knox-server/conf",
+          "component": "knox-server"
         }
       ],
       "phoenix": [
