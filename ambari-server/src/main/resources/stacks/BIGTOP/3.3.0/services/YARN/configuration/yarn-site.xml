@@ -1,0 +1,53 @@
+<?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<!--
+   Licensed to the Apache Software Foundation (ASF) under one or more
+   contributor license agreements.  See the NOTICE file distributed with
+   this work for additional information regarding copyright ownership.
+   The ASF licenses this file to You under the Apache License, Version 2.0
+   (the "License"); you may not use this file except in compliance with
+   the License.  You may obtain a copy of the License at
+
+       http://www.apache.org/licenses/LICENSE-2.0
+
+   Unless required by applicable law or agreed to in writing, software
+   distributed under the License is distributed on an "AS IS" BASIS,
+   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+   See the License for the specific language governing permissions and
+   limitations under the License.
+-->
+<!-- Put site-specific property overrides in this file. -->
+<configuration xmlns:xi="http://www.w3.org/2001/XInclude" supports_final="true">
+  <!-- ResourceManager -->
+ <property>
+    <name>yarn.nodemanager.aux-services</name>
+    <!-- TODO HDP 3.0, restore back to "mapreduce_shuffle,spark_shuffle,spark2_shuffle" after Spark is added to HDP 3.0 stack. -->
+    <value>mapreduce_shuffle,spark_shuffle,spark2_shuffle,spark3_shuffle,{{timeline_collector}}</value>
+    <description>Auxilliary services of NodeManager. A valid service name should only contain a-zA-Z0-9_ and cannot start with numbers</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.shuffle.service.port</name>
+    <value>7337</value>
+    <description>The spark shuffle service port to use for Spark 2</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>yarn.nodemanager.aux-services.spark3_shuffle.class</name>
+    <value>org.apache.spark.network.yarn.YarnShuffleService</value>
+    <description>The auxiliary service class to use for Spark 3</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>yarn.nodemanager.aux-services.spark3_shuffle.classpath</name>
+    <value>{{stack_root}}/{{spark3_version}}/spark3/aux/*:{{stack_root}}/{{spark3_version}}/spark3/aux/config</value>
+    <description>The auxiliary service classpath to use for Spark 3</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>spark.shuffle.push.server.mergedShuffleFileManagerImpl</name>
+    <value>org.apache.spark.network.shuffle.RemoteBlockPushResolver</value>
+    <description>The mergedShuffleFileManagerImpl to use for Spark 3</description>
+    <on-ambari-upgrade add="false"/>
+  </property>
+</configuration>

@@ -18,6 +18,7 @@ limitations under the License.
 """
 
 # Python imports
+from ast import Param
 import imp
 import os
 import traceback
@@ -42,10 +43,10 @@ except Exception as e:
   print "Failed to load parent"
 
 
-class HueServiceAdvisor(service_advisor.ServiceAdvisor):
+class HttpfsServiceAdvisor(service_advisor.ServiceAdvisor):
 
   def __init__(self, *args, **kwargs):
-    self.as_super = super(HueServiceAdvisor, self)
+    self.as_super = super(HttpfsServiceAdvisor, self)
     self.as_super.__init__(*args, **kwargs)
 
     # Always call these methods
@@ -113,7 +114,7 @@ class HueServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return self.getServiceComponentCardinalityValidations(services, hosts, "HUE")
+    return self.getServiceComponentCardinalityValidations(services, hosts, "Httpfs")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """
@@ -123,8 +124,8 @@ class HueServiceAdvisor(service_advisor.ServiceAdvisor):
     # Logger.info("Class: %s, Method: %s. Recommending Service Configurations." %
     #            (self.__class__.__name__, inspect.stack()[0][3]))
 
-    recommender = HueRecommender()
-    recommender.recommendHueConfigurationsFromHDP33(configurations, clusterData, services, hosts)
+    recommender = HttpfsRecommender()
+    recommender.recommendHttpfsConfigurationsFromHDP33(configurations, clusterData, services, hosts)
 
 
   # def getServiceConfigurationRecommendationsForSSO(self, configurations, clusterData, services, hosts):
@@ -132,7 +133,7 @@ class HueServiceAdvisor(service_advisor.ServiceAdvisor):
   #   Entry point.
   #   Must be overriden in child class.
   #   """
-  #   recommender = HueRecommender()
+  #   recommender = HttpfsRecommender()
   #   recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
@@ -170,26 +171,22 @@ class HueServiceAdvisor(service_advisor.ServiceAdvisor):
       return False
 
 
-class HueRecommender(service_advisor.ServiceAdvisor):
+class HttpfsRecommender(service_advisor.ServiceAdvisor):
   """
-  Hue Recommender suggests properties when adding the service for the first time or modifying configs via the UI.
+  Httpfs Recommender suggests properties when adding the service for the first time or modifying configs via the UI.
   """
 
   def __init__(self, *args, **kwargs):
-    self.as_super = super(HueRecommender, self)
+    self.as_super = super(HttpfsRecommender, self)
     self.as_super.__init__(*args, **kwargs)
 
-  def recommendHueConfigurationsFromHDP33(self, configurations, clusterData, services, hosts):
+  def recommendHttpfsConfigurationsFromHDP33(self, configurations, clusterData, services, hosts):
     """
     Recommend configurations for this service based on HDP 3.3.
     """
 
-    if configurations and "httpfs-site" in configurations:
-      putHttpsSiteProperty = self.putProperty(configurations, "httpfs-site", services)
-      putHttpssitePropertyAttribute = self.putPropertyAttribute(configurations, "httpfs-site")   
+    putCoreSiteProperty = self.putProperty(configurations, "core-site", services)
+    putCoresitePropertyAttribute = self.putPropertyAttribute(configurations, "core-site")   
 
-      putHttpsSiteProperty("httpfs.proxyuser.hue.groups", "*")
-      putHttpsSiteProperty("httpfs.proxyuser.hue.hosts", "*")
-
-        
- 
+    putCoreSiteProperty("hadoop.proxyuser.httpfs.groups", "*")
+    putCoreSiteProperty("hadoop.proxyuser.httpfs.hosts", "*")

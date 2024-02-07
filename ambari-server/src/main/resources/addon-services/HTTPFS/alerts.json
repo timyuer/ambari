@@ -1,17 +1,17 @@
 {
-  "HUE": {
+  "HTTPFS": {
     "service": [],
-    "HUE_SERVER": [
+    "HTTPFS_GATEWAY": [
       {
-        "name": "hue_webui",
-        "label": "Hue Web UI",
-        "description": "This host-level alert is triggered if the Hue Web UI is unreachable.",
+        "name": "httpfs_server_process",
+        "label": "HTTPFS server Process",
+        "description": "This host-level alert is triggered if the HTTPFS server cannot be determined to be up.",
         "interval": 1,
         "scope": "HOST",
         "source": {
           "type": "PORT",
-          "uri": "{{hue-env/http_port}}",
-          "default_port": 8888,
+          "uri": "{{httpfs/httpfs.port}}",
+          "default_port": 14000,
           "reporting": {
             "ok": {
               "text": "TCP OK - {0:.3f}s response on port {1}"
@@ -22,7 +22,7 @@
             },
             "critical": {
               "text": "Connection failed: {0} to {1}:{2}",
-              "value": 5
+              "value": 5.0
             }
           }
         }
