@@ -44,14 +44,14 @@ def celeborn(name=None):
   Directory([ status_params.celeborn_pid_dir, params.celeborn_master_ha_ratis_raft_server_storage_dir],
             owner=params.celeborn_user,
             group=params.celeborn_group,
-            mode=0775,
+            mode=0o775,
             create_parents = True
   )
 
   Directory([params.celeborn_log_dir],
             owner=params.celeborn_user,
             group=params.celeborn_group,
-            mode=0777,
+            mode=0o777,
             create_parents = True
   )
 
@@ -60,7 +60,7 @@ def celeborn(name=None):
        owner=params.celeborn_user,
        group=params.celeborn_group,
        content=InlineTemplate(params.celeborn_defaults_conf),
-       mode=0644,
+       mode=0o644,
   )
 
   # create celeborn-env.sh in celeborn install dir
@@ -68,7 +68,7 @@ def celeborn(name=None):
        owner=params.celeborn_user,
        group=params.celeborn_group,
        content=InlineTemplate(params.celeborn_env_sh),
-       mode=0775,
+       mode=0o775,
   )
 
   #create log4j.xml celeborn install dir
@@ -76,7 +76,7 @@ def celeborn(name=None):
        owner=params.celeborn_user,
        group=params.celeborn_group,
        content=InlineTemplate(params.celeborn_log4j_xml),
-       mode=0644,
+       mode=0o644,
   ) 
   
   #create metrics.properties celeborn install dir
@@ -84,7 +84,7 @@ def celeborn(name=None):
        owner=params.celeborn_user,
        group=params.celeborn_group,
        content=InlineTemplate(params.celeborn_metrics_properties),
-       mode=0644,
+       mode=0o644,
   ) 
 
   #quota.yaml
@@ -93,7 +93,7 @@ def celeborn(name=None):
        owner=params.celeborn_user,
        group=params.celeborn_group,
        content=InlineTemplate(params.celeborn_quota_xml),
-       mode=0644,
+       mode=0o644,
     ) 
 
   #ratis-log4j.properties
@@ -101,14 +101,14 @@ def celeborn(name=None):
        owner=params.celeborn_user,
        group=params.celeborn_group,
        content=InlineTemplate(params.celeborn_ratis_log4j_properties),
-       mode=0644,
+       mode=0o644,
   ) 
   
   # hostss
   File(format("{celeborn_conf_dir}/hosts"),
        owner=params.celeborn_user,
        group=params.celeborn_group,
-       mode=0644,
+       mode=0o644,
        content=Template('hosts.j2', conf_dir=params.celeborn_conf_dir)
     ) 
   
@@ -117,12 +117,12 @@ def celeborn(name=None):
                  type="directory",
                  action="create_on_execute",
                  owner=params.celeborn_user,
-                 mode=0775
+                 mode=0o775
             )
   params.HdfsResource(params.celeborn_storage_hdfs_dir,
                  type="directory",
                  action="create_on_execute",
                  owner=params.celeborn_user,
-                 mode=0775
+                 mode=0o775
             )
             

@@ -19,7 +19,7 @@ limitations under the License.
 """
 import socket
 import os
-from urlparse import urlparse
+from urllib.parse import urlparse
 
 from ambari_commons.constants import AMBARI_SUDO_BINARY
 from resource_management import *
@@ -92,6 +92,7 @@ celeborn_conf_dir = format("{stack_root}/current/{component_directory}/conf")
 celeborn_user = config['configurations']['celeborn-env']['celeborn_user']
 celeborn_group = config['configurations']['celeborn-env']['celeborn_group']
 celeborn_log_dir = config['configurations']['celeborn-env']['celeborn_log_dir']
+celeborn_pid_dir = config['configurations']['celeborn-env']['celeborn_pid_dir']
 
 # celeborn masters address
 celeborn_masters = config['clusterHostInfo']['celeborn_master_hosts']

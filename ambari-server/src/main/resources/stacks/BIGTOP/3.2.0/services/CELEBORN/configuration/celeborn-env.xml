@@ -66,6 +66,7 @@
         <name>celeborn_pid_dir</name>
         <display-name>Celeborn PID directory</display-name>
         <value>/var/run/celeborn</value>
+        <description>Celeborn Log Dir</description>
         <value-attributes>
             <type>directory</type>
         </value-attributes>
