@@ -49,6 +49,33 @@ from resource_management.libraries.functions.namenode_ha_utils import get_proper
 config = Script.get_config()
 tmp_dir = Script.get_tmp_dir()
 
+
+
+######### httpfs
+ignore_groupsusers_create = default("/configurations/cluster-env/ignore_groupsusers_create", False)
+smoke_user = default("/configurations/cluster-env/smokeuser", "ambari-qa")
+smoke_user_principal = default("/configurations/cluster-env/smokeuser_principal_name", "")
+smoke_user_keytab = default("/configurations/cluster-env/smokeuser_keytab", "")
+kinit_path_local = get_kinit_path(default("/configurations/kerberos-env/executable_search_paths", None))
+
+httpfs_user = config['configurations']['httpfs-env']['httpfs_user']
+httpfs_group = config['configurations']['httpfs-env']['httpfs_group']
+httpfs_conf_dir = config['configurations']['httpfs-env']['conf_dir']
+httpfs_pid_dir = "/var/run/hadoop/httpfs"
+httpfs_pid_file = f"{httpfs_pid_dir}/hadoop-{httpfs_user}-httpfs.pid"
+httpfs_temp_dir = "/tmp/httpfs"
+
+httpfs_server_host = config['clusterHostInfo']['httpfs_gateway_hosts'][0]
+httpfs_server_port = config['configurations']['httpfs-env']['port']
+httpfs_log_dir = config['configurations']['httpfs-env']['httpfs_log_dir']
+
+httpfs_env_template = config['configurations']['httpfs-env']['content']
+httpfs_log4j_content = config['configurations']['httpfs-log4j']['content']
+
+_authentication = config['configurations']['core-site']['hadoop.security.authentication']
+
+
+
 architecture = get_architecture()
 
 service_name = 'hdfs'

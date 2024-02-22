@@ -280,6 +280,28 @@
             </customCommand>
           </customCommands>
         </component>
+
+        <component>
+          <name>HTTPFS_GATEWAY</name>
+          <displayName>HTTPFS gateway</displayName>
+          <category>MASTER</category>
+          <cardinality>0+</cardinality>
+          <commandScript>
+            <script>scripts/httpfs_component.py</script>
+            <scriptType>PYTHON</scriptType>
+            <timeout>600</timeout>
+          </commandScript>
+          <dependencies>
+            <dependency>
+              <name>HDFS/HDFS_CLIENT</name>
+              <scope>host</scope>
+              <auto-deploy>
+                <enabled>true</enabled>
+              </auto-deploy>
+            </dependency>
+          </dependencies>
+        </component>
+
       </components>
 
       <osSpecifics>
@@ -306,6 +328,9 @@
             </package>
             <package>
               <name>ranger_${stack_version}-hdfs-plugin</name>
+            </package>
+            <package>
+              <name>hadoop_${stack_version}-httpfs</name>
             </package>
           </packages>
         </osSpecific>
@@ -356,6 +381,9 @@
         <config-type>ranger-hdfs-audit</config-type>
         <config-type>ranger-hdfs-policymgr-ssl</config-type>
         <config-type>ranger-hdfs-security</config-type>
+        <config-type>httpfs-log4j</config-type>
+        <config-type>httpfs-env</config-type>
+        <config-type>httpfs-site</config-type>
       </configuration-dependencies>
       <restartRequiredAfterRackChange>true</restartRequiredAfterRackChange>
 
