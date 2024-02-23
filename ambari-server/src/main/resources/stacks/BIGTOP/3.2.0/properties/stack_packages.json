@@ -1,6 +1,58 @@
 {
   "BIGTOP": {
     "stack-select": {
+      "CELEBORN": {
+        "CELEBORN_MASTER": {
+          "STACK-SELECT-PACKAGE": "celeborn",
+          "INSTALL": [
+            "celeborn"
+          ],
+          "PATCH": [
+            "celeborn"
+          ],
+          "STANDARD": [
+            "celeborn"
+          ]
+        },
+        "CELEBORN_WORKER": {
+          "STACK-SELECT-PACKAGE": "celeborn",
+          "INSTALL": [
+            "celeborn"
+          ],
+          "PATCH": [
+            "celeborn"
+          ],
+          "STANDARD": [
+            "celeborn"
+          ]
+        }
+      },
+      "ALLUXIO": {
+        "ALLUXIO_MASTER": {
+          "STACK-SELECT-PACKAGE": "alluxio",
+          "INSTALL": [
+            "alluxio"
+          ],
+          "PATCH": [
+            "alluxio"
+          ],
+          "STANDARD": [
+            "alluxio"
+          ]
+        },
+        "ALLUXIO_WORKER": {
+          "STACK-SELECT-PACKAGE": "alluxio",
+          "INSTALL": [
+            "alluxio"
+          ],
+          "PATCH": [
+            "alluxio"
+          ],
+          "STANDARD": [
+            "alluxio"
+          ]
+        }
+      },
       "HBASE": {
         "HBASE_CLIENT": {
           "STACK-SELECT-PACKAGE": "hbase-client",
@@ -203,6 +255,20 @@
           ]
         }
       },
+      "KNOX": {
+        "KNOX_GATEWAY": {
+          "STACK-SELECT-PACKAGE": "knox-server",
+          "INSTALL": [
+            "knox-server"
+          ],
+          "PATCH": [
+            "knox-server"
+          ],
+          "STANDARD": [
+            "knox-server"
+          ]
+        }
+      },
       "MAPREDUCE2": {
         "HISTORYSERVER": {
           "STACK-SELECT-PACKAGE": "hadoop-mapreduce-historyserver",
@@ -271,6 +337,32 @@
           ]
         }
       },
+      "KYUUBI": {
+        "KYUUBI_CLIENT": {
+          "STACK-SELECT-PACKAGE": "kyuubi-client",
+          "INSTALL": [
+            "kyuubi-client"
+          ],
+          "PATCH": [
+            "kyuubi-client"
+          ],
+          "STANDARD": [
+            "kyuubi-client"
+          ]
+        },
+        "KYUUBI_SERVER": {
+          "STACK-SELECT-PACKAGE": "kyuubi-server",
+          "INSTALL": [
+            "kyuubi-server"
+          ],
+          "PATCH": [
+            "kyuubi-server"
+          ],
+          "STANDARD": [
+            "kyuubi-server"
+          ]
+        }
+      },
       "FLINK": {
         "FLINK_CLIENT": {
           "STACK-SELECT-PACKAGE": "flink-client",
@@ -299,18 +391,6 @@
         }
       },
       "KYUUBI": {
-        "KYUUBI_CLIENT": {
-          "STACK-SELECT-PACKAGE": "kyuubi-client",
-          "INSTALL": [
-            "kyuubi-client"
-          ],
-          "PATCH": [
-            "kyuubi-client"
-          ],
-          "STANDARD": [
-            "kyuubi-client"
-          ]
-        },
         "KYUUBI_SERVER": {
           "STACK-SELECT-PACKAGE": "kyuubi-server",
           "INSTALL": [
@@ -574,6 +654,13 @@
           "component": "spark-client"
         }
       ],
+      "kyuubi": [
+        {
+          "conf_dir": "/etc/kyuubi/conf",
+          "current_dir": "{0}/current/kyuubi-server/conf",
+          "component": "kyuubi-server"
+        }
+      ],
       "flink": [
         {
           "conf_dir": "/etc/flink/conf",
@@ -629,6 +716,9 @@
         "packages": [
           "kafka"
         ]
+      },
+      "KNOX": {
+        "packages": ["knox"]
       },
       "MAPREDUCE2": {
         "packages": []
