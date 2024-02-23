@@ -53,10 +53,10 @@ tmp_dir = Script.get_tmp_dir()
 
 ######### httpfs
 ignore_groupsusers_create = default("/configurations/cluster-env/ignore_groupsusers_create", False)
-smoke_user = default("/configurations/cluster-env/smokeuser", "ambari-qa")
+#smoke_user = default("/configurations/cluster-env/smokeuser", "ambari-qa")
 smoke_user_principal = default("/configurations/cluster-env/smokeuser_principal_name", "")
-smoke_user_keytab = default("/configurations/cluster-env/smokeuser_keytab", "")
-kinit_path_local = get_kinit_path(default("/configurations/kerberos-env/executable_search_paths", None))
+#smoke_user_keytab = default("/configurations/cluster-env/smokeuser_keytab", "")
+#kinit_path_local = get_kinit_path(default("/configurations/kerberos-env/executable_search_paths", None))
 
 httpfs_user = config['configurations']['httpfs-env']['httpfs_user']
 httpfs_group = config['configurations']['httpfs-env']['httpfs_group']
