@@ -20,7 +20,7 @@
   <services>
     <service>
       <name>ZOOKEEPER</name>
-      <version>3.8.3</version>
+      <version>3.7.2</version>
 
       <quickLinksConfigurations-dir>quicklinks</quickLinksConfigurations-dir>
         <quickLinksConfigurations>
