@@ -91,6 +91,8 @@ alluxio_pid_dir = config['configurations']['alluxio-env']['alluxio_pid_dir']
 alluxio_log_dir = config['configurations']['alluxio-env']['alluxio_log_dir']
 alluxio_work_dir = format("{alluxio_pid_dir}/work")
 
+alluxio_journal_dir = format("{stack_root}/current/{component_directory}/journal")
+
 host_name = config['agentLevelParams']['hostname']
 
 # alluxio masters address

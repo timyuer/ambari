@@ -31,7 +31,7 @@ class AlluxioWorker(Script):
         env.set_params(params)
         
 
-        Directory([params.alluxio_pid_dir],
+        Directory([params.alluxio_pid_dir, params.alluxio_journal_dir],
                   owner=params.alluxio_user,
                   group=params.alluxio_group,
                   mode=0o775,

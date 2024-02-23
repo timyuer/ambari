@@ -31,7 +31,7 @@ class AlluxioMaster(Script):
         import params
         env.set_params(params)       
 
-        Directory([ params.alluxio_pid_dir, params.alluxio_master_metastore_dir],
+        Directory([ params.alluxio_pid_dir, params.alluxio_master_metastore_dir, params.alluxio_journal_dir],
                   owner=params.alluxio_user,
                   group=params.alluxio_group,
                   mode=0o775,
