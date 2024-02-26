@@ -20,6 +20,14 @@
 -->
 <configuration supports_final="true">
     <property>
+        <name>kyuubi.frontend.rest.bind.port</name>
+        <value>10099</value>
+        <description>
+            Port of the machine on which to run the REST frontend service.
+        </description>
+        <on-ambari-upgrade add="true"/>
+    </property>
+    <property>
         <name>kyuubi.frontend.thrift.binary.bind.port</name>
         <value>10009</value>
         <description>
