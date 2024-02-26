@@ -338,18 +338,6 @@
         }
       },
       "KYUUBI": {
-        "KYUUBI_CLIENT": {
-          "STACK-SELECT-PACKAGE": "kyuubi-client",
-          "INSTALL": [
-            "kyuubi-client"
-          ],
-          "PATCH": [
-            "kyuubi-client"
-          ],
-          "STANDARD": [
-            "kyuubi-client"
-          ]
-        },
         "KYUUBI_SERVER": {
           "STACK-SELECT-PACKAGE": "kyuubi-server",
           "INSTALL": [

@@ -62,7 +62,7 @@ stack_version_formatted = format_stack_version(stack_version_unformatted)
 major_stack_version = get_major_version(stack_version_formatted)
 
 #3.2.1.0-001
-effective_version = get_current_version(service="SPARK3")
+effective_version = get_current_version(service="SPARK")
 
 sysprep_skip_copy_tarballs_hdfs = get_sysprep_skip_copy_tarballs_hdfs()
 
