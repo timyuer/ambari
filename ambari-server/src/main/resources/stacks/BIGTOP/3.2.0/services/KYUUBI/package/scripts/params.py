@@ -89,7 +89,7 @@ kyuubi_user = config['configurations']['kyuubi-env']['kyuubi_user']
 kyuubi_group = config['configurations']['kyuubi-env']['kyuubi_group']
 kyuubi_pid_dir = config['configurations']['kyuubi-env']['kyuubi_pid_dir']
 kyuubi_log_dir = config['configurations']['kyuubi-env']['kyuubi_log_dir']
-kyuubi_work_dir = format("{kyuubi_pid_dir}/work")
+kyuubi_work_dir = format("{kyuubi_home}/work")
 kyuubi_pid_file = format("{kyuubi_pid_dir}/kyuubi-{kyuubi_user}-org.apache.kyuubi.server.KyuubiServer.pid")
 
 kyuubi_metrics_dir= format("{stack_root}/current/{component_directory}/work/metrics")

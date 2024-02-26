@@ -31,7 +31,6 @@ class KyuubiServer(Script):
         
 
         Directory([params.kyuubi_log_dir, params.kyuubi_pid_dir, params.kyuubi_work_dir, params.kyuubi_metrics_dir, params.kyuubi_operation_log_dir],
-        #Directory([params.kyuubi_log_dir, params.kyuubi_pid_dir, params.kyuubi_operation_log_dir],
                   owner=params.kyuubi_user,
                   group=params.kyuubi_group,
                   mode=0o775,
