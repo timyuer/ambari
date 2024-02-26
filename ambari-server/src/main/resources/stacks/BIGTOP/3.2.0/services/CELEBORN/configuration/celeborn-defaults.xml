@@ -21,14 +21,14 @@
 -->
 <configuration supports_final="true">
 
-  <property require-input="true">
+  <property>
     <name>celeborn.master.port</name>
     <description>celeborn.master.port</description>
     <value>9097</value>
     <on-ambari-upgrade add="true"/>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>celeborn.master.ratis.port</name>
     <description>celeborn.master.ratis.port</description>
     <value>9872</value>
@@ -47,7 +47,7 @@
     <on-ambari-upgrade add="false"/>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>celeborn.worker.storage.dirs</name>
     <description>If Celeborn workers have local disks and HDFS. Following configs should be added.
 Celeborn will use local disks until local disk become unavailable to gain the best performance.
@@ -59,7 +59,7 @@ example: /mnt/disk1:disktype=SSD,/mnt/disk2:disktype=SSD</description>
     <on-ambari-upgrade add="true"/>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>celeborn.storage.activeTypes</name>
     <description># If Celeborn workers don't have local disks. You can use HDFS.
 # Do not set `celeborn.worker.storage.dirs` and use following configs.</description>
@@ -67,7 +67,7 @@ example: /mnt/disk1:disktype=SSD,/mnt/disk2:disktype=SSD</description>
     <on-ambari-upgrade add="true"/>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>celeborn.storage.hdfs.dir</name>
     <description>celeborn.storage.hdfs.dir</description>
     <value>/celeborn</value>

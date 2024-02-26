@@ -19,66 +19,52 @@
  */
 -->
 <configuration supports_final="true">
-  <property require-input="true">
+  <property>
     <name>alluxio.master.rpc.port</name>
     <description>alluxio.master.rpc.port</description>
     <value>19998</value>
     <on-ambari-upgrade add="true"/>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>alluxio.master.web.port</name>
     <description>alluxio.master.web.port</description>
     <value>19999</value>
     <on-ambari-upgrade add="true"/>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>alluxio.worker.rpc.port</name>
     <description>alluxio.worker.rpc.port</description>
     <value>29999</value>
     <on-ambari-upgrade add="true"/>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>alluxio.worker.web.port</name>
     <description>alluxio.worker.web.port</description>
     <value>30000</value>
     <on-ambari-upgrade add="true"/>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>alluxio.worker.memory</name>
     <description>Alluxio Worker Memory(GB)</description>
     <value>2GB</value>
     <on-ambari-upgrade add="true"/>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>alluxio.underfs.hdfs.address</name>
     <description>Alluxio UnderFS hdfs Address</description>
     <value>/alluxio/underFSStorage</value>
     <on-ambari-upgrade add="true"/>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>alluxio.master.metastore.dir</name>
     <description>Alluxio UnderFS Address</description>
-    <value>/usr/hdp/current/alluxio/metastore</value>
-    <on-ambari-upgrade add="true"/>
-  </property>
-  
-  <property require-input="true">
-    <name>alluxio.hdd.dirs</name>
-    <description>Alluxio HDD Directory</description>
-    <value>/hadoop/alluxio/hdd</value>
-    <on-ambari-upgrade add="true"/>
-  </property>
-
-  <property require-input="true">
-    <name>alluxio.hdd.quota</name>
-    <description>Alluxio HDD Size(GB)</description>
-    <value>20GB</value>
+    <value>/usr/bigtop/current/alluxio/metastore</value>
     <on-ambari-upgrade add="true"/>
   </property>
 

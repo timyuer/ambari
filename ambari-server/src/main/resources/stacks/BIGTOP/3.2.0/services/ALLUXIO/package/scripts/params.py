@@ -163,8 +163,6 @@ underfs_hdfs_addr = namenode_address + config['configurations']['alluxio-site-pr
 
 
 # alluxio hdd dirs
-hdd_dirs = config['configurations']['alluxio-site-properties']['alluxio.hdd.dirs']
-hdd_quota = config['configurations']['alluxio-site-properties']['alluxio.hdd.quota']
 
 
 alluxio_site_properties = config['configurations']['alluxio-site-properties']['content']
