@@ -473,11 +473,34 @@
         }
       },
       "YARN": {
+        "APP_TIMELINE_SERVER": {
+          "STACK-SELECT-PACKAGE": "hadoop-yarn-timelineserver",
+          "INSTALL": [
+            "hadoop-yarn-timelineserver"
+          ],
+          "PATCH": [
+            "hadoop-yarn-timelineserver"
+          ],
+          "STANDARD": [
+            "hadoop-yarn-timelineserver"
+          ]
+        },
+        "TIMELINE_READER": {
+          "STACK-SELECT-PACKAGE": "hadoop-yarn-timelinereader",
+          "INSTALL": [
+            "hadoop-yarn-timelinereader"
+          ],
+          "PATCH": [
+            "hadoop-yarn-timelinereader"
+          ],
+          "STANDARD": [
+            "hadoop-yarn-timelinereader"
+          ]
+        },
         "NODEMANAGER": {
           "STACK-SELECT-PACKAGE": "hadoop-yarn-nodemanager",
           "INSTALL": [
-            "hadoop-yarn-nodemanager",
-            "hadoop-client"
+            "hadoop-yarn-nodemanager"
           ],
           "PATCH": [
             "hadoop-yarn-nodemanager"
@@ -489,8 +512,7 @@
         "RESOURCEMANAGER": {
           "STACK-SELECT-PACKAGE": "hadoop-yarn-resourcemanager",
           "INSTALL": [
-            "hadoop-yarn-resourcemanager",
-            "hadoop-client"
+            "hadoop-yarn-resourcemanager"
           ],
           "PATCH": [
             "hadoop-yarn-resourcemanager"
@@ -502,14 +524,25 @@
         "YARN_CLIENT": {
           "STACK-SELECT-PACKAGE": "hadoop-yarn-client",
           "INSTALL": [
-            "hadoop-yarn-client",
-            "hadoop-client"
+            "hadoop-yarn-client"
           ],
           "PATCH": [
             "hadoop-yarn-client"
           ],
           "STANDARD": [
             "hadoop-client"
+          ]
+        },
+        "YARN_REGISTRY_DNS": {
+          "STACK-SELECT-PACKAGE": "hadoop-yarn-registrydns",
+          "INSTALL": [
+            "hadoop-yarn-registrydns"
+          ],
+          "PATCH": [
+            "hadoop-yarn-registrydns"
+          ],
+          "STANDARD": [
+            "hadoop-yarn-registrydns"
           ]
         }
       },
