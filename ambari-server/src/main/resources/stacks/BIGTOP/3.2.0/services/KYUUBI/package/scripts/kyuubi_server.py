@@ -37,6 +37,12 @@ class KyuubiServer(Script):
                   create_parents = True
                   )
 
+        Directory(params.kyuubi_home,
+                  owner=params.kyuubi_user,
+                  group=params.kyuubi_group,
+                  mode=0o775
+                  )
+
         kyuubi_defaults = dict(params.config['configurations']['kyuubi-defaults'])
 
         PropertiesFile(format("{kyuubi_conf_dir}/kyuubi-defaults.conf"),
