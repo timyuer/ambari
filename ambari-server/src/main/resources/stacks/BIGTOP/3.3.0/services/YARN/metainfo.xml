@@ -24,6 +24,12 @@
       <displayName>YARN</displayName>
       <comment>Apache Hadoop NextGen MapReduce (YARN)</comment>
       <version>3.3.6</version>
-    </service> 
+    </service>
+    <service>
+      <name>MAPREDUCE2</name>
+      <displayName>MapReduce2</displayName>
+      <comment>Apache Hadoop NextGen MapReduce (YARN)</comment>
+      <version>3.3.6</version>
+    </service>
   </services>
 </metainfo>
