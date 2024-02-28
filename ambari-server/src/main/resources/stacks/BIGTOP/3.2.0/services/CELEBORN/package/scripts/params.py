@@ -109,28 +109,30 @@ celeborn_master_endpoints = ""
 celeborn_master_endpoints_config = ""
 # get comma separated lists of celeborn_master_endpoints hosts from celeborn_masters
 if(len(celeborn_masters) > 0) :
-  index = 0
-  for host in celeborn_masters:
-    celeborn_master_host = host
-    if celeborn_master_port is not None:
-      celeborn_master_host = host + ":" + str(celeborn_master_port)
+  if len(celeborn_masters) == 1:
+    host = celeborn_masters[0]
+    celeborn_master_endpoints_config = format("celeborn.master.host {host}\nceleborn.master.port {celeborn_master_port}")
 
-    celeborn_master_endpoints += celeborn_master_host
-    index += 1
-    if( host == hostname ):
-      celeborn_master_endpoints_config += format("celeborn.master.ha.node.id {index}\n")
-    celeborn_master_endpoints_config += format("celeborn.master.ha.node.{index}.host {host} \nceleborn.master.ha.node.{index}.port {celeborn_master_port} \nceleborn.master.ha.node.{index}.ratis.port {celeborn_master_ratis_port}")
+  if len(celeborn_masters) > 1:
+    index = 0
+    for host in celeborn_masters:
+      celeborn_master_host = host
+      if celeborn_master_port is not None:
+        celeborn_master_host = host + ":" + str(celeborn_master_port)
 
-    if index < len(celeborn_masters):
-      celeborn_master_endpoints += ","
-      celeborn_master_endpoints_config += "\n"
-      celeborn_master_ha_enabled = True
-    else:
-      celeborn_master_endpoints_config = format("celeborn.master.host {host}\nceleborn.master.port {celeborn_master_port}")
+      celeborn_master_endpoints += celeborn_master_host
+      index += 1
+      if( host == hostname ):
+        celeborn_master_endpoints_config += format("celeborn.master.ha.node.id {index}\n")
+      celeborn_master_endpoints_config += format("celeborn.master.ha.node.{index}.host {host} \nceleborn.master.ha.node.{index}.port {celeborn_master_port} \nceleborn.master.ha.node.{index}.ratis.port {celeborn_master_ratis_port}")
 
- 
-print(celeborn_master_endpoints)
-print(celeborn_master_endpoints_config)
+      if index < len(celeborn_masters):
+        celeborn_master_endpoints += ","
+        celeborn_master_endpoints_config += "\n"
+        celeborn_master_ha_enabled = True
+
+print(f"celeborn_master_endpoints: {celeborn_master_endpoints}")
+print(f"celeborn_master_endpoints_config: {celeborn_master_endpoints_config}")
 
 # celeborn.master.ha.ratis.raft.server.storage.dir
 celeborn_master_ha_ratis_raft_server_storage_dir = config['configurations']['celeborn-defaults']['celeborn.master.ha.ratis.raft.server.storage.dir']
