@@ -4171,7 +4171,7 @@ public class AmbariManagementControllerImpl implements AmbariManagementControlle
     String requestContext = "";
 
     if (requestProperties != null) {
-      requestContext = StringEscapeUtils.escapeHtml4(requestProperties.get(REQUEST_CONTEXT_PROPERTY));
+      requestContext = StringEscapeUtils.escapeHtml4(requestProperties.get(RequestResourceProvider.CONTEXT));
       if (requestContext == null) {
         // guice needs a non-null value as there is no way to mark this parameter @Nullable
         requestContext = "";
