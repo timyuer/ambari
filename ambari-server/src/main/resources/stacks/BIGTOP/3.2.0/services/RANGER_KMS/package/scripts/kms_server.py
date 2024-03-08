@@ -48,10 +48,6 @@ class KmsServer(Script):
       sudo = True
     )
 
-    kms.setup_kms_db()
-    self.configure(env)
-    kms.setup_java_patch()
-
   def stop(self, env, upgrade_type=None):
     import params
 
@@ -89,9 +85,11 @@ class KmsServer(Script):
 
   def configure(self, env):
     import params
-
+    kms.setup_kms_db()
     env.set_params(params)
     kms.kms()
+    if not os.path.exists(params.ranger_kms_setup_marker):
+      kms.setup_java_patch()
 
   def pre_upgrade_restart(self, env, upgrade_type=None):
     import params
