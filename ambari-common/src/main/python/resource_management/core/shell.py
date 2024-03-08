@@ -202,23 +202,23 @@ def _call(command, logoutput=None, throw_on_failure=True, stdout=subprocess.PIPE
   elif user:
     command = as_user(command, user, env=env)
 
-  if isinstance(command, basestring):
-    subprocess32_command = [command]
+  if isinstance(command, str):
+    subprocess_command = [command]
   elif shell:
     # TODO: Remove this condition after reviewing 'shell' flag requirement where shell.call() is being used.
-    subprocess32_command = [string_cmd_from_args_list(command)]
+    subprocess_command = [string_cmd_from_args_list(command)]
   else:
-    subprocess32_command = command
+    subprocess_command = command
 
   # replace placeholder from as_sudo / as_user if present
   env_str = _get_environment_str(env)
 
   for placeholder, replacement in PLACEHOLDERS_TO_STR.items():
-    subprocess32_command = [cmd.replace(placeholder, replacement.format(env_str=env_str)) for cmd in subprocess32_command]
+    subprocess_command = [cmd.replace(placeholder, replacement.format(env_str=env_str)) for cmd in subprocess_command]
 
   if shell:
     # --noprofile is used to preserve PATH set for ambari-agent
-    subprocess32_command = ["/bin/bash","--login","--noprofile","-c"] + subprocess32_command
+    subprocess_command = ["/bin/bash","--login","--noprofile","-c"] + subprocess_command
 
 
   # don't create stdout and stderr pipes, because forked process will not be able to use them if current process dies
