@@ -31,7 +31,7 @@ from resource_management.core import shell
 from resource_management.libraries.functions.default import default
 from kms_service import kms_service
 import upgrade
-
+import os
 import kms
 
 class KmsServer(Script):
