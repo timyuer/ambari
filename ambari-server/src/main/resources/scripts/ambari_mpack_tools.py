@@ -245,36 +245,41 @@ class MpackBuilder:
         logging.info(f"Created mpack tarball: {tarball_name}")
 
 
-    def setup_options():
-        parser = argparse.ArgumentParser(description='ambari Mpack Tools.')
 
-        # Add the arguments
-        parser.add_argument('-ambari-dir',
-                            metavar='components',
-                            type=str,
-                            help='The components to be build, donat split')
-        parser.add_argument('-stack-name',
-                            type=str,
-                            help='install nexus ')
+def setup_options():
+    parser = argparse.ArgumentParser(description='ambari Mpack Tools.')
 
-        parser.add_argument('-service-name',
-                            type=str,
-                            help='install nexus ')
+    # Add the arguments
+    parser.add_argument('-ambari-dir',
+                        type=str,
+                        help='The ambari prj dir')
+    parser.add_argument('-stack-name',
+                        type=str,
+                        help='the ambari stack u want package')
 
-        parser.add_argument('-stack-version',
-                            type=str,
-                            help='upload components to nexus build')
+    parser.add_argument('-service-name',
+                        type=str,
+                        help='the ambari service u want package')
 
-        parser.add_argument('-mpack-version',
-                            type=str,
-                            help='upload os pkgs to nexus')
-        parser.add_argument('-output-dir',
-                            type=str,
-                            help='upload os pkgs to nexus')
+    parser.add_argument('-stack-version',
+                        type=str,
+                        help='upload components to nexus build')
+
+    parser.add_argument('-mpack-version',
+                        type=str,
+                        help='upload os pkgs to nexus')
+    parser.add_argument('-output-dir',
+                        type=str,
+                        help='upload os pkgs to nexus')
+
+    args = parser.parse_args()
+    print(f"main program params is : {args}")
+    return args
 
 
 # Usage
 if __name__ == "__main__":
+
     args = setup_options()
     ambari_dir = args.ambari_dir
     stack_name = args.stack_name
@@ -282,17 +287,12 @@ if __name__ == "__main__":
     stack_version = args.stack_version
     mpack_version = args.mpack_version
     output_dir = args.output_dir
+    ambari_dir=os.path.abspath(ambari_dir)
+    output_dir=os.path.abspath(output_dir)
 
-    # PRJDIR = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), './'))
-    # PRJ_OUTPUT_DIR = os.path.join(PRJDIR, 'output')
-    # ambari_dir = "/Users/jialiangcai/szl/prjs/opensource/ambari"
-    # service_name = "HDFS"
-    # stack_name = "BIGTOP"
-    # stack_version = "3.2.0"
-    # mpack_version = "3.2.0"
-
-    mpack_builder = MpackBuilder(ambari_dir, output_dir, service_name, stack_name, stack_version, mpack_version)
     if service_name:
+        mpack_builder = MpackBuilder(ambari_dir, output_dir, service_name, stack_name, stack_version, mpack_version)
         mpack_builder.build_service_mpack()
     else:
+        mpack_builder = MpackBuilder(ambari_dir, output_dir, stack_name, stack_name, stack_version, mpack_version)
         mpack_builder.build_stack_mpack()
