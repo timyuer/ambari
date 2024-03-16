@@ -264,6 +264,8 @@ class OSCheck:
       operatingSystem = 'redhat'
     elif operatingSystem.startswith('uos'):
       operatingSystem = 'redhat'
+    elif operatingSystem.startswith('uniontech'):
+      operatingSystem = 'redhat'
     elif operatingSystem.startswith('anolis'):
       operatingSystem = 'redhat'
     elif operatingSystem.startswith('asianux server'):
@@ -339,6 +341,10 @@ class OSCheck:
         if version == '20':
           version = '8'
       elif operatingSystem.startswith('uos'):
+        #uos 20
+        if version == '20':
+          version = '8'
+      elif operatingSystem.startswith('uniontech'):
         #uos 20
         if version == '20':
           version = '8'
