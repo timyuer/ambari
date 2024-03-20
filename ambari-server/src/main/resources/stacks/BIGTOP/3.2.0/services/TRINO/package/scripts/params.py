@@ -53,7 +53,6 @@ memory_configs = ['query.max-memory-per-node', 'query.max-memory']
 
 stack_root = Script.get_stack_root()
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
-trino_java_home=""
 
 component_directory = "trino"
 trino_home = format("{stack_root}/current/{component_directory}")
@@ -61,7 +60,8 @@ trino_conf_dir = format("{stack_root}/current/{component_directory}/etc")
 trino_user = config['configurations']['trino-env']['trino_user']
 trino_group = config['configurations']['trino-env']['trino_group']
 
-trino_java_home = config['configurations']['trino-env']['trino_java_home']
+trino_java_home =  config['configurations']['trino-env']['java_home']
+trino_launcher_content = config['configurations']['trino-env']['content']
 
 trino_launcher_bin_path = f"{trino_home}/bin/launcher"
 # todo: hive_connector_hdfs_configfile
@@ -71,7 +71,7 @@ trino_log_dir = "/var/log/trino"
 plugin_dir = f"{trino_home}/lib/plugin"
 catalog_conf_dir = f"{trino_home}/etc/catalog"
 trino_pid_file = f"{trino_pid_dir}/launcher.pid"
-trino_node_data_dir = f"{trino_home}/var"
+trino_node_data_dir = f"{trino_home}"
 
 trino_start_cmd =  format("{trino_home}/bin/launcher start")
 trino_stop_cmd =  format("{trino_home}/bin/launcher stop")

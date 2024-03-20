@@ -55,18 +55,10 @@
     <value>50GB</value>
     <description>
       The maximum amount of distributed memory that a query may use.
-
       If you'd like to enter a value higher than the maximum on the slider,
       click on the pencil that appears when you hover over the setting and
       ignore that higher values are not recommended.
     </description>
-    <value-attributes>
-      <type>int</type>
-      <minimum>0</minimum>
-      <maximum>300</maximum>
-      <increment-step>2</increment-step>
-      <unit>GB</unit>
-    </value-attributes>
   </property>
 
   <property>
@@ -79,13 +71,6 @@
       click on the pencil that appears when you hover over the setting and
       ignore that higher values are not recommended.
     </description>
-    <value-attributes>
-      <type>int</type>
-      <minimum>0</minimum>
-      <maximum>100</maximum>
-      <increment-step>1</increment-step>
-      <unit>GB</unit>
-    </value-attributes>
   </property>
 
   <property require-input="true">

@@ -19,7 +19,7 @@
  * limitations under the License.
  */
 -->
-<configuration supports_adding_forbidden="true">
+<configuration supports_final="true">
     <property>
         <name>trino_user</name>
         <display-name>Trino User</display-name>
@@ -41,6 +41,7 @@
         </value-attributes>
         <on-ambari-upgrade add="true"/>
     </property>
+
     <property>
         <name>trino_group</name>
         <display-name>Trino Group</display-name>
@@ -52,13 +53,23 @@
         </value-attributes>
         <on-ambari-upgrade add="true"/>
     </property>
+
     <property>
-        <name>trino_java_home</name>
+        <name>java_home</name>
         <display-name>Trino Java Home</display-name>
         <value>/opt/jdk17</value>
         <description>Trino Java Home jdk 17 needed.</description>
-        <on-ambari-upgrade add="true"/>
-    </property> 
+    </property>
+
+    <property>
+        <name>content</name>
+        <description>trino launcher</description>
+        <value>#!/bin/sh -eu
+export JAVA_HOME="{{trino_java_home}}"
+export PATH=$JAVA_HOME/bin:$PATH
+exec "$(dirname "$0")/launcher.py" "$@"
+        </value>
+    </property>
 
 
 </configuration>

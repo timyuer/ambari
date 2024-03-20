@@ -14,15 +14,7 @@
 
 import uuid
 import os.path as path
-
-from resource_management.libraries.script.script import Script
-from resource_management.core.resources.system import Execute, Directory, File, Link
-from resource_management.core.exceptions import ExecutionFailed, ComponentIsNotRunning
-from resource_management.libraries.resources.modify_properties_file import ModifyPropertiesFile
-from resource_management.libraries.resources.properties_file import PropertiesFile
-from resource_management.core.resources.system import File, Execute
-from resource_management.core.source import InlineTemplate
-from resource_management.core.source import Template
+from resource_management import *
 import os
 
 class Worker(Script):
@@ -31,12 +23,12 @@ class Worker(Script):
 
     def stop(self, env):
         import params
-        Execute(params.trino_stop_cmd, user=params.trino_user, environment={'JAVA_HOME': params.java_home})
+        Execute(params.trino_stop_cmd, user=params.trino_user)
 
     def start(self, env):
         import params
         self.configure(env)
-        Execute(params.trino_start_cmd, user=params.trino_user, environment={'JAVA_HOME': params.java_home})
+        Execute(params.trino_start_cmd, user=params.trino_user)
 
     def status(self, env):
         import params
@@ -62,10 +54,12 @@ class Worker(Script):
                   mode=mode_identified_for_dir
                   )
 
+
         File(params.trino_launcher_bin_path,
-             owner=params.hdfs_user,
-             group=params.user_group,
-             content=Template("launcher.j2")
+             owner=params.trino_user,
+             group=params.trino_group,
+             content=InlineTemplate(params.trino_launcher_content),
+             mode=0o755,
              )
 
         node_properties = os.path.join(params.trino_conf_dir,'node.properties')
@@ -102,7 +96,7 @@ class Worker(Script):
                              owner = params.trino_user
                              )
 
-        update_java_exports(params.trino_launcher_bin_path, params.trino_java_home)
+        #update_java_exports(params.trino_launcher_bin_path, params.trino_java_home)
 
 if __name__ == '__main__':
     Worker().execute()
