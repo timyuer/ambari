@@ -53,6 +53,44 @@
           ]
         }
       },
+      "TRINO": {
+        "TRINO_COORDINATOR": {
+          "STACK-SELECT-PACKAGE": "trino",
+          "INSTALL": [
+            "trino"
+          ],
+          "PATCH": [
+            "trino"
+          ],
+          "STANDARD": [
+            "trino"
+          ]
+        },
+        "TRINO_WORKER": {
+          "STACK-SELECT-PACKAGE": "trino",
+          "INSTALL": [
+            "trino"
+          ],
+          "PATCH": [
+            "trino"
+          ],
+          "STANDARD": [
+            "trino"
+          ]
+        },
+        "TRINO_CLI": {
+          "STACK-SELECT-PACKAGE": "trino-cli",
+          "INSTALL": [
+            "trino-cli"
+          ],
+          "PATCH": [
+            "trino-cli"
+          ],
+          "STANDARD": [
+            "trino-cli"
+          ]
+        }
+      },
       "HBASE": {
         "HBASE_CLIENT": {
           "STACK-SELECT-PACKAGE": "hbase-client",

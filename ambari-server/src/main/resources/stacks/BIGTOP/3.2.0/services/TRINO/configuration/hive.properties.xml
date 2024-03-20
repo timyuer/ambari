@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+<!--
+# -*- coding: utf-8 -*-
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+# http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+-->
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
+<configuration>
+    <property>
+        <name>connector.name</name>
+        <value>hive</value>
+        <description> The name of the connector
+        </description>
+    </property>
+
+    <property>
+        <name>hive.metastore.uri</name>
+        <value></value>
+        <description>
+        </description>
+    </property>
+
+    <property>
+        <name>hive.config.resources</name>
+        <value>{{hive_connector_hdfs_configfile}}</value>
+        <description>
+        </description>
+    </property>
+</configuration>
