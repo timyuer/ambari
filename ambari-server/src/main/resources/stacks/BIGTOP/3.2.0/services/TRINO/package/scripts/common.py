@@ -42,21 +42,21 @@ def process_connector_conf(catalog_conf_dir,trino_user,trino_group):
         connector_tpl_content = InlineTemplate(config['configurations']['connectors.properties'][k])
         connector_name = k.split("_")[1]
         connector_file = os.path.join(catalog_conf_dir, connector_name + '.properties')
-        Logger.info(f"writing connector file to {connector_file}")
+        print(f"writing connector file to {connector_file}")
         File(connector_file,
              owner=trino_user,
              group=trino_group,
              content=connector_tpl_content)
 
     # 遍历删除catalog 目录下所有 .properties
-    connector_filepaths = recursive_glob(catalog_conf_dir, "*.properties")
+    connector_filepaths = recursive_glob(catalog_conf_dir, ".properties")
     connector_name_lists = {k.split("connector_")[1] for k, v in config['configurations']['connectors.properties'].items() if k.startswith("connector_")}
     for filepath in connector_filepaths:
         connector_file_name = os.path.basename(filepath)
         connector_name = connector_file_name.split(".properties")[0]
-        if  (connector_name not in connector_name_lists) and (connector_namenot in white_list):
-            Logger.info(f" connector file will be removed {filepath}")
-            os.remove(filepath)
+        if connector_name not in connector_name_lists and connector_name not in white_list:
+            print(f" connector file will be removed {filepath}")
+            File(filepath,action = "delete")
 
 
 def check_jdk_version():
