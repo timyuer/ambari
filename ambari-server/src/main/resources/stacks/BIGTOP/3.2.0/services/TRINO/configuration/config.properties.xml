@@ -73,7 +73,7 @@
     </description>
   </property>
 
-  <property require-input="true">
+  <property>
     <name>discovery.uri</name>
     <value>{{ discovery_uri }}</value>
     <description>
