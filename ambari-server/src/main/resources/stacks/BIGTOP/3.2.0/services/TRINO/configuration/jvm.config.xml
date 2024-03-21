@@ -19,7 +19,7 @@
   <property>
     <name>jvm.config</name>
     <value>-server
--Xmx1G
+-Xmx2G
 -XX:+UseG1GC
 -XX:G1HeapRegionSize=32M
 -XX:+UseGCOverheadLimit

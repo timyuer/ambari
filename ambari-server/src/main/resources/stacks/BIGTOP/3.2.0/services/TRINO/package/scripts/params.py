@@ -67,7 +67,7 @@ trino_launcher_bin_path = f"{trino_home}/bin/launcher"
 trino_pid_dir = "/var/run/trino"
 trino_log_dir = "/var/log/trino"
 
-plugin_dir = f"{trino_home}/lib/plugin"
+plugin_dir = f"{trino_home}/plugin"
 catalog_conf_dir = f"{trino_home}/etc/catalog"
 trino_pid_file = f"{trino_pid_dir}/launcher.pid"
 trino_node_data_dir = f"{trino_home}"

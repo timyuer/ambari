@@ -39,7 +39,7 @@ def process_connector_conf(catalog_conf_dir,trino_user,trino_group):
     config = Script.get_config()
     connector_lists = {k: v for k, v in config['configurations']['connectors.properties'].items() if k.startswith("connector_")}
     for k, v in connector_lists.items():
-        connector_tpl_content = InlineTemplate(config['configurations']['connectors.properties'][k])
+        connector_tpl_content = config['configurations']['connectors.properties'][k]
         connector_name = k.split("_")[1]
         connector_file = os.path.join(catalog_conf_dir, connector_name + '.properties')
         print(f"writing connector file to {connector_file}")
