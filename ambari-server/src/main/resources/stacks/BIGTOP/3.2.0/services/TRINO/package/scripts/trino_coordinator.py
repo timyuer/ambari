@@ -14,9 +14,9 @@
 
 import uuid
 import os.path as path
-
 import os
 from resource_management import *
+from common import  process_connector_conf
 
 class Coordinator(Script):
     def install(self, env):
@@ -101,12 +101,9 @@ class Coordinator(Script):
                              owner = params.trino_user
                              )
 
+        process_connector_conf(params.catalog_conf_dir,params.trino_user,params.trino_group)
 
-        #create_connectors(node_properties, connectors_to_add)
-        #delete_connectors(node_properties, connectors_to_delete)
-        # This is a separate call because we always want the tpch connector to
-        # be available because it is used to smoketest the installation.
-        #create_connectors(node_properties, "{'tpch': ['connector.name=tpch']}")
+
 
 
 if __name__ == '__main__':

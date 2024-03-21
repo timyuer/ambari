@@ -16,62 +16,49 @@ import os
 
 from resource_management.core.resources.system import Execute
 import re
-script_dir = os.path.dirname(os.path.realpath(__file__))
-# def create_connectors(node_properties, connectors_to_add):
-#     if not connectors_to_add:
-#         return
-#     Execute('mkdir -p {0}'.format(node_properties['plugin.config-dir']))
-#     connectors_dict = ast.literal_eval(connectors_to_add)
-#     for connector in connectors_dict:
-#         connector_file = os.path.join(node_properties['plugin.config-dir'], connector + '.properties')
-#         with open(connector_file, 'w') as f:
-#             for lineitem in connectors_dict[connector]:
-#                 f.write('{0}\n'.format(lineitem))
-#
-# def delete_connectors(node_properties, connectors_to_delete):
-#     if not connectors_to_delete:
-#         return
-#     connectors_list = ast.literal_eval(connectors_to_delete)
-#     for connector in connectors_list:
-#         connector_file_name = os.path.join(node_properties['plugin.config-dir'], connector + '.properties')
-#         Execute('rm -f {0}'.format(connector_file_name))
+from resource_management import *
+def recursive_glob(rootdir='.', suffix='', filter_func=None):
+    import glob
+    import os
+
+    """Recursively glob files with a specific suffix from rootdir, and apply an optional filter."""
+    files = [
+        os.path.join(looproot, filename)
+        for looproot, _, filenames in os.walk(rootdir)
+        for filename in filenames if filename.endswith(suffix)
+    ]
+    # 如果提供了过滤函数，进一步过滤文件列表
+    if filter_func is not None:
+        files = [file for file in files if filter_func(file)]
+    return files
 
 
+def process_connector_conf(catalog_conf_dir,trino_user,trino_group):
+    white_list=["jmx", "tpcds", "tpch"]
 
-# Function to update or insert JAVA_HOME and PATH exports
-def update_java_exports(file_path, java_home):
+    config = Script.get_config()
+    connector_lists = {k: v for k, v in config['configurations']['connectors.properties'].items() if k.startswith("connector_")}
+    for k, v in connector_lists.items():
+        connector_tpl_content = InlineTemplate(config['configurations']['connectors.properties'][k])
+        connector_name = k.split("_")[1]
+        connector_file = os.path.join(catalog_conf_dir, connector_name + '.properties')
+        Logger.info(f"writing connector file to {connector_file}")
+        File(connector_file,
+             owner=trino_user,
+             group=trino_group,
+             content=connector_tpl_content)
 
-    # Constants for the export statements
-    java_home_export = f"export JAVA_HOME={java_home}\n"
-    path_export = "export PATH=$JAVA_HOME/bin:$PATH\n"
+    # 遍历删除catalog 目录下所有 .properties
+    connector_filepaths = recursive_glob(catalog_conf_dir, "*.properties")
+    connector_name_lists = {k.split("connector_")[1] for k, v in config['configurations']['connectors.properties'].items() if k.startswith("connector_")}
+    for filepath in connector_filepaths:
+        connector_file_name = os.path.basename(filepath)
+        connector_name = connector_file_name.split(".properties")[0]
+        if  (connector_name not in connector_name_lists) and (connector_namenot in white_list):
+            Logger.info(f" connector file will be removed {filepath}")
+            os.remove(filepath)
 
-    with open(file_path, 'r') as file:
-        lines = file.readlines()
 
-    # Find the index of the target exec line
-    exec_index = next((i for i, line in enumerate(lines) if 'exec "$(dirname "$0")/launcher.py" "$@' in line), None)
-
-    if exec_index is not None:
-        # Check if the export lines already exist
-        java_home_exists = any("export JAVA_HOME" in line for line in lines[:exec_index])
-        path_exists = any("export PATH" in line for line in lines[:exec_index])
-
-        # Update or insert JAVA_HOME and PATH exports
-        if not java_home_exists:
-            lines.insert(exec_index, java_home_export)
-            exec_index += 1  # Adjust index due to insertion
-        else:
-            # Update the existing JAVA_HOME export
-            lines = [java_home_export if "export JAVA_HOME" in line else line for line in lines]
-
-        if not path_exists:
-            lines.insert(exec_index, path_export)
-        else:
-            # Update the existing PATH export
-            lines = [path_export if "export PATH" in line else line for line in lines]
-
-        # Write the updated lines back to the file
-        with open(file_path, 'w') as file:
-            file.writelines(lines)
-
+def check_jdk_version():
+    pass
 # Replace 'your_file_path' with the actual file path

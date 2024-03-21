@@ -64,7 +64,6 @@ trino_java_home =  config['configurations']['trino-env']['java_home']
 trino_launcher_content = config['configurations']['trino-env']['content']
 
 trino_launcher_bin_path = f"{trino_home}/bin/launcher"
-# todo: hive_connector_hdfs_configfile
 trino_pid_dir = "/var/run/trino"
 trino_log_dir = "/var/log/trino"
 

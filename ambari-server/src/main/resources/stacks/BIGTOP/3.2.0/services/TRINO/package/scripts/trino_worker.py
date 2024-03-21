@@ -16,6 +16,7 @@ import uuid
 import os.path as path
 from resource_management import *
 import os
+from common import  process_connector_conf
 
 class Worker(Script):
     def install(self, env):
@@ -35,8 +36,10 @@ class Worker(Script):
         env.set_params(params)
         check_process_status(params.trino_pid_file)
 
-    def configure(self, env):
+    def configure(self, env, upgrade_type=None, config_dir=None):
         import params
+        env.set_params(params)
+
         mode_identified_for_file = 0o644
         mode_identified_for_dir = 0o755
 
@@ -48,12 +51,12 @@ class Worker(Script):
                   create_parents = True
                   )
 
+
         Directory(params.trino_home,
                   owner=params.trino_user,
                   group=params.trino_group,
                   mode=mode_identified_for_dir
                   )
-
 
         File(params.trino_launcher_bin_path,
              owner=params.trino_user,
@@ -62,6 +65,7 @@ class Worker(Script):
              mode=0o755,
              )
 
+
         node_properties = os.path.join(params.trino_conf_dir,'node.properties')
         PropertiesFile(node_properties,
                        properties = params.node_properties,
@@ -69,7 +73,6 @@ class Worker(Script):
                        owner=params.trino_user,
                        group=params.trino_group
                        )
-
         ModifyPropertiesFile(node_properties,
                              properties = {'node.id': str(uuid.uuid4())},
                              owner = params.trino_user,
@@ -90,13 +93,15 @@ class Worker(Script):
                        owner=params.trino_user,
                        group=params.trino_group
                        )
+
         ModifyPropertiesFile(config_properties_file,
                              properties = {'coordinator': 'false'},
                              mode=mode_identified_for_file,
                              owner = params.trino_user
                              )
 
-        #update_java_exports(params.trino_launcher_bin_path, params.trino_java_home)
+        process_connector_conf(params.catalog_conf_dir,params.trino_user,params.trino_group)
+
 
 if __name__ == '__main__':
     Worker().execute()
