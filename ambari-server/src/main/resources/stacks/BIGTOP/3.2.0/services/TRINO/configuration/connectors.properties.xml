@@ -21,7 +21,7 @@
     <value>see description</value>
     <description>
         To integrate a new Trino connector within the Ambari configuration, you must add a specific property.
-        This property should begin with `connector_` followed by the name of the connector you wish to add. For instance, to add a Hive connector, the property name should be `connector_hive`.
+        This property should begin with connector_ followed by the name of the connector you wish to add. For instance, to add a Hive connector, the property name should be connector_hive=a_value\n.
         Assign the appropriate configuration details as the value of this property. After adding this property, a system restart is required for the changes to be effective.
         If you need to remove a Trino connector, simply delete the relevant configuration property that was previously added. Don't forget to restart the system thereafter to ensure that the removal is properly processed.
     </description>

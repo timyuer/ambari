@@ -40,13 +40,18 @@ def process_connector_conf(catalog_conf_dir,trino_user,trino_group):
     connector_lists = {k: v for k, v in config['configurations']['connectors.properties'].items() if k.startswith("connector_")}
     for k, v in connector_lists.items():
         connector_tpl_content = config['configurations']['connectors.properties'][k]
+        connector_tpl_content_dict = dict(item.split('=') for item in connector_tpl_content.split('\\n'))
+
+
         connector_name = k.split("_")[1]
         connector_file = os.path.join(catalog_conf_dir, connector_name + '.properties')
-        print(f"writing connector file to {connector_file}")
-        File(connector_file,
-             owner=trino_user,
-             group=trino_group,
-             content=connector_tpl_content)
+        print(f"writing connector file to {connector_file} {connector_tpl_content_dict}")
+
+        PropertiesFile(connector_file,
+                       properties = connector_tpl_content_dict,
+                       owner=trino_user,
+                       group=trino_group
+                       )
 
     # 遍历删除catalog 目录下所有 .properties
     connector_filepaths = recursive_glob(catalog_conf_dir, ".properties")
@@ -61,4 +66,3 @@ def process_connector_conf(catalog_conf_dir,trino_user,trino_group):
 
 def check_jdk_version():
     pass
-# Replace 'your_file_path' with the actual file path
