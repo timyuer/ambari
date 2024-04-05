@@ -121,11 +121,11 @@ if(len(celeborn_masters) > 0) :
         celeborn_master_host = host + ":" + str(celeborn_master_port)
 
       celeborn_master_endpoints += celeborn_master_host
-      index += 1
+
       if( host == hostname ):
         celeborn_master_endpoints_config += format("celeborn.master.ha.node.id {index}\n")
       celeborn_master_endpoints_config += format("celeborn.master.ha.node.{index}.host {host} \nceleborn.master.ha.node.{index}.port {celeborn_master_port} \nceleborn.master.ha.node.{index}.ratis.port {celeborn_master_ratis_port}")
-
+      index += 1
       if index < len(celeborn_masters):
         celeborn_master_endpoints += ","
         celeborn_master_endpoints_config += "\n"

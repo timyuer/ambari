@@ -1,17 +1,17 @@
 {
-  "HTTPFS": {
+  "DINKY": {
     "service": [],
-    "HTTPFS_GATEWAY": [
+    "DINKY_SERVER": [
       {
-        "name": "httpfs_server_process",
-        "label": "HTTPFS server Process",
-        "description": "This host-level alert is triggered if the HTTPFS server cannot be determined to be up.",
-        "interval": 1,
-        "scope": "HOST",
+        "name": "dinky_server_port_check",
+        "label": "dinky_server_port_check",
+        "description": "dinky_server_port_check.",
+        "interval": 10,
+        "scope": "ANY",
         "source": {
           "type": "PORT",
-          "uri": "{{httpfs/httpfs.port}}",
-          "default_port": 14000,
+          "uri": "{{dinky-application-server/server.port}}",
+          "default_port": 8888,
           "reporting": {
             "ok": {
               "text": "TCP OK - {0:.3f}s response on port {1}"

@@ -42,11 +42,10 @@ except Exception as e:
   traceback.print_exc()
   print "Failed to load parent"
 
-
-class HttpfsServiceAdvisor(service_advisor.ServiceAdvisor):
+class DinkyServiceAdvisor(service_advisor.ServiceAdvisor):
 
   def __init__(self, *args, **kwargs):
-    self.as_super = super(HttpfsServiceAdvisor, self)
+    self.as_super = super(DinkyServiceAdvisor, self)
     self.as_super.__init__(*args, **kwargs)
 
     # Always call these methods
@@ -104,7 +103,7 @@ class HttpfsServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-   # Nothing to do
+    # Nothing to do
     pass
 
 
@@ -114,7 +113,7 @@ class HttpfsServiceAdvisor(service_advisor.ServiceAdvisor):
     Must be overriden in child class.
     """
 
-    return self.getServiceComponentCardinalityValidations(services, hosts, "Httpfs")
+    return self.getServiceComponentCardinalityValidations(services, hosts, "KYUUBI")
 
   def getServiceConfigurationRecommendations(self, configurations, clusterData, services, hosts):
     """
@@ -124,8 +123,8 @@ class HttpfsServiceAdvisor(service_advisor.ServiceAdvisor):
     # Logger.info("Class: %s, Method: %s. Recommending Service Configurations." %
     #            (self.__class__.__name__, inspect.stack()[0][3]))
 
-    recommender = HttpfsRecommender()
-    recommender.recommendHttpfsConfigurationsFromHDP33(configurations, clusterData, services, hosts)
+    recommender = DinkyRecommender()
+    recommender.recommendDinkyConfigurationsFromHDP33(configurations, clusterData, services, hosts)
 
 
   # def getServiceConfigurationRecommendationsForSSO(self, configurations, clusterData, services, hosts):
@@ -133,7 +132,7 @@ class HttpfsServiceAdvisor(service_advisor.ServiceAdvisor):
   #   Entry point.
   #   Must be overriden in child class.
   #   """
-  #   recommender = HttpfsRecommender()
+  #   recommender = DinkyRecommender()
   #   recommender.recommendConfigurationsForSSO(configurations, clusterData, services, hosts)
 
   def getServiceConfigurationsValidationItems(self, configurations, recommendedDefaults, services, hosts):
@@ -171,22 +170,27 @@ class HttpfsServiceAdvisor(service_advisor.ServiceAdvisor):
       return False
 
 
-class HttpfsRecommender(service_advisor.ServiceAdvisor):
+class DinkyRecommender(service_advisor.ServiceAdvisor):
   """
-  Httpfs Recommender suggests properties when adding the service for the first time or modifying configs via the UI.
+  Dinky Recommender suggests properties when adding the service for the first time or modifying configs via the UI.
   """
 
   def __init__(self, *args, **kwargs):
-    self.as_super = super(HttpfsRecommender, self)
+    self.as_super = super(DinkyRecommender, self)
     self.as_super.__init__(*args, **kwargs)
 
-  def recommendHttpfsConfigurationsFromHDP33(self, configurations, clusterData, services, hosts):
+  def recommendDinkyConfigurationsFromHDP33(self, configurations, clusterData, services, hosts):
     """
     Recommend configurations for this service based on HDP 3.3.
     """
 
-    putCoreSiteProperty = self.putProperty(configurations, "core-site", services)
-    putCoresitePropertyAttribute = self.putPropertyAttribute(configurations, "core-site")   
 
-    putCoreSiteProperty("hadoop.proxyuser.httpfs.groups", "*")
-    putCoreSiteProperty("hadoop.proxyuser.httpfs.hosts", "*")
+
+    
+ 
+    
+    
+
+ 
+ 
+ 
