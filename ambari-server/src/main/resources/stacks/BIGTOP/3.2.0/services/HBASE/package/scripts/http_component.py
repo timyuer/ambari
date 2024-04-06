@@ -22,7 +22,6 @@ import pwd
 
 from resource_management import *
 from resource_management.libraries.resources.xml_config import XmlConfig
-from utils import initiate_safe_zkfc_failover, get_hdfs_binary, get_dfsadmin_base_command
 
 class Http_component(Script):
     def configure(self, env):
@@ -60,7 +59,7 @@ class Http_component(Script):
     def stop(self, env):
         import params
         Logger.info("Stopping HttpFS service")
-        command = format("{daemon_script} stop rest")
+        command = format("{params.daemon_script} stop rest")
         Execute(
             command,
             user=params.hbase_user,
@@ -76,7 +75,7 @@ class Http_component(Script):
     def start(self, env):
         import params
         self.configure(env)
-        command = format("{daemon_script} start rest")
+        command = format("{params.daemon_script} start rest")
         Execute(
             command,
             user=params.hbase_user,

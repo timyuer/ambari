@@ -58,6 +58,12 @@ class Httpfs_component(Script):
                   create_parents=True,
                   mode=0o755,
                   )
+        Directory(params.httpfs_conf_dir,
+                  owner=params.httpfs_user,
+                  group=params.httpfs_group,
+                  create_parents=True,
+                  mode=0o755,
+                  )
         Logger.info(format("Creating {params.httpfs_conf_dir}/httpfs-env.sh config file"))
         
         File(format("{params.httpfs_conf_dir}/httpfs-env.sh"),
