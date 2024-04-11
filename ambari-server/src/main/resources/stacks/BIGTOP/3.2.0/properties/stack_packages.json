@@ -27,6 +27,20 @@
           ]
         }
       },
+      "HADOOP_ROUTER": {
+        "ROUTER": {
+          "STACK-SELECT-PACKAGE": "hadoop-hdfs-router",
+          "INSTALL": [
+            "hadoop-hdfs-router"
+          ],
+          "PATCH": [
+            "hadoop-hdfs-router"
+          ],
+          "STANDARD": [
+            "hadoop-hdfs-router"
+          ]
+        }
+      },
       "ALLUXIO": {
         "ALLUXIO_MASTER": {
           "STACK-SELECT-PACKAGE": "alluxio",
