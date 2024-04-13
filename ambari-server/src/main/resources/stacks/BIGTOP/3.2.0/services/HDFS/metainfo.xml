@@ -358,6 +358,9 @@
               <name>hadoop-${stack_version}-hdfs-zkfc</name>
             </package>
             <package>
+              <name>hadoop-${stack_version}-httpfs</name>
+            </package>
+            <package>
               <name>libsnappy1v5</name>
             </package>
             <package>
