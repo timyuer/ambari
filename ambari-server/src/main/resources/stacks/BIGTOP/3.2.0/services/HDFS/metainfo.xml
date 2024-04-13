@@ -355,9 +355,9 @@
             <package>
               <name>libhdfs0-dev</name>
             </package>
-            <package>
-              <name>ranger-${stack_version}-hdfs-plugin</name>
-            </package>
+<!--            <package>-->
+<!--              <name>ranger-${stack_version}-hdfs-plugin</name>-->
+<!--            </package>-->
           </packages>
         </osSpecific>
       </osSpecifics>

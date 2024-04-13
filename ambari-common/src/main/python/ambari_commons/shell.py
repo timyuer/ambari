@@ -325,14 +325,14 @@ def chunks_reader(cmd, kill_timer):
 
     if not data_chunk:
       break
-    str_buffer += data_chunk
+    str_buffer += data_chunk.decode()
 
     if os.linesep in str_buffer:
       copy_offset = str_buffer.rindex(os.linesep)
       buff_lines = str_buffer[:copy_offset]
-      str_buffer = str_buffer[copy_offset:]
+      str_buffer = str_buffer[copy_offset + len(os.linesep):]  # Adjust slicing to remove the line separator
       for line in buff_lines.strip(os.linesep).split(os.linesep):
-        yield line
+        yield line   # Decode bytes to str before yielding
 
   kill_timer.cancel()
 

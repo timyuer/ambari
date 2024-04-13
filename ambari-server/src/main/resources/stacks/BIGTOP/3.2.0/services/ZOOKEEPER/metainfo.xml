@@ -81,6 +81,15 @@
         </osSpecific>
       </osSpecifics>
 
+      <osSpecific>
+        <osFamily>ubuntu22</osFamily>
+        <packages>
+          <package>
+            <name>zookeeper-${stack_version}</name>
+          </package>
+        </packages>
+      </osSpecific>
+
       <commandScript>
         <script>scripts/service_check.py</script>
         <scriptType>PYTHON</scriptType>
