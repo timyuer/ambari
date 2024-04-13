@@ -334,17 +334,31 @@
             </package>
           </packages>
         </osSpecific>
+
+
         <osSpecific>
           <osFamily>ubuntu22</osFamily>
           <packages>
             <package>
-              <name>hadoop-${stack_version}</name>
-            </package>
-            <package>
               <name>hadoop-${stack_version}-client</name>
             </package>
             <package>
-              <name>libsnappy1</name>
+              <name>hadoop-${stack_version}-hdfs-datanode</name>
+            </package>
+            <package>
+              <name>hadoop-${stack_version}-hdfs-journalnode</name>
+            </package>
+            <package>
+              <name>hadoop-${stack_version}-hdfs-namenode</name>
+            </package>
+            <package>
+              <name>hadoop-${stack_version}-hdfs-secondarynamenode</name>
+            </package>
+            <package>
+              <name>hadoop-${stack_version}-hdfs-zkfc</name>
+            </package>
+            <package>
+              <name>libsnappy1v5</name>
             </package>
             <package>
               <name>libsnappy-dev</name>
@@ -352,12 +366,9 @@
             <package>
               <name>libhdfs0</name>
             </package>
-            <package>
-              <name>libhdfs0-dev</name>
-            </package>
-<!--            <package>-->
-<!--              <name>ranger-${stack_version}-hdfs-plugin</name>-->
-<!--            </package>-->
+            <!--            <package>-->
+            <!--              <name>ranger-${stack_version}-hdfs-plugin</name>-->
+            <!--            </package>-->
           </packages>
         </osSpecific>
       </osSpecifics>
