@@ -35,6 +35,7 @@ from resource_management.core.source import InlineTemplate, Template
 from resource_management.core.logger import Logger
 from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
 from ambari_commons import OSConst
+from resource_management.libraries.script.config_dictionary import UnknownConfiguration
 
 from resource_management.libraries.functions.mounted_dirs_helper import handle_mounted_dirs
 from hbase_service import create_hbase_package, copy_hbase_package_to_hdfs, createTables
@@ -152,14 +153,16 @@ def yarn(name=None, config_dir=None):
             group=params.user_group,
             mode=0o644
   )
-  XmlConfig("hbase-site.xml",
-            conf_dir=params.yarn_hbase_conf_dir,
-            configurations=params.hbase_site_conf,
-            configuration_attributes=params.hbase_site_attributes,
-            owner=params.yarn_hbase_user,
-            group=params.user_group,
-            mode=0o644
-            )
+
+  if not isinstance(params.hbase_site_conf, UnknownConfiguration):
+      XmlConfig("hbase-site.xml",
+                conf_dir=params.yarn_hbase_conf_dir,
+                configurations=params.hbase_site_conf,
+                configuration_attributes=params.hbase_site_attributes,
+                owner=params.yarn_hbase_user,
+                group=params.user_group,
+                mode=0o644
+                )
 
   XmlConfig("resource-types.xml",
             conf_dir=config_dir,
