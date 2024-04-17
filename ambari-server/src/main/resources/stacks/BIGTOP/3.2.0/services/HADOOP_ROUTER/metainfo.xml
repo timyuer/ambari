@@ -61,6 +61,13 @@
         </component>
       </components>
 
+      <quickLinksConfigurations>
+        <quickLinksConfiguration>
+          <fileName>quicklinks.json</fileName>
+          <default>true</default>
+        </quickLinksConfiguration>
+      </quickLinksConfigurations>
+
       <osSpecifics>
         <osSpecific>
           <osFamily>redhat9,redhat8,redhat7,amazonlinux2,redhat6,suse11,suse12</osFamily>
@@ -82,16 +89,7 @@
         <config-type>hdfs-rbf-site</config-type>
       </configuration-dependencies>
 
-      <themes>
-        <theme>
-          <fileName>credentials.json</fileName>
-          <default>true</default>
-        </theme>
-        <theme>
-          <fileName>directories.json</fileName>
-          <default>true</default>
-        </theme>
-      </themes>
+
     </service>
   </services>
 </metainfo>
