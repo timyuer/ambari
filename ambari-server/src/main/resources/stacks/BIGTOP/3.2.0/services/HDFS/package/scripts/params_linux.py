@@ -274,10 +274,10 @@ dfs_domain_socket_dir = os.path.dirname(dfs_domain_socket_path)
 hdfs_site = config['configurations']['hdfs-site']
 
 
-if namenode_federation_enabled(hdfs_site):
-  jn_edits_dirs = list(get_properties_for_all_nameservices(hdfs_site, 'dfs.journalnode.edits.dir').values())
-else:
-  jn_edits_dirs = [config['configurations']['hdfs-site']['dfs.journalnode.edits.dir']]
+# if namenode_federation_enabled(hdfs_site):
+#   jn_edits_dirs = list(get_properties_for_all_nameservices(hdfs_site, 'dfs.journalnode.edits.dir').values())
+# else:
+jn_edits_dirs = [config['configurations']['hdfs-site']['dfs.journalnode.edits.dir']]
 
 dfs_name_dir = config['configurations']['hdfs-site']['dfs.namenode.name.dir']
 

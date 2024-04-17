@@ -73,4 +73,9 @@
         <name>dfs.federation.router.file.resolver.client.class</name>
         <value>org.apache.hadoop.hdfs.server.federation.resolver.MultipleDestinationMountTableResolver</value>
     </proterty>
+
+    <proterty>
+        <name>dfs.federation.router.http-address</name>
+        <value>0.0.0.0:50071</value>
+    </proterty>
 </configuration>

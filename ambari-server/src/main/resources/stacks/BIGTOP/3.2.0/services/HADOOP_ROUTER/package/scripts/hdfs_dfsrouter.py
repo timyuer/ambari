@@ -7,6 +7,7 @@ from resource_management.libraries.functions import format
 from resource_management.core.shell import as_user
 from resource_management.libraries.functions.show_logs import show_logs
 from resource_management.core import shell
+import subprocess
 
 @OsFamilyFuncImpl(os_family=OsFamilyImpl.DEFAULT)
 def dfsrouter(action=None):
@@ -53,7 +54,7 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
     """
     import params
     import status_params
-
+    ulimit_cmd = "ulimit -c unlimited ; "
     options = options if options else ""
     pid_dir = status_params.hadoop_pid_dir
     pid_file = status_params.dfsrouter_pid_file
@@ -83,7 +84,7 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
                       create_parents = True)
 
 
-    hadoop_daemon = format("{hadoop_bin}/hadoop-daemon.sh")
+    hadoop_daemon = f"{params.hadoop_bin}/hadoop-daemon.sh"
 
     if user == "root":
         cmd = [hadoop_daemon, "--config", params.hadoop_conf_dir, action, name]
@@ -91,7 +92,7 @@ def service(action=None, name=None, user=None, options="", create_pid_dir=False,
             cmd += [options, ]
         daemon_cmd = as_sudo(cmd)
     else:
-        cmd = format("{ulimit_cmd} {hadoop_daemon} --config {hadoop_conf_dir} {action} {name}")
+        cmd = f"{ulimit_cmd} {hadoop_daemon} --config {params.hadoop_conf_dir} {action} {name}"
         if options:
             cmd += " " + options
         daemon_cmd = as_user(cmd, user)

@@ -41,6 +41,8 @@ root_user="root"
 hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
 hadoop_pid_dir = format("{hadoop_pid_dir_prefix}/{hdfs_user}")
+hadoop_bin = stack_select.get_hadoop_dir("sbin")
+hadoop_bin_dir = stack_select.get_hadoop_dir("bin")
 
 dfsrouter_pid_file = format("{hadoop_pid_dir}/hadoop-{hdfs_user}-{root_user}-dfsrouter.pid")
 user_group = config['configurations']['cluster-env']['user_group']

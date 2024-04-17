@@ -20,7 +20,7 @@
   <services>
     <service>
       <name>HADOOP_ROUTER</name>
-      <displayName>HADOOP_ROUTER</displayName>
+      <displayName>HADOOP ROUTER</displayName>
       <comment>This component acts as a gateway, offering a unified access point for authentication and interaction with multiple Apache Hadoop services across a federated cluster environment. It simplifies client interactions by providing a central, transparent routing mechanism to various services, thereby enhancing the scalability and manageability of large Hadoop ecosystems.</comment>
       <version>2.0.0</version>
       <components>

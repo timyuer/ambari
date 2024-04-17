@@ -1,0 +1,21 @@
+{
+  "name": "default",
+  "description": "default quick links configuration",
+  "configuration": {
+    "links": [
+      {
+        "name": "Router_WEB_UI",
+        "label": "Router Web UI",
+        "requires_user_name": "false",
+        "component_name": "HADOOP_ROUTER",
+        "url":"%@://%@:%@",
+        "port":{
+          "http_property": "dfs.federation.router.http-address",
+          "http_default_port": "10099",
+          "regex" : "\\w*:(\\d+)",
+          "site": "hdfs-rbf-site"
+        }
+      }
+    ]
+  }
+}
