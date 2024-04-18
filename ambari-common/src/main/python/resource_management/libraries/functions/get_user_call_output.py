@@ -26,6 +26,7 @@ import tempfile
 from resource_management.core import shell
 from resource_management.core.logger import Logger
 from resource_management.core.exceptions import ExecutionFailed
+from resource_management.core.resources.system import Execute
 
 def get_user_call_output(command, user, quiet=False, is_checked_call=True, **call_kwargs):
   """
@@ -38,13 +39,13 @@ def get_user_call_output(command, user, quiet=False, is_checked_call=True, **cal
   out_files = []
   
   try:
-    out_files.append(tempfile.NamedTemporaryFile())
-    out_files.append(tempfile.NamedTemporaryFile())
+    out_files.append(tempfile.NamedTemporaryFile(delete=False))
+    out_files.append(tempfile.NamedTemporaryFile(delete=False))
     
     # other user should be able to write to it
     for f in out_files:
-      os.chmod(f.name, 0o666)
-    
+      Execute(("chown", user, f.name), sudo=True)
+
     command_string += " 1>" + out_files[0].name
     command_string += " 2>" + out_files[1].name
     
@@ -74,6 +75,6 @@ def get_user_call_output(command, user, quiet=False, is_checked_call=True, **cal
     return result
   finally:
     for f in out_files:
-      f.close()
-      
+      Execute(("rm", "-f", f.name), sudo=True)
+
   
