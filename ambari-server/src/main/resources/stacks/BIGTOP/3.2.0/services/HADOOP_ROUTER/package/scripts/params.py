@@ -38,6 +38,8 @@ stack_version_formatted = format_stack_version(stack_version_unformatted)
 hadoop_pid_dir_prefix = "/var/run/hadoop"
 root_user="root"
 
+hadoop_router_hosts = default("/clusterHostInfo/router_hosts", [])
+router_addr = config['configurations']['hdfs-rbf-site']['dfs.federation.router.http-address']
 hdfs_user = config['configurations']['hadoop-env']['hdfs_user']
 hadoop_conf_dir = conf_select.get_hadoop_conf_dir()
 hadoop_pid_dir = format("{hadoop_pid_dir_prefix}/{hdfs_user}")
@@ -58,3 +60,6 @@ if 'viewfs-mount-table' in config['configurations']:
   if 'content' in mount_table and mount_table['content'].strip():
     mount_table_xml_inclusion_file_full_path = os.path.join(hadoop_conf_dir, xml_inclusion_file_name)
     mount_table_content = mount_table['content']
+
+smoke_user = config['configurations']['cluster-env']['smokeuser']
+tmp_dir = Script.get_tmp_dir()

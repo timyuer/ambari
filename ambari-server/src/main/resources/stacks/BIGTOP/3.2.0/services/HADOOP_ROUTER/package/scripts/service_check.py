@@ -1,4 +1,3 @@
-#!/usr/bin/env python
 """
 Licensed to the Apache Software Foundation (ASF) under one
 or more contributor license agreements.  See the NOTICE file
@@ -19,78 +18,45 @@ limitations under the License.
 """
 
 from resource_management.libraries.script.script import Script
-from resource_management.core.resources.system import Execute, File
-from resource_management.libraries.functions.format import format
-from resource_management.core.source import StaticFile
-import sys
-import os
+from resource_management.core.shell import as_user
+from ambari_commons.os_family_impl import OsFamilyImpl
 from ambari_commons import OSConst
-from ambari_commons.os_family_impl import OsFamilyFuncImpl, OsFamilyImpl
+from resource_management.libraries.functions.curl_krb_request import curl_krb_request
+from resource_management.libraries import functions
+from resource_management.libraries.functions.format import format
+from resource_management.libraries.resources.execute_hadoop import ExecuteHadoop
+from resource_management.core.logger import Logger
+from resource_management.core.source import StaticFile
+from resource_management.core.resources.system import Execute, File
 
 
-class KnoxServiceCheck(Script):
-  def service_check(self, env):
+class HadoopRouterServiceCheck(Script):
     pass
 
-
-@OsFamilyImpl(os_family=OSConst.WINSRV_FAMILY)
-class KnoxServiceCheckWindows(KnoxServiceCheck):
-  def service_check(self, env):
-    import params
-    env.set_params(params)
-
-    temp_dir = os.path.join(os.path.dirname(params.knox_home), "temp")
-    validateKnoxFileName = "validateKnoxStatus.py"
-    validateKnoxFilePath = os.path.join(temp_dir, validateKnoxFileName)
-    python_executable = sys.executable
-    validateStatusCmd = "%s %s -p %s -n %s" % (python_executable, validateKnoxFilePath, params.knox_host_port, params.knox_host_name)
-
-    print("Test connectivity to knox server")
-
-    File(validateKnoxFilePath,
-         content=StaticFile(validateKnoxFileName)
-    )
-
-    Execute(validateStatusCmd,
-            tries=3,
-            try_sleep=5,
-            timeout=5,
-            logoutput=True
-    )
-
-
 @OsFamilyImpl(os_family=OsFamilyImpl.DEFAULT)
-class KnoxServiceCheckDefault(KnoxServiceCheck):
-  def service_check(self, env):
-    import params
-    env.set_params(params)
+class HadoopRouterServiceCheckDefault(HadoopRouterServiceCheck):
+    def service_check(self, env):
+        import params
 
-    validateKnoxFileName = "validateKnoxStatus.py"
-    validateKnoxFilePath = format("{tmp_dir}/{validateKnoxFileName}")
-    python_executable = sys.executable
-    validateStatusCmd = format("{python_executable} {validateKnoxFilePath} -p {knox_host_port} -n {knox_host_name}")
-    if params.security_enabled:
-      kinit_cmd = format("{kinit_path_local} -kt {smoke_user_keytab} {smokeuser_principal};")
-      smoke_cmd = format("{kinit_cmd} {validateStatusCmd}")
-    else:
-      smoke_cmd = validateStatusCmd
+        env.set_params(params)
 
-    print("Test connectivity to knox server")
+        checkWebUIFileName = "checkWebUI.py"
+        checkWebUIFilePath = format("{params.tmp_dir}/{checkWebUIFileName}")
+        router_port = params.router_addr.split(":")[1]
+        https_only= False
+        comma_sep_router_hosts = ",".join(params.hadoop_router_hosts)
 
-    File(validateKnoxFilePath,
-         content=StaticFile(validateKnoxFileName),
-         mode=0o755
-    )
+        checkWebUICmd = f"ambari-python-wrap {checkWebUIFilePath} -m {comma_sep_router_hosts} -p {router_port} -s {https_only}"
+        File(checkWebUIFilePath,
+             content=StaticFile(checkWebUIFileName),
+             mode=0o775)
 
-    Execute(smoke_cmd,
-            tries=15,
-            try_sleep=5,
-            path='/usr/sbin:/sbin:/usr/local/bin:/bin:/usr/bin',
-            user=params.smokeuser,
-            timeout=5,
-            logoutput=True
-    )
-
+        Execute(checkWebUICmd,
+                logoutput=True,
+                try_sleep=3,
+                tries=5,
+                user=params.smoke_user
+                )
 
 if __name__ == "__main__":
-    KnoxServiceCheck().execute()
+    HadoopRouterServiceCheck().execute()
