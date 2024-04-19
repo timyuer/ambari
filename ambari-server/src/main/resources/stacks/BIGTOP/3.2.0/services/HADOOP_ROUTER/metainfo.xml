@@ -77,6 +77,14 @@
             </package>
           </packages>
         </osSpecific>
+        <osSpecific>
+          <osFamily>ubuntu22</osFamily>
+          <packages>
+            <package>
+              <name>hadoop-${stack_version}-hdfs-dfsrouter</name>
+            </package>
+          </packages>
+        </osSpecific>
       </osSpecifics>
 
       <commandScript>
