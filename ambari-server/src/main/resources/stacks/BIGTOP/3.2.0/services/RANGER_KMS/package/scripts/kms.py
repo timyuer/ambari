@@ -538,10 +538,10 @@ def enable_kms_plugin():
       mode=0o744)
 
     if params.xa_audit_db_is_enabled:
-      cred_setup = params.cred_setup_prefix + ('-f', params.credential_file, '-k', 'auditDBCred', '-v', PasswordString(params.xa_audit_db_password), '-c', '1')
+      cred_setup =  params.cred_setup_prefix + ('-f', params.credential_file, '-k', 'auditDBCred', '-v', PasswordString(params.xa_audit_db_password), '-c', '1')
       Execute(cred_setup, environment={'JAVA_HOME': params.java_home}, logoutput=True, sudo=True)
 
-    cred_setup = params.cred_setup_prefix + ('-f', params.credential_file, '-k', 'sslKeyStore', '-v', PasswordString(params.ssl_keystore_password), '-c', '1')
+    cred_setup =  params.cred_setup_prefix + ('-f', params.credential_file, '-k', 'sslKeyStore', '-v', PasswordString(params.ssl_keystore_password), '-c', '1')
     Execute(cred_setup, environment={'JAVA_HOME': params.java_home}, logoutput=True, sudo=True)
 
     cred_setup = params.cred_setup_prefix + ('-f', params.credential_file, '-k', 'sslTrustStore', '-v', PasswordString(params.ssl_truststore_password), '-c', '1')
