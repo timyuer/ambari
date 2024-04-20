@@ -172,8 +172,22 @@
           <osFamily>ubuntu22</osFamily>
           <packages>
             <package>
-              <name>ambari-metrics-assembly</name>
+              <name>ambari-metrics-collector</name>
               <skipUpgrade>true</skipUpgrade>
+              <condition>should_install_ams_collector</condition>
+            </package>
+            <package>
+              <name>ambari-metrics-monitor</name>
+              <skipUpgrade>true</skipUpgrade>
+            </package>
+            <package>
+              <name>ambari-metrics-hadoop-sink</name>
+              <skipUpgrade>true</skipUpgrade>
+            </package>
+            <package>
+              <name>ambari-metrics-grafana</name>
+              <skipUpgrade>true</skipUpgrade>
+              <condition>should_install_ams_grafana</condition>
             </package>
             <package>
               <name>gcc</name>
