@@ -1,6 +1,8 @@
 <?xml version="1.0"?>
+<?xml-stylesheet type="text/xsl" href="configuration.xsl"?>
 <!--
- censed to the Apache Software Foundation (ASF) under one
+/**
+ * Licensed to the Apache Software Foundation (ASF) under one
  * or more contributor license agreements.  See the NOTICE file
  * distributed with this work for additional information
  * regarding copyright ownership.  The ASF licenses this file
@@ -17,7 +19,7 @@
  * limitations under the License.
  */
 -->
-<configuration supports_final="true">
+<configuration xmlns:xi="http://www.w3.org/2001/XInclude" supports_final="true">
   <property>
     <name>log.dirs</name>
     <display-name>Log directories</display-name>
@@ -29,7 +31,18 @@
     <value-attributes>
       <type>directories</type>
     </value-attributes>
-    <on-ambari-upgrade add="false" />
+    <on-ambari-upgrade add="false"/>
+  </property>
+  <property>
+    <name>port</name>
+    <value>6667</value>
+    <description>
+      The port on which the server accepts client connections.
+    </description>
+    <value-attributes>
+      <type>int</type>
+    </value-attributes>
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>zookeeper.connect</name>
@@ -301,18 +314,18 @@
     <description>
       Backoff time between shutdown retries.
     </description>
-    <on-ambari-upgrade add="false" />
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>kafka.metrics.reporters</name>
-    <value>{{metrics_reporters}}</value>
+    <value/>
     <description>
       kafka ganglia metrics reporter and kafka timeline metrics reporter
     </description>
     <value-attributes>
       <empty-value-valid>true</empty-value-valid>
     </value-attributes>
-    <on-ambari-upgrade add="false" />
+    <on-ambari-upgrade add="false"/>
   </property>
   <property>
     <name>kafka.ganglia.metrics.reporter.enabled</name>

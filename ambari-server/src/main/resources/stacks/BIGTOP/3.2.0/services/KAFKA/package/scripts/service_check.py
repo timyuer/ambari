@@ -33,12 +33,20 @@ class ServiceCheck(Script):
     # TODO, Kafka Service check should be more robust , It should get all the broker_hosts
     # Produce some messages and check if consumer reads same no.of messages.
 
+    kafka_command_config=""
+    if params.kerberos_security_enabled and params.kafka_kerberos_enabled:
+      Logger.info("Kafka kerberos security is enabled.")
+      kafka_command_config=" --command-config /etc/kafka/conf/client_kerberos.properties"
+    
     kafka_config = self.read_kafka_config()
-    topic = "ambari_kafka_service_check"
-    create_topic_cmd_created_output = "Created topic ambari_kafka_service_check."
-    create_topic_cmd_exists_output = "Topic \'ambari_kafka_service_check\' already exists."
+    #topic = "ambari_kafka_service_check"
+    topic = "ambari-kafka-service-check"
+    create_topic_cmd_created_output = "Created topic \"ambari-kafka-service-check\"."
+    create_topic_cmd_created_output2 = "Created topic ambari-kafka-service-check."
+    create_topic_cmd_exists_output = "Topic \"ambari-kafka-service-check\" already exists."
+    create_topic_cmd_exists_output2 = "Topic 'ambari-kafka-service-check' already exists."
     source_cmd = format("source {conf_dir}/kafka-env.sh")
-    topic_exists_cmd = format(source_cmd + " ; " + "{kafka_home}/bin/kafka-topics.sh --zookeeper {kafka_config[zookeeper.connect]} --topic {topic} --list")
+    topic_exists_cmd = format(source_cmd + " ; " + "{kafka_home}/bin/kafka-topics.sh  --bootstrap-server {kafka_broker_quorum}  --topic {topic} --list"  + kafka_command_config)
     topic_exists_cmd_code, topic_exists_cmd_out = shell.call(topic_exists_cmd, logoutput=True, quiet=False, user=params.kafka_user)
 
     if topic_exists_cmd_code > 0:
@@ -50,12 +58,12 @@ class ServiceCheck(Script):
 
       # run create topic command only if the topic doesn't exists
     if topic not in topic_exists_cmd_out:
-      create_topic_cmd = format("{kafka_home}/bin/kafka-topics.sh --zookeeper {kafka_config[zookeeper.connect]} --create --topic {topic} --partitions 1 --replication-factor 1")
+      create_topic_cmd = format("{kafka_home}/bin/kafka-topics.sh --bootstrap-server {kafka_broker_quorum}  --create --topic {topic} --partitions 1 --replication-factor 1"  + kafka_command_config)
       command = source_cmd + " ; " + create_topic_cmd
-      Logger.info("Running kafka create topic command: %s" % command)
-      call_and_match_output(command, format("({create_topic_cmd_created_output})|({create_topic_cmd_exists_output})"), "Failed to check that topic exists", user=params.kafka_user)
+      Logger.info("Running kafka create topic command 22222 : %s" % command)
+      call_and_match_output(command, format("({create_topic_cmd_created_output})|({create_topic_cmd_created_output2})|({create_topic_cmd_exists_output})|({create_topic_cmd_exists_output})"), "Failed to check that topic exists", user=params.kafka_user)
 
-    under_rep_cmd = format("{kafka_home}/bin/kafka-topics.sh --describe --zookeeper {kafka_config[zookeeper.connect]} --under-replicated-partitions")
+    under_rep_cmd = format("{kafka_home}/bin/kafka-topics.sh --describe --bootstrap-server {kafka_broker_quorum}   --under-replicated-partitions"  + kafka_command_config)
     under_rep_cmd_code, under_rep_cmd_out = shell.call(under_rep_cmd, logoutput=True, quiet=False, user=params.kafka_user)
 
     if under_rep_cmd_code > 0:

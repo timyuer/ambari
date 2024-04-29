@@ -45,6 +45,13 @@ def kafka(upgrade_type=None):
     effective_version = params.stack_version_formatted if upgrade_type is None else format_stack_version(params.version)
     Logger.info(format("Effective stack version: {effective_version}"))
 
+    File(os.path.join(params.conf_dir, 'client_kerberos.properties'),
+           owner=params.kafka_user,
+           group=params.user_group,
+           mode=0o755,
+           content=Template("client_kerberos.properties.j2")
+         )
+
     # listeners and advertised.listeners are only added in 2.3.0.0 onwards.
     if effective_version is not None and effective_version != "" and \
        check_stack_feature(StackFeature.KAFKA_LISTENERS, effective_version):

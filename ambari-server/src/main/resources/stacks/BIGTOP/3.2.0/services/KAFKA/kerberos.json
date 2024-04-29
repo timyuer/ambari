@@ -6,16 +6,37 @@
         {
           "name": "kafka_smokeuser",
           "reference": "/smokeuser"
+        },
+        {
+          "name": "kafka_user",
+          "principal": {
+            "value": "${kafka-env/kafka_user}${principal_suffix}@${realm}",
+            "type" : "user",
+            "local_username" : "${kafka-env/kafka_user}",
+            "configuration": "kafka-env/kafka_user_principal"
+          },
+          "keytab": {
+            "file": "${keytab_dir}/kafka.headless.keytab",
+            "owner": {
+              "name": "${kafka-env/kafka_user}",
+              "access": "r"
+            },
+            "group": {
+              "name": "${cluster-env/user_group}",
+              "access": "r"
+            },
+            "configuration": "kafka-env/kafka_user_keytab"
+          }
         }
       ],
       "configurations": [
         {
           "kafka-broker": {
-            "authorizer.class.name": "kafka.security.auth.SimpleAclAuthorizer",
-            "principal.to.local.class":"kafka.security.auth.KerberosPrincipalToLocal",
-            "super.users": "user:${kafka-env/kafka_user}",
-            "security.inter.broker.protocol": "SASL_PLAINTEXT",
-            "zookeeper.set.acl": "true"
+              "authorizer.class.name": "kafka.security.auth.SimpleAclAuthorizer",
+              "principal.to.local.class":"kafka.security.auth.KerberosPrincipalToLocal",
+              "super.users": "user:${kafka-env/kafka_user}",
+              "security.inter.broker.protocol": "SASL_PLAINTEXT",
+              "zookeeper.set.acl": "true"
           }
         },
         {
@@ -29,7 +50,7 @@
           }
         }
       ],
-      "auth_to_local_properties": [
+      "auth_to_local_properties" : [
         "kafka-broker/sasl.kerberos.principal.to.local.rules|comma"
       ],
       "components": [
@@ -51,7 +72,7 @@
                 },
                 "group": {
                   "name": "${cluster-env/user_group}",
-                  "access": ""
+                  "access": "r"
                 },
                 "configuration": "kafka-env/kafka_keytab"
               }

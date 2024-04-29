@@ -52,7 +52,7 @@ def run_migration(env, upgrade_type):
   kafka_acls_script = None
   command_suffix = ""
   if params.upgrade_direction == Direction.UPGRADE:
-    kafka_acls_script = format("{stack_root}/{version}/kafka/usr/lib/bin/kafka-acls.sh")
+    kafka_acls_script = format("{stack_root}/{version}/usr/lib/kafka/bin/kafka-acls.sh")
     command_suffix = "--upgradeAcls"
   elif params.upgrade_direction == Direction.DOWNGRADE:
     kafka_acls_script = format("{stack_root}/{downgrade_from_version}/usr/lib/kafka/bin/kafka-acls.sh")
@@ -64,7 +64,7 @@ def run_migration(env, upgrade_type):
       if params.zookeeper_connect is None:
         raise Fail("Could not retrieve property kafka-broker/zookeeper.connect")
 
-      acls_command = "{0} --authorizer kafka.security.auth.SimpleAclAuthorizer --authorizer-properties zookeeper.connect={1} {2}".\
+      acls_command = "{0} --authorizer kafka.security.authorizer.AclAuthorizer --authorizer-properties zookeeper.connect={1} {2}".\
         format(kafka_acls_script, params.zookeeper_connect, command_suffix)
 
       Execute(acls_command,

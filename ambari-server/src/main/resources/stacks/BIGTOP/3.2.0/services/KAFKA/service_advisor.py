@@ -259,9 +259,13 @@ class KafkaRecommender(service_advisor.ServiceAdvisor):
       # enabled or not.
       putKafkaBrokerProperty("authorizer.class.name", 'org.apache.ranger.authorization.kafka.authorizer.RangerKafkaAuthorizer')
     elif security_enabled:
-      putKafkaBrokerProperty("authorizer.class.name", 'kafka.security.auth.SimpleAclAuthorizer')
+      putKafkaBrokerProperty("authorizer.class.name", 'kafka.security.authorizer.AclAuthorizer')
     else:
       putKafkaBrokerAttributes('authorizer.class.name', 'delete', 'true')
+
+    #If AMS is part of Services, use the KafkaTimelineMetricsReporter for metric reporting. Default is ''.
+    if "AMBARI_METRICS" in servicesList:
+      putKafkaBrokerProperty('kafka.metrics.reporters', 'org.apache.hadoop.metrics2.sink.kafka.KafkaTimelineMetricsReporter')
 
     if ranger_plugin_enabled:
       kafkaLog4jRangerLines = [{
