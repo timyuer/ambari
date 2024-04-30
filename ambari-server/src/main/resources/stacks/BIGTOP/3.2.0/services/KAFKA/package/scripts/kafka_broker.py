@@ -17,11 +17,12 @@ limitations under the License.
 
 """
 from resource_management import Script
+from resource_management.core import sudo
 from resource_management.core.logger import Logger
-from resource_management.core.resources.system import Execute, File, Directory
+from resource_management.core.resources.system import Execute, File
+from resource_management.core.exceptions import ComponentIsNotRunning, Fail
 from resource_management.libraries.functions import stack_select
 from resource_management.libraries.functions import Direction
-from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions.format import format
 from resource_management.libraries.functions.check_process_status import check_process_status
 from resource_management.libraries.functions import StackFeature
@@ -29,10 +30,9 @@ from resource_management.libraries.functions import upgrade_summary
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.show_logs import show_logs
 from kafka import ensure_base_directories
-
+from setup_ranger_kafka import setup_ranger_kafka
 import upgrade
 from kafka import kafka
-from setup_ranger_kafka import setup_ranger_kafka
 
 class KafkaBroker(Script):
 
@@ -78,36 +78,57 @@ class KafkaBroker(Script):
         Execute(kafka_kinit_cmd, user=params.kafka_user)
 
     if params.is_supported_kafka_ranger:
-      setup_ranger_kafka() #Ranger Kafka Plugin related call 
-    daemon_cmd = format('source {params.conf_dir}/kafka-env.sh ; {params.kafka_bin} start')
-    no_op_test = format('ls {params.kafka_pid_file} >/dev/null 2>&1 && ps -p `cat {params.kafka_pid_file}` >/dev/null 2>&1')
+      setup_ranger_kafka() #Ranger Kafka Plugin related call
+    daemon_cmd = format('source {params.conf_dir}/kafka-env.sh ; {params.kafka_start_cmd} >>/dev/null 2>>{params.kafka_err_file} & echo $!>{params.kafka_pid_file}')
+    no_op_test = format('ls {params.kafka_pid_file}>/dev/null 2>&1 && ps -p `cat {params.kafka_pid_file}`>/dev/null 2>&1')
     try:
       Execute(daemon_cmd,
               user=params.kafka_user,
               not_if=no_op_test
-      )
+              )
     except:
       show_logs(params.kafka_log_dir, params.kafka_user)
       raise
 
   def stop(self, env, upgrade_type=None):
-    import params
+    import os, time, params, signal
+
     env.set_params(params)
     # Kafka package scripts change permissions on folders, so we have to
     # restore permissions after installing repo version bits
     # before attempting to stop Kafka Broker
     ensure_base_directories()
-    daemon_cmd = format('source {params.conf_dir}/kafka-env.sh; {params.kafka_bin} stop')
+
+    if not params.kafka_pid_file or not os.path.isfile(params.kafka_pid_file):
+      Logger.info("Kafka is not running. No pid file found.")
+      return
+
     try:
-      Execute(daemon_cmd,
-              user=params.kafka_user,
-      )
+      pid = int(sudo.read_file(params.kafka_pid_file))
     except:
-      show_logs(params.kafka_log_dir, params.kafka_user)
-      raise
-    File(params.kafka_pid_file,
-          action = "delete"
-    )
+      Logger.info("Pid file {0} does not exist or does not contain a process id number".format(params.kafka_pid_file))
+      return
+
+    max_wait = 120
+    for i in range(max_wait):
+      Logger.info("Waiting for Kafka Broker stop, current pid: {0}, seconds: {1}s".format(pid, i + 1))
+      try:
+        sudo.kill(pid, signal.SIGTERM.value)
+      except OSError as e:
+        Logger.info("Kafka Broker is not running, delete pid file: {0}".format(params.kafka_pid_file))
+        File(params.kafka_pid_file, action = "delete")
+        return
+
+      time.sleep(1)
+
+      try:
+        check_process_status(params.kafka_pid_file)
+      except ComponentIsNotRunning as e:
+        File(params.kafka_pid_file, action = "delete")
+        return
+
+    raise Fail("Cannot stop Kafka Broker after {0} seconds".format(max_wait))
+
 
   def disable_security(self, env):
     import params
@@ -128,11 +149,11 @@ class KafkaBroker(Script):
     import status_params
     env.set_params(status_params)
     check_process_status(status_params.kafka_pid_file)
-    
+
   def get_log_folder(self):
     import params
     return params.kafka_log_dir
-  
+
   def get_user(self):
     import params
     return params.kafka_user

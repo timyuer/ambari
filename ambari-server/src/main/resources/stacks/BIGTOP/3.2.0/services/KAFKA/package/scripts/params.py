@@ -24,6 +24,7 @@ from resource_management.libraries.functions.version import format_stack_version
 from resource_management.libraries.functions import StackFeature
 from resource_management.libraries.functions.stack_features import check_stack_feature
 from resource_management.libraries.functions.stack_features import get_stack_feature_version
+from resource_management.libraries.functions.version import format_stack_version, get_major_version
 from resource_management.libraries.functions.default import default
 from utils import get_bare_principal
 from resource_management.libraries.functions.get_stack_version import get_stack_version
@@ -87,10 +88,16 @@ if stack_version_formatted and check_stack_feature(StackFeature.ROLLING_UPGRADE,
   kafka_bin = os.path.join(kafka_home, "bin", "kafka")
   conf_dir = os.path.join(kafka_home, "config")
 
+
+kafka_start_cmd = format('{kafka_home}/bin/kafka-server-start.sh -daemon {conf_dir}/server.properties')
+kafka_stop_cmd = format('{kafka_home}/bin/kafka-server-stop.sh {conf_dir}/server.properties')
+
+
 kafka_user = config['configurations']['kafka-env']['kafka_user']
 kafka_log_dir = config['configurations']['kafka-env']['kafka_log_dir']
 kafka_pid_dir = status_params.kafka_pid_dir
 kafka_pid_file = kafka_pid_dir+"/kafka.pid"
+kafka_err_file = kafka_log_dir + "/kafka.err"
 # This is hardcoded on the kafka bash process lifecycle on which we have no control over
 kafka_managed_pid_dir = "/var/run/kafka"
 kafka_managed_log_dir = "/var/log/kafka"
