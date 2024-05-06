@@ -62,6 +62,16 @@
   </property>
 
   <property>
+    <name>memory.heap-headroom-per-node</name>
+    <value>300MB</value>
+    <description>
+      This is the amount of memory set aside as headroom/buffer in the JVM heap for allocations that are not tracked by Trino.Default value: (JVM max memory * 0.3)
+    </description>
+  </property>
+
+
+
+  <property>
     <name>query.max-memory-per-node</name>
     <value>1GB</value>
     <description>
