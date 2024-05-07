@@ -79,7 +79,7 @@ class KafkaBroker(Script):
 
     if params.is_supported_kafka_ranger:
       setup_ranger_kafka() #Ranger Kafka Plugin related call
-    daemon_cmd = format('source {params.conf_dir}/kafka-env.sh ; {params.kafka_start_cmd} >>/dev/null 2>>{params.kafka_err_file} & echo $!>{params.kafka_pid_file}')
+    daemon_cmd = format('source {params.conf_dir}/kafka-env.sh ; {params.kafka_start_cmd} >>/dev/null 2>>{params.kafka_err_file} & echo $! > {params.kafka_pid_file}')
     no_op_test = format('ls {params.kafka_pid_file}>/dev/null 2>&1 && ps -p `cat {params.kafka_pid_file}`>/dev/null 2>&1')
     try:
       Execute(daemon_cmd,
@@ -91,43 +91,20 @@ class KafkaBroker(Script):
       raise
 
   def stop(self, env, upgrade_type=None):
-    import os, time, params, signal
+    import params
 
     env.set_params(params)
     # Kafka package scripts change permissions on folders, so we have to
     # restore permissions after installing repo version bits
     # before attempting to stop Kafka Broker
     ensure_base_directories()
-
-    if not params.kafka_pid_file or not os.path.isfile(params.kafka_pid_file):
-      Logger.info("Kafka is not running. No pid file found.")
-      return
-
+    daemon_cmd = format('source {params.conf_dir}/kafka-env.sh ; {params.kafka_stop_cmd}')
     try:
-      pid = int(sudo.read_file(params.kafka_pid_file))
+      Execute(daemon_cmd, user=params.kafka_user)
     except:
-      Logger.info("Pid file {0} does not exist or does not contain a process id number".format(params.kafka_pid_file))
-      return
+      show_logs(params.kafka_log_dir, params.kafka_user)
+    File(params.kafka_pid_file, action = "delete")
 
-    max_wait = 120
-    for i in range(max_wait):
-      Logger.info("Waiting for Kafka Broker stop, current pid: {0}, seconds: {1}s".format(pid, i + 1))
-      try:
-        sudo.kill(pid, signal.SIGTERM.value)
-      except OSError as e:
-        Logger.info("Kafka Broker is not running, delete pid file: {0}".format(params.kafka_pid_file))
-        File(params.kafka_pid_file, action = "delete")
-        return
-
-      time.sleep(1)
-
-      try:
-        check_process_status(params.kafka_pid_file)
-      except ComponentIsNotRunning as e:
-        File(params.kafka_pid_file, action = "delete")
-        return
-
-    raise Fail("Cannot stop Kafka Broker after {0} seconds".format(max_wait))
 
 
   def disable_security(self, env):

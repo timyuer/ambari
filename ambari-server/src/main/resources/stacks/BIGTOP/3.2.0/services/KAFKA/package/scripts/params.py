@@ -89,7 +89,7 @@ if stack_version_formatted and check_stack_feature(StackFeature.ROLLING_UPGRADE,
   conf_dir = os.path.join(kafka_home, "config")
 
 
-kafka_start_cmd = format('{kafka_home}/bin/kafka-server-start.sh -daemon {conf_dir}/server.properties')
+kafka_start_cmd = format('{kafka_home}/bin/kafka-server-start.sh {conf_dir}/server.properties')
 kafka_stop_cmd = format('{kafka_home}/bin/kafka-server-stop.sh {conf_dir}/server.properties')
 
 
