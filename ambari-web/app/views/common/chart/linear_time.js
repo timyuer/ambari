@@ -750,7 +750,7 @@ App.ChartLinearTimeView = Ember.View.extend(App.ExportMetricsMixin, {
       width: graphSize.width,
       element: chartElement,
       series: seriesData,
-      interpolation: 'step-after',
+      interpolation: 'cardinal',
       stroke: true,
       renderer: this.get('renderer'),
       strokeWidth: 'area' === this.get('renderer') ? 1 : 2,
