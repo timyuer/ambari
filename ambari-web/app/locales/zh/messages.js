@@ -2591,6 +2591,8 @@ Em.I18n.translations = {
   "dashboard.services.hbase.regionServersSummary": "{0} live/ {1}合计",
   "dashboard.services.hbase.restServers": "HBaseRESTServer",
   "dashboard.services.hbase.restServersSummary": "{0} live/ {1}合计",
+  'dashboard.services.hbase.hbaseRestGateways':'Hbase Rest Gateways',
+  'dashboard.services.hbase.hbaseRestGatewaysSummary':'{0} live / {1} 合计',
   "dashboard.services.hbase.phoenixServers": "Phoenix Query Servers",
   "dashboard.services.hbase.phoenixServersSummary": "{0} live/ {1}合计",
   "dashboard.services.hbase.chart.label": "请求数",
