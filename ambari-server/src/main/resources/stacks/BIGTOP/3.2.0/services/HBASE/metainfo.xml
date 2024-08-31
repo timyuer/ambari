@@ -133,12 +133,12 @@
         </component>
 
         <component>
-          <name>HTTP_GATEWAY</name>
-          <displayName>HTTP gateway</displayName>
-          <category>MASTER</category>
+          <name>HBASE_REST_GATEWAY</name>
+          <displayName>HBASE REST GATEWAY</displayName>
+          <category>SLAVE</category>
           <cardinality>0+</cardinality>
           <commandScript>
-            <script>scripts/http_component.py</script>
+            <script>scripts/hbase_rest_gateway.py</script>
             <scriptType>PYTHON</scriptType>
             <timeout>600</timeout>
           </commandScript>
