@@ -96,6 +96,7 @@ pipeline {
             parallel {
                 stage('Ambari Agent Tests') {
                     steps {
+                        sh 'pip3 install distro'
                         sh 'mvn -Dmaven.test.failure.ignore=true -am test -pl ambari-agent -Dmaven.artifact.threads=10 -Drat.skip'
                     }
                 }
