@@ -73,7 +73,7 @@ def __create_solr_cloud_cli_prefix(
 def __append_flags_if_exists(command, flagsDict):
   for key, value in flagsDict.items():
     if value is not None:
-      command += " %s %s" % (key, value)
+      command += f" {key} {value}"
   return command
 
 

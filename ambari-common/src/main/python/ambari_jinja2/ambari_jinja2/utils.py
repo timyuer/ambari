@@ -257,7 +257,7 @@ def object_type_repr(obj):
     name = obj.__class__.__name__
   else:
     name = obj.__class__.__module__ + "." + obj.__class__.__name__
-  return "%s object" % name
+  return f"{name} object"
 
 
 def pformat(obj, verbose=False):
@@ -306,20 +306,16 @@ def urlize(text, trim_url_limit=None, nofollow=False):
           middle.endswith(".org") or middle.endswith(".net") or middle.endswith(".com")
         )
       ):
-        middle = '<a href="http://%s"%s>%s</a>' % (
-          middle,
-          nofollow_attr,
-          trim_url(middle),
-        )
+        middle = f'<a href="http://{middle}"{nofollow_attr}>{trim_url(middle)}</a>'
       if middle.startswith("http://") or middle.startswith("https://"):
-        middle = '<a href="%s"%s>%s</a>' % (middle, nofollow_attr, trim_url(middle))
+        middle = f'<a href="{middle}"{nofollow_attr}>{trim_url(middle)}</a>'
       if (
         "@" in middle
         and not middle.startswith("www.")
         and not ":" in middle
         and _simple_email_re.match(middle)
       ):
-        middle = '<a href="mailto:%s">%s</a>' % (middle, middle)
+        middle = f'<a href="mailto:{middle}">{middle}</a>'
       if lead + middle + trail != word:
         words[i] = lead + middle + trail
   return "".join(words)
@@ -372,7 +368,7 @@ def generate_lorem_ipsum(n=5, html=True, min=20, max=100):
 
   if not html:
     return "\n\n".join(result)
-  return Markup("\n".join("<p>%s</p>" % escape(x) for x in result))
+  return Markup("\n".join(f"<p>{escape(x)}</p>" for x in result))
 
 
 class LRUCache(object):
@@ -456,7 +452,7 @@ class LRUCache(object):
     return len(self._mapping)
 
   def __repr__(self):
-    return "<%s %r>" % (self.__class__.__name__, self._mapping)
+    return f"<{self.__class__.__name__} {self._mapping!r}>"
 
   def __getitem__(self, key):
     """Get an item from the cache. Moves the item up so that it has the

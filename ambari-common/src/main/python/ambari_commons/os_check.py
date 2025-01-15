@@ -159,7 +159,7 @@ class OS_CONST_TYPE(type):
           json_data[JSON_OS_ALIASES] if JSON_OS_ALIASES in json_data else {}
         )
     except:
-      raise Exception("Couldn't load '%s' file" % OSFAMILY_JSON_RESOURCE)
+      raise Exception(f"Couldn't load '{OSFAMILY_JSON_RESOURCE}' file")
 
   def __init__(cls, name, bases, dct):
     cls.initialize_data()
@@ -177,7 +177,7 @@ class OS_CONST_TYPE(type):
       return name[3:]
     if "_family" in name and name[:-7] in cls.FAMILY_COLLECTION:
       return name[:-7]
-    raise Exception("Unknown class property '%s'" % name)
+    raise Exception(f"Unknown class property '{name}'")
 
 
 class OSConst(metaclass=OS_CONST_TYPE):

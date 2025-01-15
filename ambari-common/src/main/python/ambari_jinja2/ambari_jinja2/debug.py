@@ -216,7 +216,7 @@ def fake_exc_info(exc_info, filename, lineno):
       if function == "root":
         location = "top-level template code"
       elif function.startswith("block_"):
-        location = 'block "%s"' % function[6:]
+        location = f'block "{function[6:]}"'
       else:
         location = "template"
     code = CodeType(

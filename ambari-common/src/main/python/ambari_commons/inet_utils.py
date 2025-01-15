@@ -90,7 +90,7 @@ def download_file_anyway(link, destination, chunk_size=16 * 1024, progress_func=
   if not os.path.exists(destination):
     print(f"Trying to download {link} to {destination} with [curl] command.")
     # print_info_msg(f"Trying to download {link} to {destination} with [curl] command.")
-    curl_command = "curl --fail -k -o %s %s" % (destination, link)
+    curl_command = f"curl --fail -k -o {destination} {link}"
     retcode, out, err = os_run_os_command(curl_command)
     if retcode != 0:
       print_error_msg(
@@ -99,7 +99,7 @@ def download_file_anyway(link, destination, chunk_size=16 * 1024, progress_func=
 
   if not os.path.exists(destination):
     print_error_msg(f"Unable to download file {link}!")
-    print("ERROR: unable to donwload file %s!" % (link))
+    print(f"ERROR: unable to donwload file {link}!")
 
 
 def download_progress(file_name, downloaded_size, blockSize, totalSize):
@@ -181,7 +181,7 @@ def force_download_file(link, destination, chunk_size=16 * 1024, progress_func=N
     if partial_size > chunk_size:
       # Re-download the last chunk, to minimize the possibilities of file corruption
       resume_pos = partial_size - chunk_size
-      request.add_header("Range", "bytes=%s-" % resume_pos)
+      request.add_header("Range", f"bytes={resume_pos}-")
   else:
     # Make sure the full dir structure is in place, otherwise file open will fail
     if not os.path.exists(dest_path):
@@ -190,7 +190,7 @@ def force_download_file(link, destination, chunk_size=16 * 1024, progress_func=N
   response = urllib.request.urlopen(request)
   (file_size, seek_pos) = find_range_components(response.info())
 
-  print_info_msg("Downloading to: %s Bytes: %s" % (destination, file_size))
+  print_info_msg(f"Downloading to: {destination} Bytes: {file_size}")
 
   if partial_size < file_size:
     if seek_pos == 0:

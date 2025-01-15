@@ -431,9 +431,7 @@ class AmbariUserChecksLinux(AmbariUserChecks):
 
     elif retcode != 0:  # fail
       print_warning_msg(
-        "Can't create user {0}. Command {1} " "finished with {2}: \n{3}".format(
-          user, command, retcode, err
-        )
+        f"Can't create user {user}. Command {command} finished with {retcode}: \n{err}"
       )
       return retcode
 
@@ -1529,7 +1527,7 @@ def check_ambari_java_version_is_valid(java_home, java_bin, min_version, propert
   print("Check JDK version for Ambari Server...")
   try:
     command = JDK_VERSION_CHECK_CMD.format(os.path.join(java_home, "bin", java_bin))
-    print("Running java version check command: {0}".format(command))
+    print(f"Running java version check command: {command}")
     process = subprocess.Popen(
       command,
       stdout=subprocess.PIPE,

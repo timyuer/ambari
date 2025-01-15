@@ -45,7 +45,7 @@ class MissingKeytabs(object):
       )
 
     def __str__(self):
-      return "Keytab: %s Principal: %s" % (self.keytab_file_path, self.principal)
+      return f"Keytab: {self.keytab_file_path} Principal: {self.principal}"
 
   @classmethod
   def from_kerberos_records(self, kerberos_record, hostname):

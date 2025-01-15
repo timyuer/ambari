@@ -38,7 +38,7 @@ class Provider(object):
     return self.__str__()
 
   def __str__(self):
-    return "%s[%s]" % (self.__class__.__name__, self.resource)
+    return f"{self.__class__.__name__}[{self.resource}]"
 
 
 PROVIDERS = dict(
@@ -90,6 +90,6 @@ def find_provider(env, resource, class_path=None):
   try:
     mod_path, class_name = class_path.rsplit(".", 1)
   except ValueError:
-    raise Fail("Unable to find provider for %s as %s" % (resource, class_path))
+    raise Fail(f"Unable to find provider for {resource} as {class_path}")
   mod = __import__(mod_path, {}, {}, [class_name])
   return getattr(mod, class_name)

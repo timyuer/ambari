@@ -86,7 +86,7 @@ class MountProvider(Provider):
       os.makedirs(self.resource.mount_point)
 
     if self.is_mounted():
-      Logger.debug("%s already mounted" % self)
+      Logger.debug(f"{self} already mounted")
     else:
       args = ["mount"]
       if self.resource.fstype:
@@ -99,24 +99,24 @@ class MountProvider(Provider):
 
       check_call(args)
 
-      Logger.info("%s mounted" % self)
+      Logger.info(f"{self} mounted")
 
   def action_umount(self):
     if self.is_mounted():
       check_call(["umount", self.resource.mount_point])
 
-      Logger.info("%s unmounted" % self)
+      Logger.info(f"{self} unmounted")
     else:
-      Logger.debug("%s is not mounted" % self)
+      Logger.debug(f"{self} is not mounted")
 
   def action_enable(self):
     if self.is_enabled():
-      Logger.debug("%s already enabled" % self)
+      Logger.debug(f"{self} already enabled")
     else:
       if not self.resource.device:
-        raise Fail("[%s] device not set but required for enable action" % self)
+        raise Fail(f"[{self}] device not set but required for enable action")
       if not self.resource.fstype:
-        raise Fail("[%s] fstype not set but required for enable action" % self)
+        raise Fail(f"[{self}] fstype not set but required for enable action")
 
       with open("/etc/fstab", "a") as fp:
         fp.write(
@@ -131,7 +131,7 @@ class MountProvider(Provider):
           )
         )
 
-      Logger.info("%s enabled" % self)
+      Logger.info(f"{self} enabled")
 
   def action_disable(self):
     pass  # TODO
@@ -141,7 +141,7 @@ class MountProvider(Provider):
       return False
 
     if self.resource.device and not os.path.exists(self.resource.device):
-      raise Fail("%s Device %s does not exist" % (self, self.resource.device))
+      raise Fail(f"{self} Device {self.resource.device} does not exist")
 
     mounts = get_mounted()
     for m in mounts:

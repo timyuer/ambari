@@ -626,11 +626,11 @@ class Environment(object):
       zip_file = ZipFile(
         target, "w", dict(deflated=ZIP_DEFLATED, stored=ZIP_STORED)[zip]
       )
-      log_function('Compiling into Zip archive "%s"' % target)
+      log_function(f'Compiling into Zip archive "{target}"')
     else:
       if not os.path.isdir(target):
         os.makedirs(target)
-      log_function('Compiling into folder "%s"' % target)
+      log_function(f'Compiling into folder "{target}"')
 
     try:
       for name in self.list_templates(extensions, filter_func):
@@ -640,7 +640,7 @@ class Environment(object):
         except TemplateSyntaxError as e:
           if not ignore_errors:
             raise
-          log_function('Could not compile "%s": %s' % (name, e))
+          log_function(f'Could not compile "{name}": {e}')
           continue
 
         filename = ModuleLoader.get_module_filename(name)
@@ -648,10 +648,10 @@ class Environment(object):
         if py_compile:
           c = self._compile(code, _encode_filename(filename))
           write_file(filename + "c", py_header + marshal.dumps(c), "wb")
-          log_function('Byte-compiled "%s" as %s' % (name, filename + "c"))
+          log_function(f"Byte-compiled \"{name}\" as {filename + 'c'}")
         else:
           write_file(filename, code, "w")
-          log_function('Compiled "%s" as %s' % (name, filename))
+          log_function(f'Compiled "{name}" as {filename}')
     finally:
       if zip:
         zip_file.close()
@@ -1028,10 +1028,10 @@ class Template(object):
 
   def __repr__(self):
     if self.name is None:
-      name = "memory:%x" % id(self)
+      name = f"memory:{id(self):x}"
     else:
       name = repr(self.name)
-    return "<%s %s>" % (self.__class__.__name__, name)
+    return f"<{self.__class__.__name__} {name}>"
 
 
 class TemplateModule(object):
@@ -1053,10 +1053,10 @@ class TemplateModule(object):
 
   def __repr__(self):
     if self.__name__ is None:
-      name = "memory:%x" % id(self)
+      name = f"memory:{id(self):x}"
     else:
       name = repr(self.__name__)
-    return "<%s %s>" % (self.__class__.__name__, name)
+    return f"<{self.__class__.__name__} {name}>"
 
 
 class TemplateExpression(object):

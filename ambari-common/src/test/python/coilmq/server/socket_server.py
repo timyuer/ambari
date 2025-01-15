@@ -59,7 +59,7 @@ class StompRequestHandler(BaseRequestHandler, StompConnection):
     if self.server.timeout is not None:
       self.request.settimeout(self.server.timeout)
     self.debug = False
-    self.log = logging.getLogger("%s.%s" % (self.__module__, self.__class__.__name__))
+    self.log = logging.getLogger(f"{self.__module__}.{self.__class__.__name__}")
     self.buffer = FrameBuffer()
     self.engine = StompEngine(
       connection=self,
@@ -81,12 +81,12 @@ class StompRequestHandler(BaseRequestHandler, StompConnection):
           if not data:
             break
           if self.debug:
-            self.log.debug("RECV: %r" % data)
+            self.log.debug(f"RECV: {data!r}")
           self.buffer.append(data)
 
           for frame in self.buffer:
             self.server.frames_queue.put(frame)
-            self.log.debug("Processing frame: %s" % frame)
+            self.log.debug(f"Processing frame: {frame}")
             self.engine.process_frame(frame)
             if not self.engine.connected:
               raise ClientDisconnected()
@@ -95,7 +95,7 @@ class StompRequestHandler(BaseRequestHandler, StompConnection):
     except ClientDisconnected:
       self.log.debug("Client disconnected, discontinuing read loop.")
     except Exception as e:  # pragma: no cover
-      self.log.error("Error receiving data (unbinding): %s" % e)
+      self.log.error(f"Error receiving data (unbinding): {e}")
       self.engine.unbind()
       raise
 
@@ -116,7 +116,7 @@ class StompRequestHandler(BaseRequestHandler, StompConnection):
     """
     packed = frame.pack()
     if self.debug:  # pragma: no cover
-      self.log.debug("SEND: %r" % packed)
+      self.log.debug(f"SEND: {packed!r}")
     self.request.sendall(packed)
 
 
@@ -160,7 +160,7 @@ class StompServer(TCPServer):
     @keyword queue_manager: The configured L{coilmq.queue.QueueManager} object to use.
     @keyword topic_manager: The configured L{coilmq.topic.TopicManager} object to use.
     """
-    self.log = logging.getLogger("%s.%s" % (self.__module__, self.__class__.__name__))
+    self.log = logging.getLogger(f"{self.__module__}.{self.__class__.__name__}")
     if not RequestHandlerClass:
       RequestHandlerClass = StompRequestHandler
     self.timeout = timeout

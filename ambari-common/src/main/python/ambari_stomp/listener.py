@@ -418,17 +418,11 @@ class StatsListener(ConnectionListener):
     Return a string containing the current statistics (messages sent and received,
     errors, etc)
     """
-    return """Connections: %s
-Messages sent: %s
-Messages received: %s
-Heartbeats received: %s
-Errors: %s""" % (
-      self.connections,
-      self.messages_sent,
-      self.messages,
-      self.heartbeat_count,
-      self.errors,
-    )
+    return f"""Connections: {self.connections}
+Messages sent: {self.messages_sent}
+Messages received: {self.messages}
+Heartbeats received: {self.heartbeat_count}
+Errors: {self.errors}"""
 
 
 class PrintingListener(ConnectionListener):
@@ -443,7 +437,7 @@ class PrintingListener(ConnectionListener):
     :param dict headers:
     :param body:
     """
-    print("on_connected %s %s" % (headers, body))
+    print(f"on_connected {headers} {body}")
 
   def on_disconnected(self):
     print("on_disconnected")
@@ -456,7 +450,7 @@ class PrintingListener(ConnectionListener):
     :param dict headers:
     :param body:
     """
-    print("on_before_message %s %s" % (headers, body))
+    print(f"on_before_message {headers} {body}")
     return headers, body
 
   def on_message(self, headers, body):
@@ -464,27 +458,27 @@ class PrintingListener(ConnectionListener):
     :param dict headers:
     :param body:
     """
-    print("on_message %s %s" % (headers, body))
+    print(f"on_message {headers} {body}")
 
   def on_receipt(self, headers, body):
     """
     :param dict headers:
     :param body:
     """
-    print("on_receipt %s %s" % (headers, body))
+    print(f"on_receipt {headers} {body}")
 
   def on_error(self, headers, body):
     """
     :param dict headers:
     :param body:
     """
-    print("on_error %s %s" % (headers, body))
+    print(f"on_error {headers} {body}")
 
   def on_send(self, frame):
     """
     :param Frame frame:
     """
-    print("on_send %s %s %s" % (frame.cmd, frame.headers, frame.body))
+    print(f"on_send {frame.cmd} {frame.headers} {frame.body}")
 
   def on_heartbeat(self):
     print("on_heartbeat")

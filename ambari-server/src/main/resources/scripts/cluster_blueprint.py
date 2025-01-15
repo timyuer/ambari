@@ -217,8 +217,7 @@ class AmbariBlueprint:
       logger.info("Blueprint created successfully.")
     elif retCode == "409":
       logger.info(
-        "Blueprint %s already exists, proceeding with host "
-        "assignments." % blueprint_name
+        f"Blueprint {blueprint_name} already exists, proceeding with host assignments."
       )
     else:
       logger.error(f"Unable to create blueprint from location {blueprintLocation}")

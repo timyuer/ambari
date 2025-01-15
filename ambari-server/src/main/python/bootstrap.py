@@ -1140,9 +1140,7 @@ class PBootstrap:
           if elapsedtime > HOST_BOOTSTRAP_TIMEOUT:
             # bootstrap timed out
             logging.warn(
-              "Bootstrap at host {0} timed out and will be " "interrupted".format(
-                bootstrap.host
-              )
+              f"Bootstrap at host {bootstrap.host} timed out and will be interrupted"
             )
             bootstrap.interruptBootstrap()
             finished_list.append(bootstrap)

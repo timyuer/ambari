@@ -85,7 +85,7 @@ def os_set_file_permissions(file, mod, recursive, user):
 
 
 def os_set_open_files_limit(maxOpenFiles):
-  command = "%s %s" % (ULIMIT_CMD, str(maxOpenFiles))
+  command = f"{ULIMIT_CMD} {str(maxOpenFiles)}"
   os_run_os_command(command)
 
 
@@ -96,11 +96,11 @@ def os_getpass(prompt):
 def os_is_service_exist(serviceName):
   if os.path.exists("/run/systemd/system/"):
     return (
-      os.popen('systemctl list-units --full -all | grep "%s.service"' % serviceName)
+      os.popen(f'systemctl list-units --full -all | grep "{serviceName}.service"')
       .read()
       .strip()
       != ""
     )
 
-  status = os.system("service %s status >/dev/null 2>&1" % serviceName)
+  status = os.system(f"service {serviceName} status >/dev/null 2>&1")
   return status != 256

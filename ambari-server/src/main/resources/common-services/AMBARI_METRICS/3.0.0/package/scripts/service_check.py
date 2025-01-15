@@ -323,8 +323,7 @@ def call_curl_krb_request(
       if i < tries - 1:  # range/xrange returns items from start to end-1
         time.sleep(connection_timeout)
         Logger.info(
-          "Connection failed for %s. Next retry in %s seconds."
-          % (uri, connection_timeout)
+          f"Connection failed for {uri}. Next retry in {connection_timeout} seconds."
         )
         continue
       else:

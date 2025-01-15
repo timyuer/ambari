@@ -46,7 +46,7 @@ class UserProvider(Provider):
     if not self.user:
       creating_user = True
       command = ["useradd", "-m"]
-      Logger.info("Adding user %s" % self.resource)
+      Logger.info(f"Adding user {self.resource}")
     else:
       creating_user = False
       command = ["usermod"]
@@ -64,7 +64,7 @@ class UserProvider(Provider):
       else:
         return
 
-      Logger.info("Modifying user %s" % (self.resource.username))
+      Logger.info(f"Modifying user {self.resource.username}")
 
     if self.resource.system and not self.user:
       command.append("--system")
@@ -110,7 +110,7 @@ class UserProvider(Provider):
     if self.user:
       command = ["userdel", self.resource.username]
       shell.checked_call(command, sudo=True)
-      Logger.info("Removed user %s" % self.resource)
+      Logger.info(f"Removed user {self.resource}")
 
   @property
   def user(self):
@@ -154,7 +154,7 @@ class GroupProvider(Provider):
     group = self.group
     if not group:
       command = ["groupadd"]
-      Logger.info("Adding group %s" % self.resource)
+      Logger.info(f"Adding group {self.resource}")
     else:
       command = ["groupmod"]
 
@@ -166,7 +166,7 @@ class GroupProvider(Provider):
       else:
         return
 
-      Logger.info("Modifying group %s" % (self.resource.group_name))
+      Logger.info(f"Modifying group {self.resource.group_name}")
 
     for option_name, attributes in self.options.items():
       option_value = getattr(self.resource, option_name)
@@ -185,7 +185,7 @@ class GroupProvider(Provider):
     if self.group:
       command = ["groupdel", self.resource.group_name]
       shell.checked_call(command, sudo=True)
-      Logger.info("Removed group %s" % self.resource)
+      Logger.info(f"Removed group {self.resource}")
 
   @property
   def group(self):

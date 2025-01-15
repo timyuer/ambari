@@ -106,7 +106,7 @@ class TemplateReference(object):
     return BlockReference(name, self.__context, blocks, 0)
 
   def __repr__(self):
-    return "<%s %r>" % (self.__class__.__name__, self.__context.name)
+    return f"<{self.__class__.__name__} {self.__context.name!r}>"
 
 
 class Context(object):
@@ -161,7 +161,7 @@ class Context(object):
       blocks[index]
     except LookupError:
       return self.environment.undefined(
-        "there is no parent block " "called %r." % name, name="super"
+        f"there is no parent block called {name!r}.", name="super"
       )
     return BlockReference(name, self, blocks, index)
 
@@ -256,7 +256,7 @@ class Context(object):
     return item
 
   def __repr__(self):
-    return "<%s %s of %r>" % (self.__class__.__name__, repr(self.get_all()), self.name)
+    return f"<{self.__class__.__name__} {repr(self.get_all())} of {self.name!r}>"
 
 
 # register the context as mapping if possible
@@ -282,7 +282,7 @@ class BlockReference(object):
     """Super the block."""
     if self._depth + 1 >= len(self._stack):
       return self._context.environment.undefined(
-        "there is no parent block called %r." % self.name, name="super"
+        f"there is no parent block called {self.name!r}.", name="super"
       )
     return BlockReference(self.name, self._context, self._stack, self._depth + 1)
 
@@ -356,7 +356,7 @@ class LoopContext(object):
     return self._length
 
   def __repr__(self):
-    return "<%s %r/%r>" % (self.__class__.__name__, self.index, self.length)
+    return f"<{self.__class__.__name__} {self.index!r}/{self.length!r}>"
 
 
 class LoopContextIterator(object):
@@ -418,7 +418,7 @@ class Macro(object):
             value = self.defaults[idx - self._argument_count + off]
           except IndexError:
             value = self._environment.undefined(
-              "parameter %r was not provided" % name, name=name
+              f"parameter {name!r} was not provided", name=name
             )
         arguments.append(value)
 
@@ -434,13 +434,13 @@ class Macro(object):
       arguments.append(kwargs)
     elif kwargs:
       raise TypeError(
-        "macro %r takes no keyword argument %r" % (self.name, next(iter(kwargs)))
+        f"macro {self.name!r} takes no keyword argument {next(iter(kwargs))!r}"
       )
     if self.catch_varargs:
       arguments.append(args[self._argument_count :])
     elif len(args) > self._argument_count:
       raise TypeError(
-        "macro %r takes not more than %d argument(s)" % (self.name, len(self.arguments))
+        f"macro {self.name!r} takes not more than {len(self.arguments)} argument(s)"
       )
     return self._func(*arguments)
 
@@ -486,7 +486,7 @@ class Undefined(object):
     """
     if self._undefined_hint is None:
       if self._undefined_obj is missing:
-        hint = "%r is undefined" % self._undefined_name
+        hint = f"{self._undefined_name!r} is undefined"
       elif not isinstance(self._undefined_name, str):
         hint = "%s has no element %r" % (
           object_type_repr(self._undefined_obj),

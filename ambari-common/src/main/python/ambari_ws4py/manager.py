@@ -255,7 +255,7 @@ class WebSocketManager(threading.Thread):
     if websocket in self:
       return
 
-    logger.info("Managing websocket %s" % format_addresses(websocket))
+    logger.info(f"Managing websocket {format_addresses(websocket)}")
     websocket.opened()
     with self.lock:
       fd = websocket.sock.fileno()
@@ -273,7 +273,7 @@ class WebSocketManager(threading.Thread):
     if websocket not in self:
       return
 
-    logger.info("Removing websocket %s" % format_addresses(websocket))
+    logger.info(f"Removing websocket {format_addresses(websocket)}")
     with self.lock:
       fd = websocket.sock.fileno()
       self.websockets.pop(fd, None)
@@ -337,7 +337,7 @@ class WebSocketManager(threading.Thread):
               self.poller.unregister(fd)
 
             if not ws.terminated:
-              logger.info("Terminating websocket %s" % format_addresses(ws))
+              logger.info(f"Terminating websocket {format_addresses(ws)}")
               ws.terminate()
 
   def close_all(self, code=1001, message="Server is shutting down"):

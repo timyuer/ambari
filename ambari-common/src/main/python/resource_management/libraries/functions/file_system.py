@@ -44,7 +44,7 @@ def get_and_cache_mount_points(refresh=False):
     for m in mounts:
       if m["mount_point"] is not None:
         m["mount_point"] = m["mount_point"].rstrip()
-    Logger.info("Host contains mounts: %s." % str([m["mount_point"] for m in mounts]))
+    Logger.info(f"Host contains mounts: {str([m['mount_point'] for m in mounts])}.")
     return mounts
 
 
@@ -78,5 +78,5 @@ def get_mount_point_for_dir(dir, mount_points=None):
         ).count(os.path.sep):
           best_mount_found = m
 
-  Logger.info("Mount point for directory %s is %s" % (str(dir), str(best_mount_found)))
+  Logger.info(f"Mount point for directory {str(dir)} is {str(best_mount_found)}")
   return best_mount_found

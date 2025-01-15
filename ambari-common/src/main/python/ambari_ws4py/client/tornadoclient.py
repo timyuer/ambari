@@ -160,7 +160,7 @@ if __name__ == "__main__":
         self.send("*" * i)
 
     def received_message(self, m):
-      print("#%d" % len(m))
+      print(f"#{len(m)}")
       if len(m) == 175:
         self.close()
 

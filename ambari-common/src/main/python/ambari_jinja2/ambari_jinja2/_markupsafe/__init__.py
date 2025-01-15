@@ -101,7 +101,7 @@ class Markup(str):
     return self.__class__(str.__mod__(self, arg))
 
   def __repr__(self):
-    return "%s(%s)" % (self.__class__.__name__, str.__repr__(self))
+    return f"{self.__class__.__name__}({str.__repr__(self)})"
 
   def join(self, seq):
     return self.__class__(str.join(self, list(map(escape, seq))))

@@ -121,7 +121,7 @@ def do_xmlattr(_eval_ctx, d, autospace=True):
   if the filter returned something unless the second parameter is false.
   """
   rv = " ".join(
-    '%s="%s"' % (escape(key), escape(value))
+    f'{escape(key)}="{escape(value)}"'
     for key, value in d.items()
     if value is not None and not isinstance(value, Undefined)
   )
@@ -308,10 +308,10 @@ def do_filesizeformat(value, binary=False):
   if bytes < base:
     return "%d Byte%s" % (bytes, bytes != 1 and "s" or "")
   elif bytes < base * base:
-    return "%.1f K%sB" % (bytes / base, middle)
+    return f"{bytes / base:.1f} K{middle}B"
   elif bytes < base * base * base:
-    return "%.1f M%sB" % (bytes / (base * base), middle)
-  return "%.1f G%sB" % (bytes / (base * base * base), middle)
+    return f"{bytes / (base * base):.1f} M{middle}B"
+  return f"{bytes / (base * base * base):.1f} G{middle}B"
 
 
 def do_pprint(value, verbose=False):

@@ -1252,7 +1252,7 @@ class Script(object):
       and config["commandParams"]["reconfigureAction"] is not None
     ):
       reconfigure_action = config["commandParams"]["reconfigureAction"]
-      Logger.info("Call %s" % reconfigure_action)
+      Logger.info(f"Call {reconfigure_action}")
       method = self.choose_method_to_execute(reconfigure_action)
       method(env)
 

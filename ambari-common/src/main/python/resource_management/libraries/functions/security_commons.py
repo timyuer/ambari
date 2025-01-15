@@ -120,7 +120,7 @@ def validate_security_config_properties(params, configuration_rules):
           actual_value = get_value(actual_values, property_name, "")
           if not actual_value:
             issues[config_file] = (
-              "Property %s must exist and must not be empty" % property_name
+              f"Property {property_name} must exist and must not be empty"
             )
 
       # Process Read Checks
@@ -131,7 +131,7 @@ def validate_security_config_properties(params, configuration_rules):
         for property_name in rules:
           actual_value = get_value(actual_values, property_name, None)
           if not actual_value:
-            issues[config_file] = "Property %s does not exist" % property_name
+            issues[config_file] = f"Property {property_name} does not exist"
           elif not os.path.isfile(actual_value):
             issues[config_file] = "Property %s points to an inaccessible file - %s" % (
               property_name,
@@ -139,7 +139,7 @@ def validate_security_config_properties(params, configuration_rules):
             )
     except Exception as e:
       issues[config_file] = (
-        "Exception occurred while validating the config file\nCauses: %s" % str(e)
+        f"Exception occurred while validating the config file\nCauses: {str(e)}"
       )
   return issues
 
@@ -238,7 +238,7 @@ def cached_kinit_executor(
   Main cached kinit executor - Uses a temporary file on the FS to cache executions. Each command
   will have its own file and only one entry (last successful execution) will be stored
   """
-  key = str(hash("%s|%s" % (principal, keytab_file)))
+  key = str(hash(f"{principal}|{keytab_file}"))
   filename = key + "_tmp.txt"
   file_path = temp_dir + os.sep + "kinit_executor_cache"
   output = None

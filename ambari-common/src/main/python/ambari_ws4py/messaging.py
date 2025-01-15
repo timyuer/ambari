@@ -54,7 +54,7 @@ class Message(object):
     elif isinstance(data, bytearray):
       data = bytes(data)
     elif not isinstance(data, bytes):
-      raise TypeError("%s is not a supported data type" % type(data))
+      raise TypeError(f"{type(data)} is not a supported data type")
 
     self.data = data
 
@@ -110,7 +110,7 @@ class Message(object):
     elif isinstance(data, unicode):
       self.data += data.encode(self.encoding)
     else:
-      raise TypeError("%s is not a supported data type" % type(data))
+      raise TypeError(f"{type(data)} is not a supported data type")
 
   def __len__(self):
     return len(self.__unicode__())

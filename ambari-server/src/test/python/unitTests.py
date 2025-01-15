@@ -339,9 +339,7 @@ def main():
   for variant in test_variants:
     executor_result = multiprocessing.Queue()
     sys.stderr.write(
-      "Running tests for stack:{0} service:{1}\n".format(
-        variant["stack"], variant["service"]
-      )
+      f"Running tests for stack:{variant['stack']} service:{variant['service']}\n"
     )
     process = multiprocessing.Process(
       target=stack_test_executor,

@@ -271,9 +271,7 @@ class MetricAlert(BaseAlert):
             response.close()
           except:
             logger.debug(
-              "[Alert][{0}] Unable to close JMX URL connection to {1}".format(
-                self.get_name(), url
-              )
+              f"[Alert][{self.get_name()}] Unable to close JMX URL connection to {url}"
             )
 
       json_is_valid = True

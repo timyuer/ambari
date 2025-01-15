@@ -97,5 +97,5 @@ def mode(archive):
     return "r:bz2"
   else:
     raise ValueError(
-      "Could not extract `%s` as no appropriate extractor is found" % archive
+      f"Could not extract `{archive}` as no appropriate extractor is found"
     )

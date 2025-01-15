@@ -40,7 +40,7 @@ def get_ambari_version_agent():
         ambari_version = f.read().strip()
     except Exception as e:
       Logger.info("Unable to determine ambari version from the agent version file.")
-      Logger.debug("Exception: %s" % str(e))
+      Logger.debug(f"Exception: {str(e)}")
       pass
     pass
   return ambari_version

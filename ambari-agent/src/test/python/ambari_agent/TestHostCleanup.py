@@ -477,7 +477,7 @@ class TestHostCleanup(TestCase):
     self.assertTrue(get_os_type_method.called)
     self.assertTrue(run_os_command_method.called)
     run_os_command_method.assert_called_with(
-      "yum erase -y {0}".format(" ".join(["abcd", "wxyz"]))
+      f"yum erase -y {' '.join(['abcd', 'wxyz'])}"
     )
     self.assertEqual(0, retval)
 
@@ -492,7 +492,7 @@ class TestHostCleanup(TestCase):
     self.assertTrue(get_os_type_method.called)
     self.assertTrue(run_os_command_method.called)
     run_os_command_method.assert_called_with(
-      "zypper -n -q remove {0}".format(" ".join(["abcd", "wxyz"]))
+      f"zypper -n -q remove {' '.join(['abcd', 'wxyz'])}"
     )
     self.assertEqual(0, retval)
 

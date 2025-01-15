@@ -179,13 +179,13 @@ class MulticastConnection(BaseConnection, Protocol12):
     if cmd == CMD_BEGIN:
       trans = headers[HDR_TRANSACTION]
       if trans in self.transactions:
-        self.notify("error", {}, "Transaction %s already started" % trans)
+        self.notify("error", {}, f"Transaction {trans} already started")
       else:
         self.transactions[trans] = []
     elif cmd == CMD_COMMIT:
       trans = headers[HDR_TRANSACTION]
       if trans not in self.transactions:
-        self.notify("error", {}, "Transaction %s not started" % trans)
+        self.notify("error", {}, f"Transaction {trans} not started")
       else:
         for f in self.transactions[trans]:
           self.transport.transmit(f)
@@ -197,7 +197,7 @@ class MulticastConnection(BaseConnection, Protocol12):
       if "transaction" in headers:
         trans = headers["transaction"]
         if trans not in self.transactions:
-          self.transport.notify("error", {}, "Transaction %s not started" % trans)
+          self.transport.notify("error", {}, f"Transaction {trans} not started")
           return
         else:
           self.transactions[trans].append(frame)

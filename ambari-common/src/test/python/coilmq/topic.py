@@ -46,7 +46,7 @@ class TopicManager(object):
   """
 
   def __init__(self):
-    self.log = logging.getLogger("%s.%s" % (__name__, self.__class__.__name__))
+    self.log = logging.getLogger(f"{__name__}.{self.__class__.__name__}")
 
     # Lock var is required for L{synchornized} decorator.
     self._lock = threading.RLock()
@@ -75,7 +75,7 @@ class TopicManager(object):
     @param destination: The topic destination (e.g. '/topic/foo')
     @type destination: C{str}
     """
-    self.log.debug("Subscribing %s to %s" % (connection, destination))
+    self.log.debug(f"Subscribing {connection} to {destination}")
     self._topics[destination].add(connection)
 
   @synchronized(lock)
@@ -89,7 +89,7 @@ class TopicManager(object):
     @param destination: The topic destination (e.g. '/topic/foo')
     @type destination: C{str}
     """
-    self.log.debug("Unsubscribing %s from %s" % (connection, destination))
+    self.log.debug(f"Unsubscribing {connection} from {destination}")
     if connection in self._topics[destination]:
       self._topics[destination].remove(connection)
 
@@ -104,7 +104,7 @@ class TopicManager(object):
     @param connection: The client connection to unsubscribe.
     @type connection: L{coilmq.server.StompConnection}
     """
-    self.log.debug("Disconnecting %s" % connection)
+    self.log.debug(f"Disconnecting {connection}")
     for dest in list(self._topics.keys()):
       if connection in self._topics[dest]:
         self._topics[dest].remove(connection)
@@ -123,7 +123,7 @@ class TopicManager(object):
     """
     dest = message.headers.get("destination")
     if not dest:
-      raise ValueError("Cannot send frame with no destination: %s" % message)
+      raise ValueError(f"Cannot send frame with no destination: {message}")
 
     message.cmd = "message"
 

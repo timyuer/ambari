@@ -43,10 +43,7 @@ class ParallelProcess(Process):
 
   def return_name(self):
     ## NOTE: self.name is an attribute of multiprocessing.Process
-    return "Process running function '%s' for element '%s'" % (
-      self.function,
-      self.element,
-    )
+    return f"Process running function '{self.function}' for element '{self.element}'"
 
   def run(self):
     try:
@@ -65,7 +62,7 @@ class ParallelProcess(Process):
 
 
 def execute_in_parallel(function, array, params, wait_for_all=False):
-  logger.info("Started running %s for %s" % (function, array))
+  logger.info(f"Started running {function} for {array}")
   processs = []
   q = Queue()
   counter = len(array)
@@ -86,7 +83,7 @@ def execute_in_parallel(function, array, params, wait_for_all=False):
   for process in processs:
     process.terminate()
 
-  logger.info("Finished running %s for %s" % (function, array))
+  logger.info(f"Finished running {function} for {array}")
 
   return results
 

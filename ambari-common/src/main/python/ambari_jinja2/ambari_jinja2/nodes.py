@@ -128,7 +128,7 @@ class Node(object, metaclass=NodeType):
     if fields:
       if len(fields) != len(self.fields):
         if not self.fields:
-          raise TypeError("%r takes 0 arguments" % self.__class__.__name__)
+          raise TypeError(f"{self.__class__.__name__!r} takes 0 arguments")
         raise TypeError(
           "%r takes 0 or %d argument%s"
           % (
@@ -142,7 +142,7 @@ class Node(object, metaclass=NodeType):
     for attr in self.attributes:
       setattr(self, attr, attributes.pop(attr, None))
     if attributes:
-      raise TypeError("unknown attribute %r" % next(iter(attributes)))
+      raise TypeError(f"unknown attribute {next(iter(attributes))!r}")
 
   def iter_fields(self, exclude=None, only=None):
     """This method iterates over all fields that are defined and yields
@@ -751,7 +751,7 @@ class Operand(Helper):
 if __debug__:
   Operand.__doc__ += "\nThe following operators are available: " + ", ".join(
     sorted(
-      "``%s``" % x
+      f"``{x}``"
       for x in set(_binop_to_func) | set(_uaop_to_func) | set(_cmpop_to_func)
     )
   )

@@ -101,9 +101,9 @@ class WebSocketWSGIApplication(object):
     ]:
       actual_value = environ.get(key, "").lower()
       if not actual_value:
-        raise HandshakeError("Header %s is not defined" % key)
+        raise HandshakeError(f"Header {key} is not defined")
       if expected_value not in actual_value:
-        raise HandshakeError("Illegal value for header %s: %s" % (key, actual_value))
+        raise HandshakeError(f"Illegal value for header {key}: {actual_value}")
 
     key = environ.get("HTTP_SEC_WEBSOCKET_KEY")
     if key:
@@ -150,7 +150,7 @@ class WebSocketWSGIApplication(object):
     upgrade_headers = [
       ("Upgrade", "websocket"),
       ("Connection", "Upgrade"),
-      ("Sec-WebSocket-Version", "%s" % version),
+      ("Sec-WebSocket-Version", f"{version}"),
       ("Sec-WebSocket-Accept", accept_value),
     ]
     if ws_protocols:

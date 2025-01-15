@@ -58,7 +58,7 @@ class AttributeDictionary(object):
       return self[name]
     except KeyError:
       raise AttributeError(
-        "'%s' object has no attribute '%s'" % (self.__class__.__name__, name)
+        f"'{self.__class__.__name__}' object has no attribute '{name}'"
       )
 
   def __setitem__(self, name, value):

@@ -108,6 +108,6 @@ def set_port(host, port):
     host_and_port = split_host_and_port(host)
 
     if (host_and_port is not None) and ("host" in host_and_port):
-      return "%s:%s" % (host_and_port["host"], port)
+      return f"{host_and_port['host']}:{port}"
     else:
       return host

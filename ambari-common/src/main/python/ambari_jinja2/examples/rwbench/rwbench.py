@@ -55,7 +55,7 @@ class Article(object):
 
 class User(object):
   def __init__(self, username):
-    self.href = "/user/%s" % username
+    self.href = f"/user/{username}"
     self.username = username
 
 
@@ -103,7 +103,7 @@ def test_genshi():
 if __name__ == "__main__":
   sys.stdout.write("Realworldish Benchmark:\n")
   for test in "jinja", "mako", "django", "genshi":
-    t = Timer(setup="from __main__ import test_%s as bench" % test, stmt="bench()")
+    t = Timer(setup=f"from __main__ import test_{test} as bench", stmt="bench()")
     sys.stdout.write(" >> %-20s<running>" % test)
     sys.stdout.flush()
     sys.stdout.write("\r    %-20s%.4f seconds\n" % (test, t.timeit(number=200) / 200))

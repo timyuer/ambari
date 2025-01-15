@@ -868,7 +868,7 @@ class TestCallList(unittest2.TestCase):
     self.assertEqual(str(mock.mock_calls), expected)
 
   def test_propertymock(self):
-    p = patch("%s.SomeClass.one" % __name__, new_callable=PropertyMock)
+    p = patch(f"{__name__}.SomeClass.one", new_callable=PropertyMock)
     mock = p.start()
     try:
       SomeClass.one

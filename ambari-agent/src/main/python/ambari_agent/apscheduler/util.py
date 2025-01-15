@@ -168,7 +168,7 @@ def get_callable_name(func):
     return func.__class__.__name__
 
   raise TypeError(
-    "Unable to determine a name for %s -- " "maybe it is not a callable?" % repr(func)
+    f"Unable to determine a name for {repr(func)} -- maybe it is not a callable?"
   )
 
 

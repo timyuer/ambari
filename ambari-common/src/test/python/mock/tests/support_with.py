@@ -51,11 +51,11 @@ except ImportError:
       if self._record:
         args.append("record=True")
       name = type(self).__name__
-      return "%s(%s)" % (name, ", ".join(args))
+      return f"{name}({', '.join(args)})"
 
     def __enter__(self):
       if self._entered:
-        raise RuntimeError("Cannot enter %r twice" % self)
+        raise RuntimeError(f"Cannot enter {self!r} twice")
       self._entered = True
       self._filters = self._module.filters
       self._module.filters = self._filters[:]
@@ -73,7 +73,7 @@ except ImportError:
 
     def __exit__(self, *exc_info):
       if not self._entered:
-        raise RuntimeError("Cannot exit %r without entering first" % self)
+        raise RuntimeError(f"Cannot exit {self!r} without entering first")
       self._module.filters = self._filters
       self._module.showwarning = self._showwarning
 

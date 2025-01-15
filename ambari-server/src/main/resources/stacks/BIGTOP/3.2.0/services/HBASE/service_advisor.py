@@ -1144,9 +1144,7 @@ class HBASEValidator(service_advisor.ServiceAdvisor):
         {
           "config-name": prop_name,
           "item": self.getWarnItem(
-            "Recommended values of " " {0} is empty or '{1}'".format(
-              prop_name, prop_val
-            )
+            f"Recommended values of  {prop_name} is empty or '{prop_val}'"
           ),
         }
       )

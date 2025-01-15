@@ -43,7 +43,7 @@ class QueueStore(object, metaclass=abc.ABCMeta):
     If you extend this class, you should either call this method or at minimum make sure these values
     get set.
     """
-    self.log = logging.getLogger("%s.%s" % (self.__module__, self.__class__.__name__))
+    self.log = logging.getLogger(f"{self.__module__}.{self.__class__.__name__}")
 
   @abc.abstractmethod
   @synchronized(lock)

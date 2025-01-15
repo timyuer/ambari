@@ -75,7 +75,7 @@ class GEventWebSocketPool(Pool):
   """
 
   def track(self, websocket):
-    logger.info("Managing websocket %s" % format_addresses(websocket))
+    logger.info(f"Managing websocket {format_addresses(websocket)}")
     return self.spawn(websocket.run)
 
   def clear(self):

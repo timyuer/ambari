@@ -134,9 +134,9 @@ class WebSocketTool(Tool):
     for key, expected_value in [("Upgrade", "websocket"), ("Connection", "upgrade")]:
       actual_value = request.headers.get(key, "").lower()
       if not actual_value:
-        raise HandshakeError("Header %s is not defined" % key)
+        raise HandshakeError(f"Header {key} is not defined")
       if expected_value not in actual_value:
-        raise HandshakeError("Illegal value for header %s: %s" % (key, actual_value))
+        raise HandshakeError(f"Illegal value for header {key}: {actual_value}")
 
     version = request.headers.get("Sec-WebSocket-Version")
     supported_versions = ", ".join([str(v) for v in ws_version])
@@ -189,7 +189,7 @@ class WebSocketTool(Tool):
       location.append(":%d" % request.local.port)
     location.append(request.path_info)
     if request.query_string != "":
-      location.append("?%s" % request.query_string)
+      location.append(f"?{request.query_string}")
     ws_location = "".join(location)
 
     response = cherrypy.serving.response
@@ -392,7 +392,7 @@ if __name__ == "__main__":
 
     @cherrypy.expose
     def index(self):
-      cherrypy.log("Handler created: %s" % repr(cherrypy.request.ws_handler))
+      cherrypy.log(f"Handler created: {repr(cherrypy.request.ws_handler)}")
 
   cherrypy.quickstart(
     Root(),

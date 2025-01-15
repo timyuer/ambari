@@ -280,9 +280,7 @@ class ResourceFilesKeeper:
       os.chmod(zip_file_path, 0o755)
     except Exception as err:
       raise KeeperException(
-        "Can not create zip archive of " "directory {0} : {1}".format(
-          directory, str(err)
-        )
+        f"Can not create zip archive of directory {directory} : {str(err)}"
       )
 
   def is_ignored(self, filename):

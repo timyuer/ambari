@@ -54,11 +54,11 @@ class ServiceProvider(Provider):
 
   def _exec_cmd(self, command, expect=None):
     if command != "status":
-      Logger.info("%s command '%s'" % (self.resource, command))
+      Logger.info(f"{self.resource} command '{command}'")
 
-    custom_cmd = getattr(self.resource, "%s_command" % command, None)
+    custom_cmd = getattr(self.resource, f"{command}_command", None)
     if custom_cmd:
-      Logger.debug("%s executing '%s'" % (self.resource, custom_cmd))
+      Logger.debug(f"{self.resource} executing '{custom_cmd}'")
       if hasattr(custom_cmd, "__call__"):
         if custom_cmd():
           ret = 0
@@ -85,7 +85,7 @@ class ServiceProvider(Provider):
       else:
         ret, out = shell.call(["/sbin/" + command, self.resource.service_name])
     else:
-      ret, out = shell.call(["/etc/init.d/%s" % self.resource.service_name, command])
+      ret, out = shell.call([f"/etc/init.d/{self.resource.service_name}", command])
     return ret, out
 
   @property
@@ -94,7 +94,7 @@ class ServiceProvider(Provider):
       return self.__upstart
     except AttributeError:
       self.__upstart = os.path.exists("/sbin/start") and os.path.exists(
-        "/etc/init/%s.conf" % self.resource.service_name
+        f"/etc/init/{self.resource.service_name}.conf"
       )
     return self.__upstart
 

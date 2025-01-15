@@ -105,7 +105,7 @@ class StompCLI(Cmd, ConnectionListener):
     if self.verbose:
       self.__sysout(frame_type)
       for k, v in headers.items():
-        self.__sysout("%s: %s" % (k, v))
+        self.__sysout(f"{k}: {v}")
     if self.prompt != "":
       self.__sysout("")
     self.__sysout(body)
@@ -142,12 +142,12 @@ class StompCLI(Cmd, ConnectionListener):
     if "filename" in headers:
       content = base64.b64decode(body.encode())
       if os.path.exists(headers["filename"]):
-        fname = "%s.%s" % (headers["filename"], int(time.time()))
+        fname = f"{headers['filename']}.{int(time.time())}"
       else:
         fname = headers["filename"]
       with open(fname, "wb") as f:
         f.write(content)
-      self.__print_async("MESSAGE", headers, "Saved file: %s" % fname)
+      self.__print_async("MESSAGE", headers, f"Saved file: {fname}")
     else:
       self.__print_async("MESSAGE", headers, body)
 
@@ -173,7 +173,7 @@ class StompCLI(Cmd, ConnectionListener):
     self.__sysout("Quick help on commands")
 
   def default(self, line):
-    self.__error("Unknown command: %s" % line.split()[0])
+    self.__error(f"Unknown command: {line.split()[0]}")
 
   def emptyline(self):
     pass
@@ -192,21 +192,20 @@ class StompCLI(Cmd, ConnectionListener):
     }
 
     if rparams.rstrip() != "":
-      rparams = """%(hl)sRequired Parameters:%(nc)s%(required)s\n\n""" % m
+      rparams = f"""{m['hl']}Required Parameters:{m['nc']}{m['required']}\n\n"""
       m["required"] = rparams
 
     if oparams.rstrip() != "":
-      oparams = """%(hl)sOptional Parameters:%(nc)s%(optional)s\n\n""" % m
+      oparams = f"""{m['hl']}Optional Parameters:{m['nc']}{m['optional']}\n\n"""
       m["optional"] = oparams
 
     self.__sysout(
-      """%(hl)sUsage:%(nc)s
-\t%(usage)s
+      f"""{m['hl']}Usage:{m['nc']}
+\t{m['usage']}
 
-%(required)s%(optional)s%(hl)sDescription:%(nc)s
-\t%(description)s
+{m['required']}{m['optional']}{m['hl']}Description:{m['nc']}
+\t{m['description']}
         """
-      % m
     )
 
   def do_quit(self, args):
@@ -233,7 +232,7 @@ class StompCLI(Cmd, ConnectionListener):
 
     name = args[0]
     if name in self.__subscriptions:
-      self.__error("Already subscribed to %s" % name)
+      self.__error(f"Already subscribed to {name}")
       return
 
     ack_mode = "auto"
@@ -269,10 +268,10 @@ class StompCLI(Cmd, ConnectionListener):
       return
 
     if args[0] not in self.__subscriptions:
-      self.__sysout("Subscription %s not found" % args[0])
+      self.__sysout(f"Subscription {args[0]} not found")
       return
 
-    self.__sysout('Unsubscribing from "%s"' % args[0])
+    self.__sysout(f'Unsubscribing from "{args[0]}"')
     self.conn.unsubscribe(destination=args[0], id=self.__subscriptions[args[0]].id)
     del self.__subscriptions[args[0]]
 
@@ -337,7 +336,7 @@ class StompCLI(Cmd, ConnectionListener):
       self.__error("Expecting: sendreply <destination> <correlation-id> <message>")
     else:
       self.conn.send(
-        args[0], "%s\n" % " ".join(args[2:]), headers={"correlation-id": args[1]}
+        args[0], f"{' '.join(args[2:])}\n", headers={"correlation-id": args[1]}
       )
 
   def help_sendreply(self):
@@ -356,17 +355,17 @@ class StompCLI(Cmd, ConnectionListener):
     if len(args) < 2:
       self.__error("Expecting: sendfile <destination> <filename> [headers.json]")
     elif not os.path.exists(args[1]):
-      self.__error("File %s does not exist" % args[1])
+      self.__error(f"File {args[1]} does not exist")
     else:
       headers = {}
       if len(args) == 3:
         if not os.path.exists(args[2]):
-          self.__error("File %s does not exist" % args[2])
+          self.__error(f"File {args[2]} does not exist")
           return
-        self.__sysout("Loading %s" % args[2])
+        self.__sysout(f"Loading {args[2]}")
         with open(args[2], mode="rb") as jf:
           headers = json.load(jf)
-          self.__sysout("Using headers %s" % str(headers))
+          self.__sysout(f"Using headers {str(headers)}")
 
       with open(args[1], mode="rb") as f:
         s = f.read()
@@ -408,13 +407,13 @@ class StompCLI(Cmd, ConnectionListener):
 
   def check_ack_nack(self, cmd, args):
     if self.nversion >= 1.2 and len(args) < 1:
-      self.__error("Expecting: %s <ack-id>" % cmd)
+      self.__error(f"Expecting: {cmd} <ack-id>")
       return None
     elif self.nversion == 1.1 and len(args) < 2:
-      self.__error("Expecting: %s <message-id> <subscription-id>" % cmd)
+      self.__error(f"Expecting: {cmd} <message-id> <subscription-id>")
       return None
     elif len(args) < 1:
-      self.__error("Expecting: %s <message-id>" % cmd)
+      self.__error(f"Expecting: {cmd} <message-id>")
       return None
 
     if len(args) == 1:
@@ -472,7 +471,7 @@ class StompCLI(Cmd, ConnectionListener):
       self.__error("Not currently in a transaction")
     else:
       self.conn.abort(transaction=self.transaction_id)
-      self.__sysout("Aborted transaction: %s" % self.transaction_id)
+      self.__sysout(f"Aborted transaction: {self.transaction_id}")
       self.transaction_id = None
 
   do_rollback = do_abort
@@ -484,10 +483,10 @@ class StompCLI(Cmd, ConnectionListener):
 
   def do_begin(self, args):
     if self.transaction_id:
-      self.__error("Currently in a transaction (%s)" % self.transaction_id)
+      self.__error(f"Currently in a transaction ({self.transaction_id})")
     else:
       self.transaction_id = self.conn.begin()
-      self.__sysout("Transaction id: %s" % self.transaction_id)
+      self.__sysout(f"Transaction id: {self.transaction_id}")
 
   def help_begin(self):
     self.help(
@@ -501,7 +500,7 @@ class StompCLI(Cmd, ConnectionListener):
     if not self.transaction_id:
       self.__error("Not currently in a transaction")
     else:
-      self.__sysout("Committing %s" % self.transaction_id)
+      self.__sysout(f"Committing {self.transaction_id}")
       self.conn.commit(transaction=self.transaction_id)
       self.transaction_id = None
 
@@ -535,7 +534,7 @@ class StompCLI(Cmd, ConnectionListener):
     if len(args) == 0:
       self.__error("Expecting: run <filename>")
     elif not os.path.exists(args[0]):
-      self.__error("File %s was not found" % args[0])
+      self.__error(f"File {args[0]} was not found")
     else:
       with open(args[0]) as f:
         lines = f.read().split("\n")

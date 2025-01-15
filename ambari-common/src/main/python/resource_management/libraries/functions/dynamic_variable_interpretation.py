@@ -57,7 +57,7 @@ def _get_tar_source_and_dest_folder(tarball_prefix):
   :return: Returns a tuple of (x, y) after verifying the properties
   """
   component_tar_source_file = default(
-    "/configurations/cluster-env/%s%s" % (tarball_prefix.lower(), TAR_SOURCE_SUFFIX),
+    f"/configurations/cluster-env/{tarball_prefix.lower()}{TAR_SOURCE_SUFFIX}",
     None,
   )
   # E.g., <stack-root>/current/hadoop-client/tez-{{ stack_version_formatted }}.tar.gz
@@ -77,7 +77,7 @@ def _get_tar_source_and_dest_folder(tarball_prefix):
     return None, None
 
   if component_tar_source_file.find("/") == -1:
-    Logger.warning("The tar file path %s is not valid" % str(component_tar_source_file))
+    Logger.warning(f"The tar file path {str(component_tar_source_file)} is not valid")
     return None, None
 
   if not component_tar_destination_folder.endswith("/"):
@@ -203,12 +203,12 @@ def copy_tarballs_to_hdfs(
   )
   if not component_tar_source_file or not component_tar_destination_folder:
     Logger.warning(
-      "Could not retrieve properties for tarball with prefix: %s" % str(tarball_prefix)
+      f"Could not retrieve properties for tarball with prefix: {str(tarball_prefix)}"
     )
     return 1
 
   if not os.path.exists(component_tar_source_file):
-    Logger.warning("Could not find file: %s" % str(component_tar_source_file))
+    Logger.warning(f"Could not find file: {str(component_tar_source_file)}")
     return 1
 
   # Ubuntu returns: "stdin: is not a tty", as subprocess output.
@@ -238,8 +238,7 @@ def copy_tarballs_to_hdfs(
 
   if not stack_version:
     Logger.error(
-      "Could not parse stack version from output of %s: %s"
-      % (stack_selector_name, str(out))
+      f"Could not parse stack version from output of {stack_selector_name}: {str(out)}"
     )
     return 1
 
@@ -249,7 +248,7 @@ def copy_tarballs_to_hdfs(
     "{{ stack_version_formatted }}", stack_version
   )
 
-  does_hdfs_file_exist_cmd = "fs -ls %s" % destination_file
+  does_hdfs_file_exist_cmd = f"fs -ls {destination_file}"
 
   kinit_if_needed = ""
   if params.security_enabled:

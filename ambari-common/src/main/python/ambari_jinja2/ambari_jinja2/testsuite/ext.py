@@ -122,7 +122,7 @@ class TestExtension(Extension):
     ).set_lineno(next(parser.stream).lineno)
 
   def _dump(self, sandboxed, ext_attr, imported_object, context):
-    return "%s|%s|%s|%s" % (sandboxed, ext_attr, imported_object, context.blocks)
+    return f"{sandboxed}|{ext_attr}|{imported_object}|{context.blocks}"
 
 
 class PreprocessorExtension(Extension):

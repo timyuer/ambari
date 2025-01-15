@@ -71,21 +71,21 @@ def get_component_version_from_symlink(stack_name, component_name):
       if code != 0 or out is None:
         raise ValueError("Code is nonzero or output is empty")
 
-      Logger.debug("Command: %s\nOutput: %s" % (get_stack_comp_version_cmd, str(out)))
+      Logger.debug(f"Command: {get_stack_comp_version_cmd}\nOutput: {str(out)}")
       matches = re.findall(r"( [\d\.]+(\-\d+)?)", out)
       version = (
         matches[0][0].strip()
         if matches and len(matches) > 0 and len(matches[0]) > 0
         else None
       )
-      Logger.debug("Version for component %s: %s" % (component_name, str(version)))
+      Logger.debug(f"Version for component {component_name}: {str(version)}")
     except Exception as e:
       Logger.error(
         "Could not determine stack version for component %s by calling '%s'. Return Code: %s, Output: %s."
         % (component_name, get_stack_comp_version_cmd, str(code), str(out))
       )
   else:
-    Logger.error("Could not find stack selector for stack: %s" % str(stack_name))
+    Logger.error(f"Could not find stack selector for stack: {str(stack_name)}")
 
   return version
 
@@ -125,7 +125,7 @@ def get_component_version_with_stack_selector(stack_selector_path, component_nam
       if code != 0 or out is None:
         raise Exception("Code is nonzero or output is empty")
 
-      Logger.debug("Command: %s\nOutput: %s" % (get_stack_comp_version_cmd, str(out)))
+      Logger.debug(f"Command: {get_stack_comp_version_cmd}\nOutput: {str(out)}")
       matches = re.findall(r"([\d\.]+\-\d+)", out)
       version = matches[0] if matches and len(matches) > 0 else None
     except Exception as e:

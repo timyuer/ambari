@@ -99,7 +99,7 @@ def server_from_config(config=None, server_class=None, additional_kwargs=None):
     authenticator=authenticator,
     protocol=STOMP11,
   )
-  logger.info("Created server:%r" % server)
+  logger.info(f"Created server:{server!r}")
   return server
 
 
@@ -184,7 +184,7 @@ def context_serve(
     logger.info("Stomp server stopped by user interrupt.")
     raise SystemExit()
   except Exception as e:
-    logger.error("Stomp server stopped due to error: %s" % e)
+    logger.error(f"Stomp server stopped due to error: {e}")
     logger.exception(e)
     raise SystemExit()
   finally:
@@ -313,5 +313,5 @@ if __name__ == "__main__":
   except (KeyboardInterrupt, SystemExit):
     pass
   except Exception as e:
-    logger.error("Server terminated due to error: %s" % e)
+    logger.error(f"Server terminated due to error: {e}")
     logger.exception(e)

@@ -188,7 +188,7 @@ class UbuntuRepositoryProvider(RepositoryProvider):
 
   def update(self, repo_file_path):
     repo_file_name = os.path.basename(repo_file_path)
-    self.update_cmd[4] = "Dir::Etc::sourcelist=sources.list.d/%s" % repo_file_name
+    self.update_cmd[4] = f"Dir::Etc::sourcelist=sources.list.d/{repo_file_name}"
     update_cmd_formatted = [format(x) for x in self.update_cmd]
     update_failed_exception = None
 

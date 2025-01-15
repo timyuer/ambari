@@ -72,7 +72,7 @@ class StompEngine(object):
     @type connection: L{coilmq.server.StompConnection}
     """
     self.log = logging.getLogger(
-      "%s.%s" % (self.__class__.__module__, self.__class__.__name__)
+      f"{self.__class__.__module__}.{self.__class__.__name__}"
     )
     self.connection = connection
     self.authenticator = authenticator

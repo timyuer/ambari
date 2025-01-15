@@ -114,13 +114,13 @@ def _ensure_metadata(
     stat = sudo.stat(path)
     if stat.st_mode != mode:
       Logger.info(
-        "Changing permission for %s from %o to %o" % (path, stat.st_mode, mode)
+        f"Changing permission for {path} from {stat.st_mode:o} to {mode:o}"
       )
       sudo.chmod(path, mode)
 
   if cd_access:
     if not re.match("^[ugoa]+$", cd_access):
-      raise Fail("'cd_acess' value '%s' is not valid" % (cd_access))
+      raise Fail(f"'cd_acess' value '{cd_access}' is not valid")
 
     dir_path = re.sub("/+", "/", path)
     while dir_path and dir_path != os.sep:
@@ -136,14 +136,13 @@ class FileProvider(Provider):
 
     if sudo.path_isdir(path):
       raise Fail(
-        "Applying %s failed, directory with name %s exists" % (self.resource, path)
+        f"Applying {self.resource} failed, directory with name {path} exists"
       )
 
     dirname = os.path.dirname(path)
     if not sudo.path_isdir(dirname):
       raise Fail(
-        "Applying %s failed, parent directory %s doesn't exist"
-        % (self.resource, dirname)
+        f"Applying {self.resource} failed, parent directory {dirname} doesn't exist"
       )
 
     write = False
@@ -164,7 +163,7 @@ class FileProvider(Provider):
     group = self.resource.group or "root"
 
     if write:
-      Logger.info("Writing %s because %s" % (self.resource, reason))
+      Logger.info(f"Writing {self.resource} because {reason}")
 
       def on_file_created(filename):
         _ensure_metadata(
@@ -174,7 +173,7 @@ class FileProvider(Provider):
           mode=self.resource.mode,
           cd_access=self.resource.cd_access,
         )
-        Logger.info("Moving %s to %s" % (filename, path))
+        Logger.info(f"Moving {filename} to {path}")
 
       sudo.create_file(
         path, content, encoding=self.resource.encoding, on_file_created=on_file_created
@@ -189,11 +188,11 @@ class FileProvider(Provider):
 
     if sudo.path_isdir(path):
       raise Fail(
-        "Applying %s failed, %s is directory not file!" % (self.resource, path)
+        f"Applying {self.resource} failed, {path} is directory not file!"
       )
 
     if sudo.path_exists(path):
-      Logger.info("Deleting %s" % self.resource)
+      Logger.info(f"Deleting {self.resource}")
       sudo.unlink(path)
 
   def _get_content(self):
@@ -204,7 +203,7 @@ class FileProvider(Provider):
       return content
     elif hasattr(content, "__call__"):
       return content()
-    raise Fail("Unknown source type for %s: %r" % (self, content))
+    raise Fail(f"Unknown source type for {self}: {content!r}")
 
 
 class DirectoryProvider(Provider):
@@ -212,7 +211,7 @@ class DirectoryProvider(Provider):
     path = self.resource.path
 
     if not sudo.path_exists(path):
-      Logger.info("Creating directory %s since it doesn't exist." % self.resource)
+      Logger.info(f"Creating directory {self.resource} since it doesn't exist.")
 
       # dead links should be followed, else we gonna have failures on trying to create directories on top of them.
       if self.resource.follow:
@@ -256,7 +255,7 @@ class DirectoryProvider(Provider):
             raise
 
     if not sudo.path_isdir(path):
-      raise Fail("Applying %s failed, file %s already exists" % (self.resource, path))
+      raise Fail(f"Applying {self.resource} failed, file {path} already exists")
 
     _ensure_metadata(
       path,
@@ -274,9 +273,9 @@ class DirectoryProvider(Provider):
     path = self.resource.path
     if sudo.path_exists(path):
       if not sudo.path_isdir(path):
-        raise Fail("Applying %s failed, %s is not a directory" % (self.resource, path))
+        raise Fail(f"Applying {self.resource} failed, {path} is not a directory")
 
-      Logger.info("Removing directory %s and all its content" % self.resource)
+      Logger.info(f"Removing directory {self.resource} and all its content")
       sudo.rmtree(path)
 
 
@@ -293,7 +292,7 @@ class LinkProvider(Provider):
           "%s trying to create a symlink with the same name as an existing file or directory"
           % self.resource
         )
-      Logger.info("%s replacing old symlink to %s" % (self.resource, oldpath))
+      Logger.info(f"{self.resource} replacing old symlink to {oldpath}")
       sudo.unlink(path)
 
     if self.resource.hard:
@@ -308,19 +307,19 @@ class LinkProvider(Provider):
           % (self.resource, self.resource.to)
         )
 
-      Logger.info("Creating hard %s" % self.resource)
+      Logger.info(f"Creating hard {self.resource}")
       sudo.link(self.resource.to, path)
     else:
       if not sudo.path_exists(self.resource.to):
-        Logger.info("Warning: linking to nonexistent location %s" % self.resource.to)
+        Logger.info(f"Warning: linking to nonexistent location {self.resource.to}")
 
-      Logger.info("Creating symbolic %s to %s" % (self.resource, self.resource.to))
+      Logger.info(f"Creating symbolic {self.resource} to {self.resource.to}")
       sudo.symlink(self.resource.to, path)
 
   def action_delete(self):
     path = self.resource.path
     if sudo.path_lexists(path):
-      Logger.info("Deleting %s" % self.resource)
+      Logger.info(f"Deleting {self.resource}")
       sudo.unlink(path)
 
 
@@ -328,7 +327,7 @@ class ExecuteProvider(Provider):
   def action_run(self):
     if self.resource.creates:
       if sudo.path_exists(self.resource.creates):
-        Logger.info("Skipping %s due to creates" % self.resource)
+        Logger.info(f"Skipping {self.resource} due to creates")
         return
 
     shell.checked_call(
@@ -356,7 +355,7 @@ class ExecuteScriptProvider(Provider):
   def action_run(self):
     from tempfile import NamedTemporaryFile
 
-    Logger.info("Running script %s" % self.resource)
+    Logger.info(f"Running script {self.resource}")
     with NamedTemporaryFile(prefix="resource_management-script", bufsize=0) as tf:
       tf.write(self.resource.code)
       tf.flush()

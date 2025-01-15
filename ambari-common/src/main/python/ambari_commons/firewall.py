@@ -73,11 +73,7 @@ class FirewallChecks(object):
     return self.FIREWALL_SERVICE_NAME
 
   def get_command(self):
-    return "%s %s %s" % (
-      self.SERVICE_CMD,
-      self.FIREWALL_SERVICE_NAME,
-      self.SERVICE_SUBCMD,
-    )
+    return f"{self.SERVICE_CMD} {self.FIREWALL_SERVICE_NAME} {self.SERVICE_SUBCMD}"
 
   def check_result(self):
     result = False
@@ -117,7 +113,7 @@ class UbuntuFirewallChecks(FirewallChecks):
     self.FIREWALL_SERVICE_NAME = "ufw"
 
   def get_command(self):
-    return "%s %s" % (self.FIREWALL_SERVICE_NAME, self.SERVICE_SUBCMD)
+    return f"{self.FIREWALL_SERVICE_NAME} {self.SERVICE_SUBCMD}"
 
   def check_result(self):
     # On ubuntu, the status command returns 0 whether running or not
@@ -138,11 +134,7 @@ class RedHat7FirewallChecks(FirewallChecks):
   # firewalld added to support default firewall (started from RHEL7/CentOS7)
   # script default iptables checked as user can use iptables as known from previous RHEL releases.
   def get_command(self):
-    return "%(servcmd)s is-active %(fwl1)s %(fwl2)s" % {
-      "servcmd": self.SERVICE_CMD,
-      "fwl1": "iptables",
-      "fwl2": "firewalld",
-    }
+    return f"{self.SERVICE_CMD} is-active iptables firewalld"
 
   def check_result(self):
     if self.stdoutdata is None:
@@ -159,7 +151,7 @@ class Fedora18FirewallChecks(FirewallChecks):
     super(Fedora18FirewallChecks, self).__init__()
 
   def get_command(self):
-    return "systemctl is-active %s" % (self.FIREWALL_SERVICE_NAME)
+    return f"systemctl is-active {self.FIREWALL_SERVICE_NAME}"
 
   def check_result(self):
     result = False
@@ -175,7 +167,7 @@ class SuseFirewallChecks(FirewallChecks):
     self.FIREWALL_SERVICE_NAME = "rcSuSEfirewall2"
 
   def get_command(self):
-    return "%s %s" % (self.FIREWALL_SERVICE_NAME, self.SERVICE_SUBCMD)
+    return f"{self.FIREWALL_SERVICE_NAME} {self.SERVICE_SUBCMD}"
 
   def check_result(self):
     result = False

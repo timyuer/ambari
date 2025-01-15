@@ -70,9 +70,7 @@ class RecoveryAlert(BaseAlert):
 
     if logger.isEnabledFor(logging.DEBUG):
       logger.debug(
-        "[Alert][{0}] Checking recovery operations for {1}".format(
-          self.get_name(), component
-        )
+        f"[Alert][{self.get_name()}] Checking recovery operations for {component}"
       )
 
     recovery_action_info = {}

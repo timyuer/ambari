@@ -59,7 +59,7 @@ class JinjaTestCase(unittest.TestCase):
       tb = format_exception(*sys.exc_info())
       if re.search(expected_tb.strip(), "".join(tb)) is None:
         raise self.fail(
-          "Traceback did not match:\n\n%s\nexpected:\n%s" % ("".join(tb), expected_tb)
+          f"Traceback did not match:\n\n{''.join(tb)}\nexpected:\n{expected_tb}"
         )
     else:
       self.fail("Expected exception")

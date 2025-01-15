@@ -142,7 +142,7 @@ def set_file_permissions(file, mod, user, recursive):
   if os.path.exists(file):
     os_set_file_permissions(file, mod, recursive, user)
   else:
-    print_info_msg("File %s does not exist" % file)
+    print_info_msg(f"File {file} does not exist")
 
 
 def run_os_command(cmd, env=None, cwd=None):

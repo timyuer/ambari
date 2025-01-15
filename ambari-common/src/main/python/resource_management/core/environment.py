@@ -92,7 +92,7 @@ class Environment(object):
         os.makedirs(self.config.backup.path, 0o700)
       new_name = self.config.backup.prefix + path.replace("/", "-")
       backup_path = os.path.join(self.config.backup.path, new_name)
-      Logger.info("backing up %s to %s" % (path, backup_path))
+      Logger.info(f"backing up {path} to {backup_path}")
       shutil.copy(path, backup_path)
 
   def update_config(self, attributes, overwrite=True):
@@ -131,9 +131,9 @@ class Environment(object):
     provider_class = find_provider(self, resource.__class__.__name__, resource.provider)
     provider = provider_class(resource)
     try:
-      provider_action = getattr(provider, "action_%s" % action)
+      provider_action = getattr(provider, f"action_{action}")
     except AttributeError:
-      raise Fail("%r does not implement action %s" % (provider, action))
+      raise Fail(f"{provider!r} does not implement action {action}")
     provider_action()
 
   def _check_condition(self, cond):
@@ -147,7 +147,7 @@ class Environment(object):
       ret, out = shell.call(cond)
       return ret == 0
 
-    raise Exception("Unknown condition type %r" % cond)
+    raise Exception(f"Unknown condition type {cond!r}")
 
   def run(self):
     # Run resource actions

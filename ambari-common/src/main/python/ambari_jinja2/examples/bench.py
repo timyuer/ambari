@@ -464,7 +464,7 @@ for test in (
   if locals()["test_" + test] is None:
     sys.stdout.write("    %-20s*not installed*\n" % test)
     continue
-  t = Timer(setup="from __main__ import test_%s as bench" % test, stmt="bench()")
+  t = Timer(setup=f"from __main__ import test_{test} as bench", stmt="bench()")
   sys.stdout.write(" >> %-20s<running>" % test)
   sys.stdout.flush()
   sys.stdout.write("\r    %-20s%.4f seconds\n" % (test, t.timeit(number=50) / 50))

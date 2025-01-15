@@ -313,7 +313,7 @@ class SyntaxTestCase(JinjaTestCase):
       if should_fail:
         self.assert_raises(TemplateSyntaxError, env.from_string, "{{ foo(%s) }}" % sig)
       else:
-        env.from_string("foo(%s)" % sig)
+        env.from_string(f"foo({sig})")
 
   def test_tuple_expr(self):
     for tmpl in [
@@ -344,7 +344,7 @@ class SyntaxTestCase(JinjaTestCase):
         "{{ %s }}|{{ %s }}|{{ %s }}"
         % (str(const), str(const).lower(), str(const).upper())
       )
-      assert tmpl.render() == "%s|%s|" % (const, const)
+      assert tmpl.render() == f"{const}|{const}|"
 
   def test_test_chaining(self):
     self.assert_raises(

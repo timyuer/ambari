@@ -117,7 +117,7 @@ def handle_mounted_dirs(func, dirs_string, history_filename, update_cache=True):
     if not os.path.exists(history_filename):
       history_file_exists = False
       Logger.warning(
-        "History_file property has file %s and it does not exist." % history_filename
+        f"History_file property has file {history_filename} and it does not exist."
       )
 
   valid_dirs = []  # dirs that have been normalized

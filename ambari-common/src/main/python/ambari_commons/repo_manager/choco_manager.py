@@ -67,7 +67,7 @@ class ChocoManager(GenericManager):
         cmd = cmd + [enable_repo_option]
       cmd = cmd + [name]
       cmdString = " ".join(cmd)
-      Logger.info("Installing package %s ('%s')" % (name, cmdString))
+      Logger.info(f"Installing package {name} ('{cmdString}')")
       runner = shellRunner()
       res = runner.run(cmd)
       if res["exitCode"] != 0:
@@ -79,7 +79,7 @@ class ChocoManager(GenericManager):
           + res["output"]
         )
     else:
-      Logger.info("Skipping installation of existing package %s" % (name))
+      Logger.info(f"Skipping installation of existing package {name}")
 
   def upgrade_package(self, name, context):
     """
@@ -94,7 +94,7 @@ class ChocoManager(GenericManager):
       cmd = cmd + [enable_repo_option]
     cmd = cmd + [name]
     cmdString = " ".join(cmd)
-    Logger.info("Upgrading package %s ('%s')" % (name, cmdString))
+    Logger.info(f"Upgrading package {name} ('{cmdString}')")
     runner = shellRunner()
     res = runner.run(cmd)
     if res["exitCode"] != 0:
@@ -117,7 +117,7 @@ class ChocoManager(GenericManager):
     if self._check_existence(name, context):
       cmd = REMOVE_CMD[context.log_output] + [name]
       cmdString = " ".join(cmd)
-      Logger.info("Removing package %s ('%s')" % (name, " ".join(cmd)))
+      Logger.info(f"Removing package {name} ('{' '.join(cmd)}')")
       runner = shellRunner()
       res = runner.run(cmd)
       if res["exitCode"] != 0:
@@ -129,7 +129,7 @@ class ChocoManager(GenericManager):
           + res["output"]
         )
     else:
-      Logger.info("Skipping removal of non-existing package %s" % (name))
+      Logger.info(f"Skipping removal of non-existing package {name}")
 
   def _check_existence(self, name, context):
     cmd = CHECK_CMD[context.log_output] + [name]

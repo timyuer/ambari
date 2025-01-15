@@ -38,7 +38,5 @@ class TestUtils(TestCase):
       self.assertEqual(
         expected,
         bitmask,
-        'Test set "{0}" failed, expected: {1} but got {2}'.format(
-          test_pattern, expected, bitmask
-        ),
+        f'Test set "{test_pattern}" failed, expected: {expected} but got {bitmask}',
       )

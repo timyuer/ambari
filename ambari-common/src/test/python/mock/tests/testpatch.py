@@ -30,7 +30,7 @@ if inPy3k:
   unicode = str
 
 PTModule = sys.modules[__name__]
-MODNAME = "%s.PTModule" % __name__
+MODNAME = f"{__name__}.PTModule"
 
 
 def _get_proxy(obj, get_only=True):
@@ -73,7 +73,7 @@ class Foo(object):
       pass
 
 
-foo_name = "%s.Foo" % __name__
+foo_name = f"{__name__}.Foo"
 
 
 def function(a, b=Foo):
@@ -148,7 +148,7 @@ class PatchTest(unittest2.TestCase):
     global something
     original = something
 
-    @patch("%s.something" % __name__, sentinel.Something2)
+    @patch(f"{__name__}.something", sentinel.Something2)
     def test():
       pass
 
@@ -160,15 +160,15 @@ class PatchTest(unittest2.TestCase):
       something = original
 
   def test_patch(self):
-    @patch("%s.something" % __name__, sentinel.Something2)
+    @patch(f"{__name__}.something", sentinel.Something2)
     def test():
       self.assertEqual(PTModule.something, sentinel.Something2, "unpatched")
 
     test()
     self.assertEqual(PTModule.something, sentinel.Something, "patch not restored")
 
-    @patch("%s.something" % __name__, sentinel.Something2)
-    @patch("%s.something_else" % __name__, sentinel.SomethingElse)
+    @patch(f"{__name__}.something", sentinel.Something2)
+    @patch(f"{__name__}.something_else", sentinel.SomethingElse)
     def test():
       self.assertEqual(PTModule.something, sentinel.Something2, "unpatched")
       self.assertEqual(PTModule.something_else, sentinel.SomethingElse, "unpatched")
@@ -189,7 +189,7 @@ class PatchTest(unittest2.TestCase):
     mock = Mock()
     mock.return_value = sentinel.Handle
 
-    @patch("%s.open" % builtin_string, mock)
+    @patch(f"{builtin_string}.open", mock)
     def test():
       self.assertEqual(open("filename", "r"), sentinel.Handle, "open not patched")
 
@@ -199,7 +199,7 @@ class PatchTest(unittest2.TestCase):
     self.assertNotEqual(open, mock, "patch not restored")
 
   def test_patch_class_attribute(self):
-    @patch("%s.SomeClass.class_attribute" % __name__, sentinel.ClassAttribute)
+    @patch(f"{__name__}.SomeClass.class_attribute", sentinel.ClassAttribute)
     def test():
       self.assertEqual(
         PTModule.SomeClass.class_attribute, sentinel.ClassAttribute, "unpatched"
@@ -255,7 +255,7 @@ class PatchTest(unittest2.TestCase):
     test(sentinel.this1, sentinel.this2)
 
   def test_patch_with_spec(self):
-    @patch("%s.SomeClass" % __name__, spec=SomeClass)
+    @patch(f"{__name__}.SomeClass", spec=SomeClass)
     def test(MockSomeClass):
       self.assertEqual(SomeClass, MockSomeClass)
       self.assertTrue(is_instance(SomeClass.wibble, MagicMock))
@@ -273,7 +273,7 @@ class PatchTest(unittest2.TestCase):
     test()
 
   def test_patch_with_spec_as_list(self):
-    @patch("%s.SomeClass" % __name__, spec=["wibble"])
+    @patch(f"{__name__}.SomeClass", spec=["wibble"])
     def test(MockSomeClass):
       self.assertEqual(SomeClass, MockSomeClass)
       self.assertTrue(is_instance(SomeClass.wibble, MagicMock))
@@ -292,8 +292,8 @@ class PatchTest(unittest2.TestCase):
 
   def test_nested_patch_with_spec_as_list(self):
     # regression test for nested decorators
-    @patch("%s.open" % builtin_string)
-    @patch("%s.SomeClass" % __name__, spec=["wibble"])
+    @patch(f"{builtin_string}.open")
+    @patch(f"{__name__}.SomeClass", spec=["wibble"])
     def test(MockSomeClass, MockOpen):
       self.assertEqual(SomeClass, MockSomeClass)
       self.assertTrue(is_instance(SomeClass.wibble, MagicMock))
@@ -302,7 +302,7 @@ class PatchTest(unittest2.TestCase):
     test()
 
   def test_patch_with_spec_as_boolean(self):
-    @patch("%s.SomeClass" % __name__, spec=True)
+    @patch(f"{__name__}.SomeClass", spec=True)
     def test(MockSomeClass):
       self.assertEqual(SomeClass, MockSomeClass)
       # Should not raise attribute error
@@ -324,7 +324,7 @@ class PatchTest(unittest2.TestCase):
     test()
 
   def test_patch_class_acts_with_spec_is_inherited(self):
-    @patch("%s.SomeClass" % __name__, spec=True)
+    @patch(f"{__name__}.SomeClass", spec=True)
     def test(MockSomeClass):
       self.assertTrue(is_instance(MockSomeClass, MagicMock))
       instance = MockSomeClass()
@@ -337,7 +337,7 @@ class PatchTest(unittest2.TestCase):
     test()
 
   def test_patch_with_create_mocks_non_existent_attributes(self):
-    @patch("%s.frooble" % builtin_string, sentinel.Frooble, create=True)
+    @patch(f"{builtin_string}.frooble", sentinel.Frooble, create=True)
     def test():
       self.assertEqual(frooble, sentinel.Frooble)
 
@@ -355,7 +355,7 @@ class PatchTest(unittest2.TestCase):
   def test_patch_wont_create_by_default(self):
     try:
 
-      @patch("%s.frooble" % builtin_string, sentinel.Frooble)
+      @patch(f"{builtin_string}.frooble", sentinel.Frooble)
       def test():
         self.assertEqual(frooble, sentinel.Frooble)
 
@@ -455,7 +455,7 @@ class PatchTest(unittest2.TestCase):
           PTModule.something, sentinel.Something, "non-test method patched"
         )
 
-    Foo = patch("%s.something" % __name__)(Foo)
+    Foo = patch(f"{__name__}.something")(Foo)
 
     f = Foo()
     f.test_method()
@@ -594,8 +594,8 @@ class PatchTest(unittest2.TestCase):
   def test_name_preserved(self):
     foo = {}
 
-    @patch("%s.SomeClass" % __name__, object())
-    @patch("%s.SomeClass" % __name__, object(), autospec=True)
+    @patch(f"{__name__}.SomeClass", object())
+    @patch(f"{__name__}.SomeClass", object(), autospec=True)
     @patch.object(SomeClass, object())
     @patch.dict(foo)
     def some_name():
@@ -669,7 +669,7 @@ class PatchTest(unittest2.TestCase):
     something.klass_dict()
 
   def test_patch_spec_set(self):
-    @patch("%s.SomeClass" % __name__, spec_set=SomeClass)
+    @patch(f"{__name__}.SomeClass", spec_set=SomeClass)
     def test(MockClass):
       MockClass.z = "foo"
 
@@ -681,7 +681,7 @@ class PatchTest(unittest2.TestCase):
 
     self.assertRaises(AttributeError, test)
 
-    @patch("%s.SomeClass" % __name__, spec_set=True)
+    @patch(f"{__name__}.SomeClass", spec_set=True)
     def test(MockClass):
       MockClass.z = "foo"
 
@@ -694,7 +694,7 @@ class PatchTest(unittest2.TestCase):
     self.assertRaises(AttributeError, test)
 
   def test_spec_set_inherit(self):
-    @patch("%s.SomeClass" % __name__, spec_set=True)
+    @patch(f"{__name__}.SomeClass", spec_set=True)
     def test(MockClass):
       instance = MockClass()
       instance.z = "foo"
@@ -703,7 +703,7 @@ class PatchTest(unittest2.TestCase):
 
   def test_patch_start_stop(self):
     original = something
-    patcher = patch("%s.something" % __name__)
+    patcher = patch(f"{__name__}.something")
     self.assertIs(something, original)
     mock = patcher.start()
     try:
@@ -923,7 +923,7 @@ class PatchTest(unittest2.TestCase):
     test()
 
   def test_autospec_function(self):
-    @patch("%s.function" % __name__, autospec=True)
+    @patch(f"{__name__}.function", autospec=True)
     def test(mock):
       function(1)
       function.assert_called_with(1)
@@ -936,7 +936,7 @@ class PatchTest(unittest2.TestCase):
     test()
 
   def test_autospec_keywords(self):
-    @patch("%s.function" % __name__, autospec=True, return_value=3)
+    @patch(f"{__name__}.function", autospec=True, return_value=3)
     def test(mock_function):
       # self.assertEqual(function.abc, 'foo')
       return function(1, 2)
@@ -945,7 +945,7 @@ class PatchTest(unittest2.TestCase):
     self.assertEqual(result, 3)
 
   def test_autospec_with_new(self):
-    patcher = patch("%s.function" % __name__, new=3, autospec=True)
+    patcher = patch(f"{__name__}.function", new=3, autospec=True)
     self.assertRaises(TypeError, patcher.start)
 
     module = sys.modules[__name__]
@@ -1061,7 +1061,7 @@ class PatchTest(unittest2.TestCase):
       patcher.stop()
 
   def test_new_callable_create(self):
-    non_existent_attr = "%s.weeeee" % foo_name
+    non_existent_attr = f"{foo_name}.weeeee"
     p = patch(non_existent_attr, new_callable=NonCallableMock)
     self.assertRaises(AttributeError, p.start)
 
@@ -1524,7 +1524,7 @@ class PatchTest(unittest2.TestCase):
 
   def test_patch_with_spec_mock_repr(self):
     for arg in ("spec", "autospec", "spec_set"):
-      p = patch("%s.SomeClass" % __name__, **{arg: True})
+      p = patch(f"{__name__}.SomeClass", **{arg: True})
       m = p.start()
       try:
         self.assertIn(" name='SomeClass'", repr(m))
@@ -1547,7 +1547,7 @@ class PatchTest(unittest2.TestCase):
 
   def test_mock_calls_with_patch(self):
     for arg in ("spec", "autospec", "spec_set"):
-      p = patch("%s.SomeClass" % __name__, **{arg: True})
+      p = patch(f"{__name__}.SomeClass", **{arg: True})
       m = p.start()
       try:
         m.wibble()
@@ -1612,7 +1612,7 @@ class PatchTest(unittest2.TestCase):
 
   def test_create_and_specs(self):
     for kwarg in ("spec", "spec_set", "autospec"):
-      p = patch("%s.doesnotexist" % __name__, create=True, **{kwarg: True})
+      p = patch(f"{__name__}.doesnotexist", create=True, **{kwarg: True})
       self.assertRaises(TypeError, p.start)
       self.assertRaises(NameError, lambda: doesnotexist)
 

@@ -94,7 +94,7 @@ class BaseLoader(object):
     """
     if not self.has_source_access:
       raise RuntimeError(
-        "%s cannot provide access to the source" % self.__class__.__name__
+        f"{self.__class__.__name__} cannot provide access to the source"
       )
     raise TemplateNotFound(template)
 
@@ -413,7 +413,7 @@ class ModuleLoader(BaseLoader):
   has_source_access = False
 
   def __init__(self, path):
-    package_name = "_ambari_jinja2_module_templates_%x" % id(self)
+    package_name = f"_ambari_jinja2_module_templates_{id(self):x}"
 
     # create a fake module that looks for the templates in the
     # path given.
@@ -445,7 +445,7 @@ class ModuleLoader(BaseLoader):
   @internalcode
   def load(self, environment, name, globals=None):
     key = self.get_template_key(name)
-    module = "%s.%s" % (self.package_name, key)
+    module = f"{self.package_name}.{key}"
     mod = getattr(self.module, module, None)
     if mod is None:
       try:

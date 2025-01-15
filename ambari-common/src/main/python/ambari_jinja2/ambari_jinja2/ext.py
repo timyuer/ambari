@@ -229,7 +229,7 @@ class InternationalizationExtension(Extension):
       name = parser.stream.expect("name")
       if name.value in variables:
         parser.fail(
-          "translatable variable %r defined twice." % name.value,
+          f"translatable variable {name.value!r} defined twice.",
           name.lineno,
           exc=TemplateAssertionError,
         )
@@ -267,7 +267,7 @@ class InternationalizationExtension(Extension):
         name = parser.stream.expect("name")
         if name.value not in variables:
           parser.fail(
-            "unknown variable %r for pluralization" % name.value,
+            f"unknown variable {name.value!r} for pluralization",
             name.lineno,
             exc=TemplateAssertionError,
           )

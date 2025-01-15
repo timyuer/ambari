@@ -91,7 +91,7 @@ class TemplateSyntaxError(TemplateError):
     location = "line %d" % self.lineno
     name = self.filename or self.name
     if name:
-      location = 'File "%s", %s' % (name, location)
+      location = f'File "{name}", {location}'
     lines = [self.message, "  " + location]
 
     # if the source is set, add the line to the output

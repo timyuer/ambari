@@ -174,7 +174,7 @@ def _call_command(
   user=None,
 ):
   # TODO implement timeout, wait_for_finish
-  Logger.info("Executing %s" % (command))
+  Logger.info(f"Executing {command}")
   if user:
     domain, username = UserHelper.parse_user_name(user, ".")
 
@@ -297,14 +297,13 @@ class FileProvider(Provider):
 
     if os.path.isdir(path):
       raise Fail(
-        "Applying %s failed, directory with name %s exists" % (self.resource, path)
+        f"Applying {self.resource} failed, directory with name {path} exists"
       )
 
     dirname = os.path.dirname(path)
     if not os.path.isdir(dirname):
       raise Fail(
-        "Applying %s failed, parent directory %s doesn't exist"
-        % (self.resource, dirname)
+        f"Applying {self.resource} failed, parent directory {dirname} doesn't exist"
       )
 
     write = False
@@ -323,7 +322,7 @@ class FileProvider(Provider):
             self.resource.env.backup_file(path)
 
     if write:
-      Logger.info("Writing %s because %s" % (self.resource, reason))
+      Logger.info(f"Writing {self.resource} because {reason}")
       with open(path, "wb") as fp:
         if content:
           fp.write(content)
@@ -336,11 +335,11 @@ class FileProvider(Provider):
 
     if os.path.isdir(path):
       raise Fail(
-        "Applying %s failed, %s is directory not file!" % (self.resource, path)
+        f"Applying {self.resource} failed, {path} is directory not file!"
       )
 
     if os.path.exists(path):
-      Logger.info("Deleting %s" % self.resource)
+      Logger.info(f"Deleting {self.resource}")
       os.unlink(path)
 
   def _get_content(self):
@@ -351,7 +350,7 @@ class FileProvider(Provider):
       return content
     elif hasattr(content, "__call__"):
       return content()
-    raise Fail("Unknown source type for %s: %r" % (self, content))
+    raise Fail(f"Unknown source type for {self}: {content!r}")
 
 
 class ExecuteProvider(Provider):
@@ -360,7 +359,7 @@ class ExecuteProvider(Provider):
       if os.path.exists(self.resource.creates):
         return
 
-    Logger.debug("Executing %s" % self.resource)
+    Logger.debug(f"Executing {self.resource}")
 
     if self.resource.path != []:
       if not self.resource.environment:
@@ -398,7 +397,7 @@ class ExecuteProvider(Provider):
 
         if self.resource.on_timeout:
           Logger.info(
-            "Executing '%s'. Reason: %s" % (self.resource.on_timeout, err_msg)
+            f"Executing '{self.resource.on_timeout}'. Reason: {err_msg}"
           )
           _call_command(self.resource.on_timeout)
         else:
@@ -409,7 +408,7 @@ class DirectoryProvider(Provider):
   def action_create(self):
     path = DirectoryProvider._trim_uri(self.resource.path)
     if not os.path.exists(path):
-      Logger.info("Creating directory %s" % self.resource)
+      Logger.info(f"Creating directory {self.resource}")
       if self.resource.recursive:
         os.makedirs(path)
       else:
@@ -423,7 +422,7 @@ class DirectoryProvider(Provider):
         os.mkdir(path)
 
     if not os.path.isdir(path):
-      raise Fail("Applying %s failed, file %s already exists" % (self.resource, path))
+      raise Fail(f"Applying {self.resource} failed, file {path} already exists")
 
     if self.resource.owner and self.resource.mode:
       _set_file_acl(path, self.resource.owner, self.resource.mode)
@@ -432,9 +431,9 @@ class DirectoryProvider(Provider):
     path = self.resource.path
     if os.path.exists(path):
       if not os.path.isdir(path):
-        raise Fail("Applying %s failed, %s is not a directory" % (self.resource, path))
+        raise Fail(f"Applying {self.resource} failed, {path} is not a directory")
 
-      Logger.info("Removing directory %s and all its content" % self.resource)
+      Logger.info(f"Removing directory {self.resource} and all its content")
       shutil.rmtree(path)
 
   @staticmethod

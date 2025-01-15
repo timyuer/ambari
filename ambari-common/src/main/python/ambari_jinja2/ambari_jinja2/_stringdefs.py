@@ -156,16 +156,16 @@ if __name__ == "__main__":
     if cat == "Cs":
       # Jython can't handle isolated surrogates
       f.write(
-        """\
-try:
-    Cs = eval(r"%r")
+        f"""try:
+    Cs = eval(r"{val!r}")
 except UnicodeDecodeError:
-    Cs = '' # Jython can't handle isolated surrogates\n\n"""
-        % val
+    Cs = '' # Jython can't handle isolated surrogates
+
+"""
       )
     else:
-      f.write("%s = %r\n\n" % (cat, val))
-  f.write("cats = %r\n\n" % sorted(categories.keys()))
+      f.write(f"{cat} = {val!r}\n\n")
+  f.write(f"cats = {sorted(categories.keys())!r}\n\n")
 
   f.write(footer)
   f.close()

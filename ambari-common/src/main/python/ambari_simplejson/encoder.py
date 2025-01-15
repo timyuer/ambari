@@ -49,7 +49,7 @@ ESCAPE_DCT = {
 }
 for i in range(0x20):
   # ESCAPE_DCT.setdefault(chr(i), '\\u{0:04x}'.format(i))
-  ESCAPE_DCT.setdefault(chr(i), "\\u%04x" % (i,))
+  ESCAPE_DCT.setdefault(chr(i), f"\\u{i:04x}")
 
 FLOAT_REPR = repr
 
@@ -110,14 +110,14 @@ def py_encode_basestring_ascii(s, _PY3=PY3):
       n = ord(s)
       if n < 0x10000:
         # return '\\u{0:04x}'.format(n)
-        return "\\u%04x" % (n,)
+        return f"\\u{n:04x}"
       else:
         # surrogate pair
         n -= 0x10000
         s1 = 0xD800 | ((n >> 10) & 0x3FF)
         s2 = 0xDC00 | (n & 0x3FF)
         # return '\\u{0:04x}\\u{1:04x}'.format(s1, s2)
-        return "\\u%04x\\u%04x" % (s1, s2)
+        return f"\\u{s1:04x}\\u{s2:04x}"
 
   return '"' + str(ESCAPE_ASCII.sub(replace, s)) + '"'
 
@@ -303,7 +303,7 @@ class JSONEncoder(object):
             return JSONEncoder.default(self, o)
 
     """
-    raise TypeError("Object of type %s is not JSON serializable" % o.__class__.__name__)
+    raise TypeError(f"Object of type {o.__class__.__name__} is not JSON serializable")
 
   def encode(self, o):
     """Return a JSON string representation of a Python data structure.
@@ -630,7 +630,7 @@ def _make_iterencode(
       key = None
     else:
       raise TypeError(
-        "keys must be str, int, float, bool or None, " "not %s" % key.__class__.__name__
+        f"keys must be str, int, float, bool or None, not {key.__class__.__name__}"
       )
     return key
 

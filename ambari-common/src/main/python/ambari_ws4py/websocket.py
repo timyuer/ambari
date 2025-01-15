@@ -350,7 +350,7 @@ class WebSocket(object):
         )
 
     else:
-      raise ValueError("Unsupported type '%s' passed to send()" % type(payload))
+      raise ValueError(f"Unsupported type '{type(payload)}' passed to send()")
 
   def _get_from_pending(self):
     """

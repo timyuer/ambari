@@ -191,7 +191,7 @@ class WebSocketBaseClient(WebSocket):
     elif scheme in ("ws+unix", "wss+unix"):
       pass
     else:
-      raise ValueError("Invalid scheme: %s" % scheme)
+      raise ValueError(f"Invalid scheme: {scheme}")
 
     if parsed.path:
       resource = parsed.path
@@ -275,7 +275,7 @@ class WebSocketBaseClient(WebSocket):
     handshake.
     """
     headers = [
-      ("Host", "%s:%s" % (self.host, self.port)),
+      ("Host", f"{self.host}:{self.port}"),
       ("Connection", "Upgrade"),
       ("Upgrade", "websocket"),
       ("Sec-WebSocket-Key", self.key.decode("utf-8")),
@@ -313,9 +313,9 @@ class WebSocketBaseClient(WebSocket):
     Prepare the request to be sent for the upgrade handshake.
     """
     headers = self.handshake_headers
-    request = [("GET %s HTTP/1.1" % self.resource).encode("utf-8")]
+    request = [f"GET {self.resource} HTTP/1.1".encode("utf-8")]
     for header, value in headers:
-      request.append(("%s: %s" % (header, value)).encode("utf-8"))
+      request.append(f"{header}: {value}".encode("utf-8"))
     request.append(b"\r\n")
 
     return b"\r\n".join(request)
@@ -327,7 +327,7 @@ class WebSocketBaseClient(WebSocket):
     """
     protocol, code, status = response_line.split(b" ", 2)
     if code != b"101":
-      raise HandshakeError("Invalid response status: %s %s" % (code, status))
+      raise HandshakeError(f"Invalid response status: {code} {status}")
 
   def process_handshake_header(self, headers):
     """
@@ -345,15 +345,15 @@ class WebSocketBaseClient(WebSocket):
       value = value.strip().lower()
 
       if header == b"upgrade" and value != b"websocket":
-        raise HandshakeError("Invalid Upgrade header: %s" % value)
+        raise HandshakeError(f"Invalid Upgrade header: {value}")
 
       elif header == b"connection" and value != b"upgrade":
-        raise HandshakeError("Invalid Connection header: %s" % value)
+        raise HandshakeError(f"Invalid Connection header: {value}")
 
       elif header == b"sec-websocket-accept":
         match = b64encode(sha1(self.key + WS_KEY).digest())
         if value != match.lower():
-          raise HandshakeError("Invalid challenge response: %s" % value)
+          raise HandshakeError(f"Invalid challenge response: {value}")
 
       elif header == b"sec-websocket-protocol":
         protocols.extend([x.strip() for x in value.split(b",")])

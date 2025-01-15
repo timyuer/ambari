@@ -229,7 +229,7 @@ def _check_signature(func, mock, skipfirst, instance=False):
 
   # can't use self because "self" is common as an argument name
   # unfortunately even not in the first place
-  src = "lambda _mock_self, %s: None" % signature
+  src = f"lambda _mock_self, {signature}: None"
   checksig = eval(src, {})
   _copy_func_details(func, checksig)
   type(mock)._mock_check_sig = checksig
@@ -294,7 +294,7 @@ def _set_signature(mock, original, instance=False):
 
   signature, func = result
 
-  src = "lambda %s: None" % signature
+  src = f"lambda {signature}: None"
   checksig = eval(src, {})
   _copy_func_details(func, checksig)
 
@@ -303,10 +303,9 @@ def _set_signature(mock, original, instance=False):
     name = "funcopy"
   context = {"_checksig_": checksig, "mock": mock}
   src = (
-    """def %s(*args, **kwargs):
+    f"""def {name}(*args, **kwargs):
     _checksig_(*args, **kwargs)
     return mock(*args, **kwargs)"""
-    % name
   )
   exec(src, context)
   funcopy = context[name]
@@ -362,7 +361,7 @@ def _setup_func(funcopy, mock):
 
 
 def _is_magic(name):
-  return "__%s__" % name[2:-2] == name
+  return f"__{name[2:-2]}__" == name
 
 
 class _SentinelObject(object):
@@ -372,7 +371,7 @@ class _SentinelObject(object):
     self.name = name
 
   def __repr__(self):
-    return "sentinel.%s" % self.name
+    return f"sentinel.{self.name}"
 
 
 class _Sentinel(object):
@@ -687,7 +686,7 @@ class NonCallableMock(Base):
       raise AttributeError(name)
     elif self._mock_methods is not None:
       if name not in self._mock_methods or name in _all_magics:
-        raise AttributeError("Mock object has no attribute %r" % name)
+        raise AttributeError(f"Mock object has no attribute {name!r}")
     elif _is_magic(name):
       raise AttributeError(name)
 
@@ -748,7 +747,7 @@ class NonCallableMock(Base):
 
     name_string = ""
     if name not in ("mock", "mock."):
-      name_string = " name=%r" % name
+      name_string = f" name={name!r}"
 
     spec_string = ""
     if self._spec_class is not None:
@@ -756,12 +755,7 @@ class NonCallableMock(Base):
       if self._spec_set:
         spec_string = " spec_set=%r"
       spec_string = spec_string % self._spec_class.__name__
-    return "<%s%s%s id='%s'>" % (
-      type(self).__name__,
-      name_string,
-      spec_string,
-      id(self),
-    )
+    return f"<{type(self).__name__}{name_string}{spec_string} id='{id(self)}'>"
 
   def __dir__(self):
     """Filter the output of `dir(mock)` to only useful members.
@@ -786,13 +780,13 @@ class NonCallableMock(Base):
       and name not in self._mock_methods
       and name not in self.__dict__
     ):
-      raise AttributeError("Mock object has no attribute '%s'" % name)
+      raise AttributeError(f"Mock object has no attribute '{name}'")
     elif name in _unsupported_magics:
-      msg = "Attempting to set unsupported magic method %r." % name
+      msg = f"Attempting to set unsupported magic method {name!r}."
       raise AttributeError(msg)
     elif name in _all_magics:
       if self._mock_methods is not None and name not in self._mock_methods:
-        raise AttributeError("Mock object has no attribute '%s'" % name)
+        raise AttributeError(f"Mock object has no attribute '{name}'")
 
       if not _is_instance_mock(value):
         setattr(type(self), name, _get_method(name, value))
@@ -851,7 +845,7 @@ class NonCallableMock(Base):
     self = _mock_self
     if self.call_args is None:
       expected = self._format_mock_call_signature(args, kwargs)
-      raise AssertionError("Expected call: %s\nNot called" % (expected,))
+      raise AssertionError(f"Expected call: {expected}\nNot called")
 
     if self.call_args != (args, kwargs):
       msg = self._format_mock_failure_message(args, kwargs)
@@ -862,7 +856,7 @@ class NonCallableMock(Base):
     arguments."""
     self = _mock_self
     if not self.call_count == 1:
-      msg = "Expected to be called once. Called %s times." % self.call_count
+      msg = f"Expected to be called once. Called {self.call_count} times."
       raise AssertionError(msg)
     return self.assert_called_with(*args, **kwargs)
 
@@ -879,7 +873,7 @@ class NonCallableMock(Base):
     if not any_order:
       if calls not in self.mock_calls:
         raise AssertionError(
-          "Calls not found.\nExpected: %r\n" "Actual: %r" % (calls, self.mock_calls)
+          f"Calls not found.\nExpected: {calls!r}\nActual: {self.mock_calls!r}"
         )
       return
 
@@ -892,7 +886,7 @@ class NonCallableMock(Base):
       except ValueError:
         not_found.append(kall)
     if not_found:
-      raise AssertionError("%r not all found in call list" % (tuple(not_found),))
+      raise AssertionError(f"{tuple(not_found)!r} not all found in call list")
 
   def assert_any_call(self, *args, **kwargs):
     """assert the mock has been called with the specified arguments.
@@ -903,7 +897,7 @@ class NonCallableMock(Base):
     kall = call(*args, **kwargs)
     if kall not in self.call_args_list:
       expected_string = self._format_mock_call_signature(args, kwargs)
-      raise AssertionError("%s call not found" % expected_string)
+      raise AssertionError(f"{expected_string} call not found")
 
   def _get_child_mock(self, **kw):
     """Create the child mocks for attributes and return value.
@@ -1112,7 +1106,7 @@ def _importer(target):
   thing = __import__(import_path)
 
   for comp in components:
-    import_path += ".%s" % comp
+    import_path += f".{comp}"
     thing = _dot_lookup(thing, comp, import_path)
   return thing
 
@@ -1243,7 +1237,7 @@ class _patch(object):
       local = True
 
     if not self.create and original is DEFAULT:
-      raise AttributeError("%s does not have the attribute %r" % (target, name))
+      raise AttributeError(f"{target} does not have the attribute {name!r}")
     return original, local
 
   def __enter__(self):
@@ -1405,7 +1399,7 @@ def _get_target(target):
   try:
     target, attribute = target.rsplit(".", 1)
   except (TypeError, ValueError):
-    raise TypeError("Need a valid target to patch. You supplied: %r" % (target,))
+    raise TypeError(f"Need a valid target to patch. You supplied: {target!r}")
   getter = lambda: _importer(target)
   return getter, attribute
 
@@ -1721,8 +1715,8 @@ magic_methods = (
 )
 
 numerics = "add sub mul div floordiv mod lshift rshift and xor or pow "
-inplace = " ".join("i%s" % n for n in numerics.split())
-right = " ".join("r%s" % n for n in numerics.split())
+inplace = " ".join(f"i{n}" for n in numerics.split())
+right = " ".join(f"r{n}" for n in numerics.split())
 extra = ""
 if inPy3k:
   extra = "bool next "
@@ -1734,7 +1728,7 @@ else:
 # __del__ is not supported at all as it causes problems if it exists
 
 _non_defaults = set(
-  "__%s__" % method
+  f"__{method}__"
   for method in [
     "cmp",
     "getslice",
@@ -1772,7 +1766,7 @@ def _get_method(name, func):
 
 
 _magics = set(
-  "__%s__" % method
+  f"__{method}__"
   for method in " ".join([magic_methods, numerics, inplace, right, extra]).split()
 )
 
@@ -1980,7 +1974,7 @@ def _format_call_signature(name, args, kwargs):
   message = "%s(%%s)" % name
   formatted_args = ""
   args_string = ", ".join([repr(arg) for arg in args])
-  kwargs_string = ", ".join(["%s=%r" % (key, value) for key, value in kwargs.items()])
+  kwargs_string = ", ".join([f"{key}={value!r}" for key, value in kwargs.items()])
   if args_string:
     formatted_args = args_string
   if kwargs_string:
@@ -2109,14 +2103,14 @@ class _Call(tuple):
   def __getattr__(self, attr):
     if self.name is None:
       return _Call(name=attr, from_kall=False)
-    name = "%s.%s" % (self.name, attr)
+    name = f"{self.name}.{attr}"
     return _Call(name=name, parent=self, from_kall=False)
 
   def __repr__(self):
     if not self.from_kall:
       name = self.name or "call"
       if name.startswith("()"):
-        name = "call%s" % name
+        name = f"call{name}"
       return name
 
     if len(self) == 2:
@@ -2127,9 +2121,9 @@ class _Call(tuple):
       if not name:
         name = "call"
       elif not name.startswith("()"):
-        name = "call.%s" % name
+        name = f"call.{name}"
       else:
-        name = "call%s" % name
+        name = f"call{name}"
     return _format_call_signature(name, args, kwargs)
 
   def call_list(self):

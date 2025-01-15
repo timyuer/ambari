@@ -190,7 +190,7 @@ class HeaderValue(object):
     @type calculator: C{callable}
     """
     if not callable(calculator):
-      raise ValueError("Non-callable param: %s" % calculator)
+      raise ValueError(f"Non-callable param: {calculator}")
     self.calc = calculator
 
   def __get__(self, obj, objtype):
@@ -203,7 +203,7 @@ class HeaderValue(object):
     self.calc = value
 
   def __repr__(self):
-    return "<%s calculator=%s>" % (self.__class__.__name__, self.calc)
+    return f"<{self.__class__.__name__} calculator={self.calc}>"
 
 
 class ErrorFrame(Frame):
@@ -221,7 +221,7 @@ class ErrorFrame(Frame):
     self.headers["content-length"] = HeaderValue(calculator=lambda: len(self.body))
 
   def __repr__(self):
-    return "<%s message=%r>" % (self.__class__.__name__, self.headers["message"])
+    return f"<{self.__class__.__name__} message={self.headers['message']!r}>"
 
 
 class ReceiptFrame(Frame):
@@ -273,7 +273,7 @@ class FrameBuffer(object):
     self._buffer = io.BytesIO()
     self._pointer = 0
     self.debug = False
-    self.log = logging.getLogger("%s.%s" % (self.__module__, self.__class__.__name__))
+    self.log = logging.getLogger(f"{self.__module__}.{self.__class__.__name__}")
 
   def clear(self):
     """

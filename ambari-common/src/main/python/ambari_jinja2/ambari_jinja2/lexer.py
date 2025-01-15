@@ -133,7 +133,7 @@ operators = {
 reverse_operators = dict([(v, k) for k, v in operators.items()])
 assert len(operators) == len(reverse_operators), "operators dropped"
 operator_re = re.compile(
-  "(%s)" % "|".join(re.escape(x) for x in sorted(operators, key=lambda x: -len(x)))
+  f"({'|'.join(re.escape(x) for x in sorted(operators, key=lambda x: -len(x)))})"
 )
 
 ignored_tokens = frozenset(
@@ -284,7 +284,7 @@ class Token(tuple):
     return False
 
   def __repr__(self):
-    return "Token(%r, %r, %r)" % (self.lineno, self.type, self.value)
+    return f"Token({self.lineno!r}, {self.type!r}, {self.value!r})"
 
 
 class TokenStreamIterator(object):
@@ -384,13 +384,13 @@ class TokenStream(object):
       expr = describe_token_expr(expr)
       if self.current.type is TOKEN_EOF:
         raise TemplateSyntaxError(
-          "unexpected end of template, " "expected %r." % expr,
+          f"unexpected end of template, expected {expr!r}.",
           self.current.lineno,
           self.name,
           self.filename,
         )
       raise TemplateSyntaxError(
-        "expected token %r, got %r" % (expr, describe_token(self.current)),
+        f"expected token {expr!r}, got {describe_token(self.current)!r}",
         self.current.lineno,
         self.name,
         self.filename,
@@ -690,12 +690,12 @@ class Lexer(object):
             elif data in ("}", ")", "]"):
               if not balancing_stack:
                 raise TemplateSyntaxError(
-                  "unexpected '%s'" % data, lineno, name, filename
+                  f"unexpected '{data}'", lineno, name, filename
                 )
               expected_op = balancing_stack.pop()
               if expected_op != data:
                 raise TemplateSyntaxError(
-                  "unexpected '%s', " "expected '%s'" % (data, expected_op),
+                  f"unexpected '{data}', expected '{expected_op}'",
                   lineno,
                   name,
                   filename,
@@ -735,7 +735,7 @@ class Lexer(object):
         # this means a loop without break condition, avoid that and
         # raise error
         elif pos2 == pos:
-          raise RuntimeError("%r yielded empty string without " "stack change" % regex)
+          raise RuntimeError(f"{regex!r} yielded empty string without stack change")
         # publish new function and start again
         pos = pos2
         break

@@ -39,7 +39,7 @@ class ResourceArgument(object):
 
   def validate(self, value):
     if self.required and value is None:
-      raise InvalidArgument("Required argument %s missing" % self.name)
+      raise InvalidArgument(f"Required argument {self.name} missing")
     return value
 
 
@@ -56,7 +56,7 @@ class BooleanArgument(ResourceArgument):
     value = super(BooleanArgument, self).validate(value)
     if not value in (True, False):
       raise InvalidArgument(
-        "Expected a boolean for %s received %r" % (self.name, value)
+        f"Expected a boolean for {self.name} received {value!r}"
       )
     return value
 
@@ -69,7 +69,7 @@ class IntegerArgument(ResourceArgument):
     value = super(IntegerArgument, self).validate(value)
     if not isinstance(value, int):
       raise InvalidArgument(
-        "Expected an integer for %s received %r" % (self.name, value)
+        f"Expected an integer for {self.name} received {value!r}"
       )
     return value
 
@@ -157,12 +157,12 @@ class Resource(object, metaclass=ResourceMetaclass):
       try:
         arg = self._arguments[key]
       except KeyError:
-        raise Fail("%s received unsupported argument %s" % (self, key))
+        raise Fail(f"{self} received unsupported argument {key}")
       else:
         try:
           self.arguments[key] = arg.validate(value)
         except InvalidArgument as exc:
-          raise InvalidArgument("%s %s" % (self, exc))
+          raise InvalidArgument(f"{self} {exc}")
 
     if not self.env.test_mode:
       self.env.run()
@@ -174,10 +174,7 @@ class Resource(object, metaclass=ResourceMetaclass):
     return str(self)
 
   def __str__(self):
-    return "%s[%s]" % (
-      self.__class__.__name__,
-      Logger._get_resource_name_repr(self.name),
-    )
+    return f"{self.__class__.__name__}[{Logger._get_resource_name_repr(self.name)}]"
 
   def __getstate__(self):
     return dict(

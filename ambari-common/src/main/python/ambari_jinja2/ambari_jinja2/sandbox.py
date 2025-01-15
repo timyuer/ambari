@@ -295,7 +295,7 @@ class SandboxedEnvironment(Environment):
     # the double prefixes are to avoid double keyword argument
     # errors when proxying the call.
     if not __self.is_safe_callable(__obj):
-      raise SecurityError("%r is not safely callable" % (__obj,))
+      raise SecurityError(f"{__obj!r} is not safely callable")
     return __context.call(__obj, *args, **kwargs)
 
 

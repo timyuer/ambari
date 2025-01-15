@@ -44,7 +44,7 @@ def cbool(obj):
       return True
     if obj in ("false", "no", "off", "n", "f", "0"):
       return False
-    raise ValueError('Unable to interpret value "%s" as boolean' % obj)
+    raise ValueError(f'Unable to interpret value "{obj}" as boolean')
   return bool(obj)
 
 
@@ -59,7 +59,7 @@ def cint(obj):
     try:
       return int(obj)
     except ValueError:
-      raise ValueError('Unable to interpret value "%s" as integer' % obj)
+      raise ValueError(f'Unable to interpret value "{obj}" as integer')
   elif obj is None:
     return obj
 

@@ -68,7 +68,7 @@ class Parser(object):
       expected.extend(map(describe_token_expr, exprs))
     if end_token_stack:
       currently_looking = " or ".join(
-        "'%s'" % describe_token_expr(expr) for expr in end_token_stack[-1]
+        f"'{describe_token_expr(expr)}'" for expr in end_token_stack[-1]
       )
     else:
       currently_looking = None
@@ -76,7 +76,7 @@ class Parser(object):
     if name is None:
       message = ["Unexpected end of template."]
     else:
-      message = ["Encountered unknown tag '%s'." % name]
+      message = [f"Encountered unknown tag '{name}'."]
 
     if currently_looking:
       if name is not None and name in expected:
@@ -87,12 +87,12 @@ class Parser(object):
         )
       else:
         message.append(
-          "Jinja was looking for the following tags: " "%s." % currently_looking
+          f"Jinja was looking for the following tags: {currently_looking}."
         )
 
     if self._tag_stack:
       message.append(
-        "The innermost block that needs to be " "closed is '%s'." % self._tag_stack[-1]
+        f"The innermost block that needs to be closed is '{self._tag_stack[-1]}'."
       )
 
     self.fail(" ".join(message), lineno)
@@ -388,7 +388,7 @@ class Parser(object):
         target = self.parse_primary()
       target.set_ctx("store")
     if not target.can_assign():
-      self.fail("can't assign to %r" % target.__class__.__name__.lower(), target.lineno)
+      self.fail(f"can't assign to {target.__class__.__name__.lower()!r}", target.lineno)
     return target
 
   def parse_expression(self, with_condexpr=True):
@@ -584,7 +584,7 @@ class Parser(object):
     elif token.type == "lbrace":
       node = self.parse_dict()
     else:
-      self.fail("unexpected '%s'" % describe_token(token), token.lineno)
+      self.fail(f"unexpected '{describe_token(token)}'", token.lineno)
     return node
 
   def parse_tuple(
@@ -643,7 +643,7 @@ class Parser(object):
       # tuple.
       if not explicit_parentheses:
         self.fail(
-          "Expected an expression, got '%s'" % describe_token(self.stream.current)
+          f"Expected an expression, got '{describe_token(self.stream.current)}'"
         )
 
     return nodes.Tuple(args, "load", lineno=lineno)

@@ -121,7 +121,7 @@ else:
         path = os.path.join(basedir, "templates", template_name)
 
       if not os.path.exists(path):
-        raise TemplateNotFound("%s at %s" % (template_name, path))
+        raise TemplateNotFound(f"{template_name} at {path}")
       mtime = os.path.getmtime(path)
       with open(path, "rt") as fp:
         source = fp.read()

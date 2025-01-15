@@ -64,14 +64,14 @@ class Dummy(Script):
     if "role" in self.config:
       self.component_name = self.config["role"]
 
-    self.pid_file = "/var/run/%s/%s.pid" % (self.host_name, self.component_name)
+    self.pid_file = f"/var/run/{self.host_name}/{self.component_name}.pid"
     self.user = "root"
     self.user_group = "root"
     self.sudo = AMBARI_SUDO_BINARY
 
-    print("Host: %s" % self.host_name)
-    print("Component: %s" % self.component_name)
-    print("Pid File: %s" % self.pid_file)
+    print(f"Host: {self.host_name}")
+    print(f"Component: {self.component_name}")
+    print(f"Pid File: {self.pid_file}")
 
   def install(self, env):
     print("Install")
@@ -112,12 +112,12 @@ class Dummy(Script):
         self.keytab_name
       ].replace("_HOST", self.host_name)
       Execute(
-        "%s -kt %s %s" % (kinit_path_local, keytab_path_replaced, principal_replaced),
+        f"{kinit_path_local} -kt {keytab_path_replaced} {principal_replaced}",
         user="root",
       )
 
     if not os.path.isfile(self.pid_file):
-      print("Creating pid file: %s" % self.pid_file)
+      print(f"Creating pid file: {self.pid_file}")
 
       Directory(
         os.path.dirname(self.pid_file),
@@ -134,8 +134,8 @@ class Dummy(Script):
     self.prepare()
 
     if os.path.isfile(self.pid_file):
-      print("Deleting pid file: %s" % self.pid_file)
-      Execute("%s rm -rf %s" % (self.sudo, self.pid_file))
+      print(f"Deleting pid file: {self.pid_file}")
+      Execute(f"{self.sudo} rm -rf {self.pid_file}")
 
   def status(self, env):
     print("Status")

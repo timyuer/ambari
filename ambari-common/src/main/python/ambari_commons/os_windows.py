@@ -589,7 +589,7 @@ class WinServiceController:
         )
     except win32service.error as exc:
       if exc.winerror != 1056:
-        msg = "Error starting service: %s" % exc.strerror
+        msg = f"Error starting service: {exc.strerror}"
         err = exc.winerror
     return err, msg
 

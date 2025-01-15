@@ -68,4 +68,4 @@ def format_addresses(ws):
     peer_ip, peer_port = ws.peer_address
     return "[Local => %s:%d | Remote => %s:%d]" % (me_ip, me_port, peer_ip, peer_port)
 
-  return "[Bound to '%s']" % me
+  return f"[Bound to '{me}']"

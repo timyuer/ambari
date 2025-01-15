@@ -179,16 +179,12 @@ class ScriptAlert(BaseAlert):
 
     if logger.isEnabledFor(logging.DEBUG):
       logger.debug(
-        "[Alert][{0}] Executing script check {1}".format(
-          self.get_name(), self.path_to_script
-        )
+        f"[Alert][{self.get_name()}] Executing script check {self.path_to_script}"
       )
 
     if not self.path_to_script.endswith(".py"):
       logger.error(
-        "[Alert][{0}] Unable to execute script {1}".format(
-          self.get_name(), self.path_to_script
-        )
+        f"[Alert][{self.get_name()}] Unable to execute script {self.path_to_script}"
       )
 
       return None

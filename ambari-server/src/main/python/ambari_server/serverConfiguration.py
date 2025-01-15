@@ -959,7 +959,7 @@ def backup_file_in_temp(filePath):
       )
     except Exception as e:
       print_error_msg(
-        'Could not backup file in temp "%s": %s' % (back_up_file_count, str(e))
+        f'Could not backup file in temp "{back_up_file_count}": {str(e)}'
       )
   return 0
 

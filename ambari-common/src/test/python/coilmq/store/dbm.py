@@ -55,13 +55,13 @@ def make_dbm():
     cp_ops = config.getint("coilmq", "qstore.dbm.checkpoint_operations")
     cp_timeout = config.getint("coilmq", "qstore.dbm.checkpoint_timeout")
   except ConfigParser.NoOptionError as e:
-    raise ConfigError("Missing configuration parameter: %s" % e)
+    raise ConfigError(f"Missing configuration parameter: {e}")
 
   if not os.path.exists(data_dir):
-    raise ConfigError("DBM directory does not exist: %s" % data_dir)
+    raise ConfigError(f"DBM directory does not exist: {data_dir}")
   # FIXME: how do these get applied? Is OR appropriate?
   if not os.access(data_dir, os.W_OK | os.R_OK):
-    raise ConfigError("Cannot read and write DBM directory: %s" % data_dir)
+    raise ConfigError(f"Cannot read and write DBM directory: {data_dir}")
 
   store = DbmQueue(
     data_dir, checkpoint_operations=cp_ops, checkpoint_timeout=cp_timeout

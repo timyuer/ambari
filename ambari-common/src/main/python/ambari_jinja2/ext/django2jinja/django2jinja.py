@@ -286,11 +286,11 @@ class Writer(object):
     for filter, args in filters:
       name = self.get_filter_name(filter)
       if name is None:
-        self.warn("Could not find filter %s" % name)
+        self.warn(f"Could not find filter {name}")
         continue
       if name not in DEFAULT_FILTERS and name not in self._filters_warned:
         self._filters_warned.add(name)
-        self.warn("Filter %s probably doesn't exist in Jinja" % name)
+        self.warn(f"Filter {name} probably doesn't exist in Jinja")
       if not want_pipe:
         want_pipe = True
       else:
@@ -357,7 +357,7 @@ class Writer(object):
         break
     else:
       self.warn(
-        "Untranslatable node %s.%s found" % (node.__module__, node.__class__.__name__),
+        f"Untranslatable node {node.__module__}.{node.__class__.__name__} found",
         node,
       )
 
@@ -450,7 +450,7 @@ def if_condition(writer, node):
 
   for idx, (ifnot, expr) in enumerate(node.bool_exprs):
     if idx:
-      writer.write(" %s " % join_with)
+      writer.write(f" {join_with} ")
     if ifnot:
       writer.write("not ")
     writer.node(expr)
@@ -521,7 +521,7 @@ def cycle(writer, node):
     return
   if node.variable_name is not None:
     writer.start_block()
-    writer.write("set %s = " % node.variable_name)
+    writer.write(f"set {node.variable_name} = ")
   else:
     writer.start_variable()
   writer.write("loop.cycle(")
@@ -593,7 +593,7 @@ def url_tag(writer, node):
   writer.warn("url node used.  make sure to provide a proper url() " "function", node)
   if node.asvar:
     writer.start_block()
-    writer.write("set %s = " % node.asvar)
+    writer.write(f"set {node.asvar} = ")
   else:
     writer.start_variable()
   autoescape = writer.autoescape
@@ -603,7 +603,7 @@ def url_tag(writer, node):
     writer.write(", ")
     writer.node(arg)
   for key, arg in node.kwargs.items():
-    writer.write(", %s=" % key)
+    writer.write(f", {key}=")
     writer.node(arg)
   writer.write(")")
   if node.asvar:
@@ -638,7 +638,7 @@ def with_block(writer, node):
     node,
   )
   writer.start_block()
-  writer.write("set %s = " % node.name)
+  writer.write(f"set {node.name} = ")
   writer.node(node.var)
   writer.end_block()
   writer.body(node.nodelist)
@@ -661,7 +661,7 @@ def regroup(writer, node):
       node,
     )
   writer.start_block()
-  writer.write("set %s = " % node.var_name)
+  writer.write(f"set {node.var_name} = ")
   writer.node(node.target)
   writer.write("|groupby(")
   writer.literal(node.expression.var.var)
@@ -678,7 +678,7 @@ def warn_load(writer, node):
 def get_available_languages(writer, node):
   writer.warn("make sure to provide a get_available_languages function", node)
   writer.tag(
-    "set %s = get_available_languages()" % writer.translate_variable_name(node.variable)
+    f"set {writer.translate_variable_name(node.variable)} = get_available_languages()"
   )
 
 
@@ -686,7 +686,7 @@ def get_available_languages(writer, node):
 def get_current_language(writer, node):
   writer.warn("make sure to provide a get_current_language function", node)
   writer.tag(
-    "set %s = get_current_language()" % writer.translate_variable_name(node.variable)
+    f"set {writer.translate_variable_name(node.variable)} = get_current_language()"
   )
 
 
@@ -734,7 +734,7 @@ def translate_block(writer, node):
   for idx, (key, var) in enumerate(node.extra_context.items()):
     if idx:
       writer.write(",")
-    writer.write(" %s=" % key)
+    writer.write(f" {key}=")
     touch_var(key)
     writer.node(var.filter_expression)
 
@@ -747,7 +747,7 @@ def translate_block(writer, node):
       if idx > -1:
         writer.write(",")
       touch_var(plural_var)
-      writer.write(" %s=" % plural_var)
+      writer.write(f" {plural_var}=")
       writer.node(node.counter)
 
   writer.end_block()
@@ -770,7 +770,7 @@ def simple_tag(writer, node):
     writer.env and name not in writer.env.filters and name not in writer._filters_warned
   ):
     writer._filters_warned.add(name)
-    writer.warn("Filter %s probably doesn't exist in Jinja" % name)
+    writer.warn(f"Filter {name} probably doesn't exist in Jinja")
 
   if not node.vars_to_resolve:
     # No argument, pass the request

@@ -112,15 +112,15 @@ class STOMP10(STOMP):
         method(frame)
       else:
         if not transaction in self.engine.transactions:
-          raise ProtocolError("Invalid transaction specified: %s" % transaction)
+          raise ProtocolError(f"Invalid transaction specified: {transaction}")
         self.engine.transactions[transaction].append(frame)
     except Exception as e:
-      self.engine.log.error("Error processing STOMP frame: %s" % e)
+      self.engine.log.error(f"Error processing STOMP frame: {e}")
       self.engine.log.exception(e)
       try:
         self.engine.connection.send_frame(ErrorFrame(str(e), str(e)))
       except Exception as e:  # pragma: no cover
-        self.engine.log.error("Could not send error frame: %s" % e)
+        self.engine.log.error(f"Could not send error frame: {e}")
         self.engine.log.exception(e)
     else:
       # The protocol is not especially clear here (not sure why I'm surprised)
@@ -144,7 +144,7 @@ class STOMP10(STOMP):
       login = frame.headers.get("login")
       passcode = frame.headers.get("passcode")
       if not self.engine.authenticator.authenticate(login, passcode):
-        raise AuthError("Authentication failed for %s" % login)
+        raise AuthError(f"Authentication failed for {login}")
 
     self.engine.connected = True
 
@@ -216,7 +216,7 @@ class STOMP10(STOMP):
       raise ProtocolError("Missing transaction for COMMIT command.")
 
     if not frame.transaction in self.engine.transactions:
-      raise ProtocolError("Invalid transaction: %s" % frame.transaction)
+      raise ProtocolError(f"Invalid transaction: {frame.transaction}")
 
     for tframe in self.engine.transactions[frame.transaction]:
       del tframe.headers["transaction"]
@@ -235,7 +235,7 @@ class STOMP10(STOMP):
       raise ProtocolError("Missing transaction for ABORT command.")
 
     if not frame.transaction in self.engine.transactions:
-      raise ProtocolError("Invalid transaction: %s" % frame.transaction)
+      raise ProtocolError(f"Invalid transaction: {frame.transaction}")
 
     self.engine.queue_manager.resend_transaction_frames(
       self.engine.connection, frame.transaction

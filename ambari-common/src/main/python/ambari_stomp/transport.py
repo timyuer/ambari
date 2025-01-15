@@ -242,7 +242,7 @@ class BaseTransport(ambari_stomp.listener.Publisher):
       if not listener:
         continue
 
-      notify_func = getattr(listener, "on_%s" % frame_type, None)
+      notify_func = getattr(listener, f"on_{frame_type}", None)
       if not notify_func:
         log.debug("listener %s has no method on_%s", listener, frame_type)
         continue

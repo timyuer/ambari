@@ -94,17 +94,17 @@ class MockTest(unittest2.TestCase):
   def test_repr(self):
     mock = Mock(name="foo")
     self.assertIn("foo", repr(mock))
-    self.assertIn("'%s'" % id(mock), repr(mock))
+    self.assertIn(f"'{id(mock)}'", repr(mock))
 
     mocks = [(Mock(), "mock"), (Mock(name="bar"), "bar")]
     for mock, name in mocks:
-      self.assertIn("%s.bar" % name, repr(mock.bar))
-      self.assertIn("%s.foo()" % name, repr(mock.foo()))
-      self.assertIn("%s.foo().bing" % name, repr(mock.foo().bing))
-      self.assertIn("%s()" % name, repr(mock()))
-      self.assertIn("%s()()" % name, repr(mock()()))
+      self.assertIn(f"{name}.bar", repr(mock.bar))
+      self.assertIn(f"{name}.foo()", repr(mock.foo()))
+      self.assertIn(f"{name}.foo().bing", repr(mock.foo().bing))
+      self.assertIn(f"{name}()", repr(mock()))
+      self.assertIn(f"{name}()()", repr(mock()()))
       self.assertIn(
-        "%s()().foo.bar.baz().bing" % name, repr(mock()().foo.bar.baz().bing)
+        f"{name}()().foo.bar.baz().bing", repr(mock()().foo.bar.baz().bing)
       )
 
   def test_repr_with_spec(self):
@@ -207,7 +207,7 @@ class MockTest(unittest2.TestCase):
     self.assertEqual(
       mock.method_calls,
       [],
-      "method_calls not initialised correctly: %r != %r" % (mock.method_calls, []),
+      f"method_calls not initialised correctly: {mock.method_calls!r} != {[]!r}",
     )
     self.assertEqual(mock.mock_calls, [])
 
@@ -689,7 +689,7 @@ class MockTest(unittest2.TestCase):
       instance = sys.exc_info()[1]
       self.assertIsInstance(instance, exception)
     else:
-      self.fail("Exception %r not raised" % (exception,))
+      self.fail(f"Exception {exception!r} not raised")
 
     msg = str(instance)
     self.assertEqual(msg, message)
